@@ -68,22 +68,13 @@ OP [+*/-]
 
 {VAR}       { yylval.str = new std::string(yytext); return ID;}
 
-[ \t]+ { }
-\n { return NEW_LINE; }
+[ \t\r\n]+ { }
 
 
 .  { cout << "Entrada invalida: " << yytext << endl; }
 
 %%
 
-
-int main() { 
-    while (true) {
-        cout << "> ";
-        if (yyparse() != 0) break;
-    }
-    return 0;
-}
 
 int yywrap() {
     return 1;

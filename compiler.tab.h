@@ -89,8 +89,7 @@ extern int yydebug;
     READ = 290,                    /* READ  */
     WRITE = 291,                   /* WRITE  */
     WRITELN = 292,                 /* WRITELN  */
-    EOL = 293,                     /* EOL  */
-    NEW_LINE = 294                 /* NEW_LINE  */
+    EOL = 293                      /* EOL  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -99,15 +98,14 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 16 "compiler.y"
+#line 17 "compiler.y"
 
     int     ival;
     float   fval;
     std::string* str;
     bool    boolean;
-    //AtribMetadata* atrib_metadata;
 
-#line 111 "compiler.tab.h"
+#line 109 "compiler.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

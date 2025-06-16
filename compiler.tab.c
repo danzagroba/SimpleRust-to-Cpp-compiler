@@ -72,6 +72,7 @@
 #define ERROR_START "[ERROR] " <<  __LINE__  << ": "
 #include <iostream>
 using namespace std;
+#include "AST.h"
 #include "SymbolTable.h"
 //#include "AtribMetadata.h"
 
@@ -80,9 +81,9 @@ int yywrap(void);
 void yyerror(const char* s);
     
 SymbolTable st;
+MainFunctionNode* ast_root = nullptr;
 
-
-#line 86 "compiler.tab.c"
+#line 87 "compiler.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -149,14 +150,13 @@ enum yysymbol_kind_t
   YYSYMBOL_WRITE = 36,                     /* WRITE  */
   YYSYMBOL_WRITELN = 37,                   /* WRITELN  */
   YYSYMBOL_EOL = 38,                       /* EOL  */
-  YYSYMBOL_NEW_LINE = 39,                  /* NEW_LINE  */
-  YYSYMBOL_YYACCEPT = 40,                  /* $accept  */
-  YYSYMBOL_program = 41,                   /* program  */
-  YYSYMBOL_TYPE = 42,                      /* TYPE  */
-  YYSYMBOL_OPT_MUT = 43,                   /* OPT_MUT  */
-  YYSYMBOL_declaration = 44,               /* declaration  */
-  YYSYMBOL_commands = 45,                  /* commands  */
-  YYSYMBOL_command = 46                    /* command  */
+  YYSYMBOL_YYACCEPT = 39,                  /* $accept  */
+  YYSYMBOL_program = 40,                   /* program  */
+  YYSYMBOL_commands = 41,                  /* commands  */
+  YYSYMBOL_command = 42,                   /* command  */
+  YYSYMBOL_TYPE = 43,                      /* TYPE  */
+  YYSYMBOL_OPT_MUT = 44,                   /* OPT_MUT  */
+  YYSYMBOL_declaration = 45                /* declaration  */
 };
 typedef enum yysymbol_kind_t yysymbol_kind_t;
 
@@ -482,21 +482,21 @@ union yyalloc
 #endif /* !YYCOPY_NEEDED */
 
 /* YYFINAL -- State number of the termination state.  */
-#define YYFINAL  8
+#define YYFINAL  4
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   11
+#define YYLAST   16
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  40
+#define YYNTOKENS  39
 /* YYNNTS -- Number of nonterminals.  */
 #define YYNNTS  7
 /* YYNRULES -- Number of rules.  */
 #define YYNRULES  11
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  18
+#define YYNSTATES  23
 
 /* YYMAXUTOK -- Last valid token kind.  */
-#define YYMAXUTOK   294
+#define YYMAXUTOK   293
 
 
 /* YYTRANSLATE(TOKEN-NUM) -- Symbol number corresponding to TOKEN-NUM
@@ -539,15 +539,15 @@ static const yytype_int8 yytranslate[] =
        5,     6,     7,     8,     9,    10,    11,    12,    13,    14,
       15,    16,    17,    18,    19,    20,    21,    22,    23,    24,
       25,    26,    27,    28,    29,    30,    31,    32,    33,    34,
-      35,    36,    37,    38,    39
+      35,    36,    37,    38
 };
 
 #if YYDEBUG
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    73,    73,    75,    76,    77,    81,    82,    86,   121,
-     122,   124
+       0,    74,    74,    76,    77,    79,    85,    86,    87,    91,
+      92,    96
 };
 #endif
 
@@ -568,8 +568,8 @@ static const char *const yytname[] =
   "COLON", "LEFT", "RIGHT", "LBRACE", "RBRACE", "NOT", "AND", "OR", "TRUE",
   "FALSE", "ATRIB", "EQ", "NE", "LT", "LE", "GT", "GE", "IF", "THEN",
   "ELSE", "BEGIN_TOKEN", "END", "READ", "WRITE", "WRITELN", "EOL",
-  "NEW_LINE", "$accept", "program", "TYPE", "OPT_MUT", "declaration",
-  "commands", "command", YY_NULLPTR
+  "$accept", "program", "commands", "command", "TYPE", "OPT_MUT",
+  "declaration", YY_NULLPTR
 };
 
 static const char *
@@ -579,7 +579,7 @@ yysymbol_name (yysymbol_kind_t yysymbol)
 }
 #endif
 
-#define YYPACT_NINF (-31)
+#define YYPACT_NINF (-25)
 
 #define yypact_value_is_default(Yyn) \
   ((Yyn) == YYPACT_NINF)
@@ -593,8 +593,9 @@ yysymbol_name (yysymbol_kind_t yysymbol)
    STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-      -7,    -9,     5,   -31,    -7,   -31,   -31,    -1,   -31,   -31,
-      -6,    -8,   -31,   -31,   -31,   -30,   -29,   -31
+       1,     3,     5,    -6,   -25,    -5,    -4,    -2,    -1,   -11,
+     -25,   -25,   -25,     6,   -25,   -25,     2,    -7,   -25,   -25,
+     -25,   -24,   -25
 };
 
 /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -602,20 +603,21 @@ static const yytype_int8 yypact[] =
    means the default is an error.  */
 static const yytype_int8 yydefact[] =
 {
-       0,     7,     0,    11,     2,     9,     6,     0,     1,    10,
-       0,     0,     3,     4,     5,     0,     0,     8
+       0,     0,     0,     0,     1,     0,     0,     0,    10,     0,
+       3,     5,     9,     0,     2,     4,     0,     0,     6,     7,
+       8,     0,    11
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -31,   -31,   -31,   -31,   -31,   -31,     7
+     -25,   -25,   -25,     7,   -25,   -25,   -25
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-       0,     2,    15,     7,     3,     4,     5
+       0,     2,     9,    10,    21,    13,    11
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -623,36 +625,37 @@ static const yytype_int8 yydefgoto[] =
    number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-      12,    13,    14,     6,     1,     8,    10,    11,    16,     0,
-      17,     9
+       8,    18,    19,    20,     1,     4,    14,     3,     5,     8,
+       6,    12,     7,    16,    22,    17,    15
 };
 
 static const yytype_int8 yycheck[] =
 {
-       8,     9,    10,    12,    11,     0,     7,    13,    38,    -1,
-      39,     4
+      11,     8,     9,    10,     3,     0,    17,     4,    14,    11,
+      15,    12,    16,     7,    38,    13,     9
 };
 
 /* YYSTOS[STATE-NUM] -- The symbol kind of the accessing symbol of
    state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,    11,    41,    44,    45,    46,    12,    43,     0,    46,
-       7,    13,     8,     9,    10,    42,    38,    39
+       0,     3,    40,     4,     0,    14,    15,    16,    11,    41,
+      42,    45,    12,    44,    17,    42,     7,    13,     8,     9,
+      10,    43,    38
 };
 
 /* YYR1[RULE-NUM] -- Symbol kind of the left-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr1[] =
 {
-       0,    40,    41,    42,    42,    42,    43,    43,    44,    45,
-      45,    46
+       0,    39,    40,    41,    41,    42,    43,    43,    43,    44,
+      44,    45
 };
 
 /* YYR2[RULE-NUM] -- Number of symbols on the right-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr2[] =
 {
-       0,     2,     1,     1,     1,     1,     1,     0,     7,     1,
-       2,     1
+       0,     2,     7,     1,     2,     1,     1,     1,     1,     1,
+       0,     6
 };
 
 
@@ -1115,75 +1118,81 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
-  case 3: /* TYPE: TINT  */
-#line 75 "compiler.y"
+  case 2: /* program: FUNCTION MAIN LEFT RIGHT LBRACE commands RBRACE  */
+#line 74 "compiler.y"
+                                                         { cout<< "Program Started." << endl;}
+#line 1125 "compiler.tab.c"
+    break;
+
+  case 6: /* TYPE: TINT  */
+#line 85 "compiler.y"
            { (yyval.str) = new std::string("INT"); }
-#line 1122 "compiler.tab.c"
+#line 1131 "compiler.tab.c"
     break;
 
-  case 4: /* TYPE: TFLOAT  */
-#line 76 "compiler.y"
+  case 7: /* TYPE: TFLOAT  */
+#line 86 "compiler.y"
              { (yyval.str) = new std::string("FLOAT"); }
-#line 1128 "compiler.tab.c"
+#line 1137 "compiler.tab.c"
     break;
 
-  case 5: /* TYPE: TBOOL  */
-#line 77 "compiler.y"
-            { (yyval.str) = new std::string("BOOL"); }
-#line 1134 "compiler.tab.c"
-    break;
-
-  case 6: /* OPT_MUT: MUT  */
-#line 81 "compiler.y"
-        { (yyval.boolean) = true; }
-#line 1140 "compiler.tab.c"
-    break;
-
-  case 7: /* OPT_MUT: %empty  */
-#line 82 "compiler.y"
-                  { (yyval.boolean) = false; }
-#line 1146 "compiler.tab.c"
-    break;
-
-  case 8: /* declaration: LET OPT_MUT ID COLON TYPE EOL NEW_LINE  */
+  case 8: /* TYPE: TBOOL  */
 #line 87 "compiler.y"
+            { (yyval.str) = new std::string("BOOL"); }
+#line 1143 "compiler.tab.c"
+    break;
+
+  case 9: /* OPT_MUT: MUT  */
+#line 91 "compiler.y"
+        { (yyval.boolean) = true; }
+#line 1149 "compiler.tab.c"
+    break;
+
+  case 10: /* OPT_MUT: %empty  */
+#line 92 "compiler.y"
+                  { (yyval.boolean) = false; }
+#line 1155 "compiler.tab.c"
+    break;
+
+  case 11: /* declaration: LET OPT_MUT ID COLON TYPE EOL  */
+#line 97 "compiler.y"
     {   
-        if((yyvsp[-5].boolean))
+        if((yyvsp[-4].boolean))
         {
-            if(st.variables.find(*(yyvsp[-4].str)) == st.variables.end())
+            if(st.variables.find(*(yyvsp[-3].str)) == st.variables.end())
             {
-                st.variables.insert({*(yyvsp[-4].str), *(yyvsp[-2].str)});
-                cout << "[INFO] " << "\t Variable " << *(yyvsp[-4].str) << " declared as " << *(yyvsp[-2].str) << "." << endl;
+                st.variables.insert({*(yyvsp[-3].str), *(yyvsp[-1].str)});
+                cout << "[INFO] " << "\t Variable " << *(yyvsp[-3].str) << " declared as " << *(yyvsp[-1].str) << "." << endl;
             }
             else{
-                cout << ERROR_START << "Variable " << *(yyvsp[-4].str) << " already declared." << endl;
-                delete (yyvsp[-4].str);
-                delete (yyvsp[-2].str);
+                cout << ERROR_START << "Variable " << *(yyvsp[-3].str) << " already declared." << endl;
+                delete (yyvsp[-3].str);
+                delete (yyvsp[-1].str);
                 exit(EXIT_FAILURE);
             }
         }
         else
         {
-            if(st.constants.find(*(yyvsp[-4].str)) == st.constants.end())
+            if(st.constants.find(*(yyvsp[-3].str)) == st.constants.end())
             {
-                st.constants.insert({*(yyvsp[-4].str), *(yyvsp[-2].str)});
-                cout << "[INFO] " << "\t Constant " << *(yyvsp[-4].str) << " declared as " << *(yyvsp[-2].str) << "." << endl;
+                st.constants.insert({*(yyvsp[-3].str), *(yyvsp[-1].str)});
+                cout << "[INFO] " << "\t Constant " << *(yyvsp[-3].str) << " declared as " << *(yyvsp[-1].str) << "." << endl;
             }
             else{
-                cout << ERROR_START << "Constant " << *(yyvsp[-4].str) << " already declared." << endl;
-                delete (yyvsp[-4].str);
-                delete (yyvsp[-2].str);
+                cout << ERROR_START << "Constant " << *(yyvsp[-3].str) << " already declared." << endl;
+                delete (yyvsp[-3].str);
+                delete (yyvsp[-1].str);
                 exit(EXIT_FAILURE);
             }
         }
-        delete (yyvsp[-4].str);
-        delete (yyvsp[-2].str);
+        delete (yyvsp[-3].str);
+        delete (yyvsp[-1].str);
     }
-#line 1183 "compiler.tab.c"
+#line 1192 "compiler.tab.c"
     break;
 
 
-#line 1187 "compiler.tab.c"
+#line 1196 "compiler.tab.c"
 
       default: break;
     }
@@ -1376,4 +1385,25 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 548 "compiler.y"
+#line 135 "compiler.y"
+
+
+
+int main() { 
+
+    int parse_result = yyparse();
+    if (parse_result == 0) 
+    {
+        cout << "Parsing successful!" << endl;
+        if(ast_root)
+        {
+            delete ast_root;
+            ast_root = nullptr;
+        } 
+    } 
+    else 
+    {
+        cout << "Parsing failed." << endl;
+    }
+    return parse_result;
+}

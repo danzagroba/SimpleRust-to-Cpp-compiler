@@ -2,6 +2,7 @@
 #define ERROR_START "[ERROR] " <<  __LINE__  << ": "
 #include <iostream>
 using namespace std;
+#include "AST.h"
 #include "SymbolTable.h"
 //#include "AtribMetadata.h"
 
@@ -10,7 +11,7 @@ int yywrap(void);
 void yyerror(const char* s);
     
 SymbolTable st;
-
+MainFunctionNode* ast_root = nullptr;
 %}
 
 %union {
@@ -18,11 +19,11 @@ SymbolTable st;
     float   fval;
     std::string* str;
     bool    boolean;
-    //AtribMetadata* atrib_metadata;
-}
+};
 
 
 %start program
+
 
 
 /*=========================================================================
@@ -53,12 +54,12 @@ SymbolTable st;
 
 %token READ WRITE WRITELN
 
-%token EOL NEW_LINE
+%token EOL 
 
 %type <str> TYPE
 %type <boolean> OPT_MUT
 
-%type <boolean> LOGICAL_EXPR
+//%type <boolean> LOGICAL_EXPR
 /*
 
 %type <boolean> logical_expression comparison_expression boolean_factor
@@ -70,15 +71,14 @@ SymbolTable st;
                             GRAMMAR RULES
 =========================================================================*/
 %%
-//program: FUNCTION MAIN LEFT RIGHT LBRACE commands RBRACE;
-program: commands;
+program: FUNCTION MAIN LEFT RIGHT LBRACE commands RBRACE { cout<< "Program Started." << endl;};
 
 commands: command
     | commands command;
 
 command: declaration
     //| if_command
-    | atrib
+    //| atrib
     //| read_command
     //| write_command;
 
@@ -93,7 +93,7 @@ OPT_MUT:
     ;
 declaration:
 
-    LET OPT_MUT ID COLON TYPE EOL NEW_LINE
+    LET OPT_MUT ID COLON TYPE EOL
     {   
         if($2)
         {
@@ -127,9 +127,29 @@ declaration:
         delete $5;
     }
 
-    EXPR:
-    LOGICAL_EXPR
-    | ARITMETIC_EXPR
+    //EXPR:
+    //LOGICAL_EXPR
+    //| ARITMETIC_EXPR
     ;
 
 %%
+
+
+int main() { 
+
+    int parse_result = yyparse();
+    if (parse_result == 0) 
+    {
+        cout << "Parsing successful!" << endl;
+        if(ast_root)
+        {
+            delete ast_root;
+            ast_root = nullptr;
+        } 
+    } 
+    else 
+    {
+        cout << "Parsing failed." << endl;
+    }
+    return parse_result;
+}
