@@ -4,10 +4,11 @@
 
 class SymbolTable{
     public:
-    //Tabela de simbolos para variáveis
+    //SymbolTable for variables
     std::unordered_map<std::string, TypeNode*> variables;
-    //Tabela de simbolos para constantes
-    std::unordered_map<std::string, TypeNode*> constants;
+    //Constants are not supported in this grammar anymore
+    //SymbolTable for constants
+    //std::unordered_map<std::string, TypeNode*> constants;
   
 
     SymbolTable();

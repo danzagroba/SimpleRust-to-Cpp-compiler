@@ -172,6 +172,7 @@ public:
 class VariableDeclarationNode: public CommandNode
 {
 public:
+    //Constants are not supported in this grammar anymore
     bool isMut;
     TypeNode* type;
     IdentifierNode* identifier;
@@ -189,6 +190,7 @@ public:
 class ArrayDeclarationNode: public CommandNode
 {
 public:
+//Constants are not supported in this grammar anymore
 //The arrays are mutable by default, so the isMut flag is not needed here
 TypeNode* type;
 IdentifierNode* identifier;

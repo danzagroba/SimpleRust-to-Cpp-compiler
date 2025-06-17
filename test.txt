@@ -13,6 +13,6 @@ fn main() {
     let ww: f32 = 3;
     let ll: f32 = 3.5;
 
-    let ee: i32 = 4.3;
+    let ee: i32 = 4.3 + ll * 3;
     let kk: i32 = true;
 }
