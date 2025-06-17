@@ -56,12 +56,12 @@ extern int yydebug;
     YYUNDEF = 257,                 /* "invalid token"  */
     FUNCTION = 258,                /* FUNCTION  */
     MAIN = 259,                    /* MAIN  */
-    INTEGER = 260,                 /* INTEGER  */
-    FLOATING = 261,                /* FLOATING  */
-    ID = 262,                      /* ID  */
-    TINT = 263,                    /* TINT  */
-    TFLOAT = 264,                  /* TFLOAT  */
-    TBOOL = 265,                   /* TBOOL  */
+    ID = 260,                      /* ID  */
+    TINT = 261,                    /* TINT  */
+    TFLOAT = 262,                  /* TFLOAT  */
+    TBOOL = 263,                   /* TBOOL  */
+    INTEGER = 264,                 /* INTEGER  */
+    FLOATING = 265,                /* FLOATING  */
     LET = 266,                     /* LET  */
     MUT = 267,                     /* MUT  */
     COLON = 268,                   /* COLON  */
@@ -98,14 +98,54 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 17 "compiler.y"
+#line 18 "compiler.y"
 
     int     ival;
     float   fval;
     std::string* str;
     bool    boolean;
 
-#line 109 "compiler.tab.h"
+    //AST Nodes
+    Node* node_ptr;
+    CommandNode* command_node_ptr;
+    vector<CommandNode*>* command_list_ptr; 
+    TypeNode* type_node_ptr;
+    ExpressionNode* expr_node_ptr;
+    LogicalExpressionNode* logical_expr_node_ptr;
+    ArithmeticExpressionNode* arith_expr_node_ptr;
+    MainFunctionNode* main_func_node_ptr;
+    IdentifierNode* id_node_ptr;
+    IntegerLiteralNode* int_literal_node_ptr;
+    FloatLiteralNode* float_literal_node_ptr;
+    BooleanLiteralNode* bool_literal_node_ptr;
+    VariableDeclarationNode* var_decl_node_ptr;
+    ListElementsNode* list_elements_node_ptr;
+    ArrayDeclarationNode* array_decl_node_ptr; 
+    ScalarAssignmentNode* scalar_assign_node_ptr; 
+    ArrayAssignmentNode* array_assign_node_ptr; 
+    IfElseNode* if_else_node_ptr; 
+    WhileNode* while_node_ptr; 
+    ForNode* for_node_ptr; 
+    AdditionOperatorNode* add_op_node_ptr; 
+    SubtractionOperatorNode* sub_op_node_ptr; 
+    MultiplicationOperatorNode* mul_op_node_ptr; 
+    DivisionOperatorNode* div_op_node_ptr; 
+    EqualityOperatorNode* eq_op_node_ptr; 
+    InequalityOperatorNode* ne_op_node_ptr; 
+    LessThanOrEqualOperatorNode* le_op_node_ptr; 
+    LessThanOperatorNode* lt_op_node_ptr; 
+    GreaterThanOrEqualOperatorNode* ge_op_node_ptr; 
+    GreaterThanOperatorNode* gt_op_node_ptr; 
+    LogicalAndOperatorNode* and_op_node_ptr; 
+    LogicalOrOperatorNode* or_op_node_ptr; 
+    NotOperatorNode* not_op_node_ptr; 
+    InputNode* input_node_ptr; 
+    OutputNode* output_node_ptr; 
+    OutputlnNode* outputln_node_ptr; 
+    ArrayAcessNode* array_access_node_ptr; 
+
+
+#line 149 "compiler.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

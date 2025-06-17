@@ -12,6 +12,7 @@ void yyerror(const char* s);
     
 SymbolTable st;
 MainFunctionNode* ast_root = nullptr;
+
 %}
 
 %union {
@@ -19,6 +20,46 @@ MainFunctionNode* ast_root = nullptr;
     float   fval;
     std::string* str;
     bool    boolean;
+
+    //AST Nodes
+    Node* node_ptr;
+    CommandNode* command_node_ptr;
+    vector<CommandNode*>* command_list_ptr; 
+    TypeNode* type_node_ptr;
+    ExpressionNode* expr_node_ptr;
+    LogicalExpressionNode* logical_expr_node_ptr;
+    ArithmeticExpressionNode* arith_expr_node_ptr;
+    MainFunctionNode* main_func_node_ptr;
+    IdentifierNode* id_node_ptr;
+    IntegerLiteralNode* int_literal_node_ptr;
+    FloatLiteralNode* float_literal_node_ptr;
+    BooleanLiteralNode* bool_literal_node_ptr;
+    VariableDeclarationNode* var_decl_node_ptr;
+    ListElementsNode* list_elements_node_ptr;
+    ArrayDeclarationNode* array_decl_node_ptr; 
+    ScalarAssignmentNode* scalar_assign_node_ptr; 
+    ArrayAssignmentNode* array_assign_node_ptr; 
+    IfElseNode* if_else_node_ptr; 
+    WhileNode* while_node_ptr; 
+    ForNode* for_node_ptr; 
+    AdditionOperatorNode* add_op_node_ptr; 
+    SubtractionOperatorNode* sub_op_node_ptr; 
+    MultiplicationOperatorNode* mul_op_node_ptr; 
+    DivisionOperatorNode* div_op_node_ptr; 
+    EqualityOperatorNode* eq_op_node_ptr; 
+    InequalityOperatorNode* ne_op_node_ptr; 
+    LessThanOrEqualOperatorNode* le_op_node_ptr; 
+    LessThanOperatorNode* lt_op_node_ptr; 
+    GreaterThanOrEqualOperatorNode* ge_op_node_ptr; 
+    GreaterThanOperatorNode* gt_op_node_ptr; 
+    LogicalAndOperatorNode* and_op_node_ptr; 
+    LogicalOrOperatorNode* or_op_node_ptr; 
+    NotOperatorNode* not_op_node_ptr; 
+    InputNode* input_node_ptr; 
+    OutputNode* output_node_ptr; 
+    OutputlnNode* outputln_node_ptr; 
+    ArrayAcessNode* array_access_node_ptr; 
+
 };
 
 
@@ -33,12 +74,12 @@ MainFunctionNode* ast_root = nullptr;
 
 %token FUNCTION MAIN
 
-%token <ival>INTEGER 
-%token <fval>FLOATING 
-
 %token <str> ID
 
 %token TINT TFLOAT TBOOL
+
+%token <ival> INTEGER
+%token <fval> FLOATING
 
 %token LET MUT COLON
 
@@ -56,83 +97,236 @@ MainFunctionNode* ast_root = nullptr;
 
 %token EOL 
 
-%type <str> TYPE
+%token '+' '-' '*' '/'
+
+%type <main_func_node_ptr> program
+%type <command_list_ptr> commands
+%type <command_node_ptr> command
+%type <type_node_ptr> TYPE
+%type <var_decl_node_ptr> declaration
 %type <boolean> OPT_MUT
 
-//%type <boolean> LOGICAL_EXPR
-/*
+%type <expr_node_ptr> expression
+%type <arith_expr_node_ptr> arithmetic_expression
+%type <logical_expr_node_ptr> logical_expression
 
-%type <boolean> logical_expression comparison_expression boolean_factor
-%type <fval> expression term factor
-%type <atrib_metadata> conditional_atrib else_command
-*/
+%type <expr_node_ptr> factor
+%type <expr_node_ptr> term
+
 
 /*=========================================================================
                             GRAMMAR RULES
 =========================================================================*/
 %%
-program: FUNCTION MAIN LEFT RIGHT LBRACE commands RBRACE { cout<< "Program Started." << endl;};
+program: FUNCTION MAIN LEFT RIGHT LBRACE commands RBRACE { 
+        ast_root = new MainFunctionNode();
+        cout<< "Program Started." << endl;
+        std::vector<CommandNode*>* cmds_list = $6;
+        for (CommandNode* cmd : *cmds_list) {
+            ast_root->addCommand(cmd);
+        }
+        delete cmds_list;
+    };
 
-commands: command
-    | commands command;
+commands: command 
+    {
+        $$ = new std::vector<CommandNode*>();
+        $$->push_back($1);
+        cout << "[INFO] " << "\t Command added to command list." << endl;
+    }
+    | commands command
+    {
+        $$ = $1;
+        $$->push_back($2);
+        cout << "[INFO] " << "\t Command added to command list." << endl;
+    };
 
-command: declaration
-    //| if_command
-    //| atrib
-    //| read_command
-    //| write_command;
+command: declaration { $$ = $1; }
+    //| if_command { $$ = $1; }
+    //| assign { $$ = $1; }
+    //| read_command { $$ = $1; }
+    //| write_command; { $$ = $1; }
 
-TYPE: TINT { $$ = new std::string("INT"); }
-    | TFLOAT { $$ = new std::string("FLOAT"); }
-    | TBOOL { $$ = new std::string("BOOL"); }
+TYPE: TINT { $$ = new IntegerTypeNode(); }
+    | TFLOAT { $$ = new FloatTypeNode(); }
+    | TBOOL { $$ = new BooleanTypeNode; }
     ;
 
 OPT_MUT: 
     MUT { $$ = true; }
     | /* empty */ { $$ = false; }
     ;
+
 declaration:
 
     LET OPT_MUT ID COLON TYPE EOL
     {   
-        if($2)
-        {
-            if(st.variables.find(*$3) == st.variables.end())
-            {
-                st.variables.insert({*$3, *$5});
-                cout << "[INFO] " << "\t Variable " << *$3 << " declared as " << *$5 << "." << endl;
-            }
-            else{
-                cout << ERROR_START << "Variable " << *$3 << " already declared." << endl;
-                delete $3;
-                delete $5;
-                exit(EXIT_FAILURE);
-            }
-        }
-        else
-        {
-            if(st.constants.find(*$3) == st.constants.end())
-            {
-                st.constants.insert({*$3, *$5});
-                cout << "[INFO] " << "\t Constant " << *$3 << " declared as " << *$5 << "." << endl;
-            }
-            else{
-                cout << ERROR_START << "Constant " << *$3 << " already declared." << endl;
-                delete $3;
-                delete $5;
-                exit(EXIT_FAILURE);
-            }
-        }
-        delete $3;
-        delete $5;
-    }
+        IdentifierNode* id_node_ptr = new IdentifierNode(*$3);
 
-    //EXPR:
-    //LOGICAL_EXPR
-    //| ARITMETIC_EXPR
+        TypeNode* type_node_ptr = $5;
+
+        bool is_mutable = $2;
+
+        $$ = new VariableDeclarationNode(type_node_ptr, id_node_ptr, is_mutable, nullptr);
+
+        if($2) {
+            st.variables.insert({id_node_ptr->getIdentifier(), type_node_ptr});
+        } else {
+            st.constants.insert({id_node_ptr->getIdentifier(), type_node_ptr}); 
+        }
+
+        cout << "[INFO] " << "\t Variable/Constant " << *$3 << " added to AST." << endl;
+        delete $3;
+    }
+    | LET OPT_MUT ID COLON TYPE ATRIB expression EOL
+    {   
+        IdentifierNode* id_node_ptr = new IdentifierNode(*$3);
+
+        TypeNode* type_node_ptr = $5;
+
+        bool is_mutable = $2;
+
+        $$ = new VariableDeclarationNode(type_node_ptr, id_node_ptr, is_mutable, $7);
+
+        if($2) {
+            st.variables.insert({id_node_ptr->getIdentifier(), type_node_ptr});
+        } else {
+            st.constants.insert({id_node_ptr->getIdentifier(), type_node_ptr}); 
+        }
+
+        cout << "[INFO] " << "\t Variable/Constant " << *$3 << " added to AST." << endl;
+        delete $3;
+    }
+    ;
+
+expression: arithmetic_expression { $$ = $1; }
+    | logical_expression { $$ = $1; }
+    ;
+
+arithmetic_expression: arithmetic_expression '+' arithmetic_expression
+    { 
+        $$ = new AdditionOperatorNode($1, $3); 
+        cout << "[INFO] " << "\t Addition operation added to AST." << endl;
+    }
+    | arithmetic_expression '-' arithmetic_expression
+    { 
+        $$ = new SubtractionOperatorNode($1, $3); 
+        cout << "[INFO] " << "\t Subtraction operation added to AST." << endl;
+    }
+    | term
+    { 
+        $$ = $1; 
+        cout << "[INFO] " << "\t Term added to arithmetic expression." << endl;
+    }
+    ;
+
+logical_expression: expression AND expression
+    { 
+        $$ = new LogicalAndOperatorNode($1, $3); 
+        cout << "[INFO] " << "\t Logical AND operation added to AST." << endl;
+    }
+    | expression OR expression
+    { 
+        $$ = new LogicalOrOperatorNode($1, $3); 
+        cout << "[INFO] " << "\t Logical OR operation added to AST." << endl;
+    }
+    | NOT expression
+    { 
+        $$ = new NotOperatorNode($2); 
+        cout << "[INFO] " << "\t Logical NOT operation added to AST." << endl;
+    }
+    | expression EQ expression
+    { 
+        $$ = new EqualityOperatorNode($1, $3); 
+        cout << "[INFO] " << "\t Equality operation added to AST." << endl;
+    }
+    | expression NE expression
+    { 
+        $$ = new InequalityOperatorNode($1, $3); 
+        cout << "[INFO] " << "\t Inequality operation added to AST." << endl;
+    }
+    | expression LT expression
+    { 
+        $$ = new LessThanOperatorNode($1, $3); 
+        cout << "[INFO] " << "\t Less than operation added to AST." << endl;
+    }
+    | expression LE expression
+    { 
+        $$ = new LessThanOrEqualOperatorNode($1, $3); 
+        cout << "[INFO] " << "\t Less than or equal operation added to AST." << endl;
+    }
+    | expression GT expression
+    { 
+        $$ = new GreaterThanOperatorNode($1, $3); 
+        cout << "[INFO] " << "\t Greater than operation added to AST." << endl;
+    }
+    | expression GE expression
+    { 
+        $$ = new GreaterThanOrEqualOperatorNode($1, $3); 
+        cout << "[INFO] " << "\t Greater than or equal operation added to AST." << endl;
+    }
+    | LEFT logical_expression RIGHT
+    { 
+        $$ = $2; 
+        cout << "[INFO] " << "\t Parentheses added to logical expression." << endl;
+    }
+    ;
+
+term: factor
+    | term '*' factor
+    { 
+        $$ = new MultiplicationOperatorNode($1, $3); 
+        cout << "[INFO] " << "\t Multiplication operation added to AST." << endl;
+    }
+    | term '/' factor
+    { 
+        $$ = new DivisionOperatorNode($1, $3); 
+        cout << "[INFO] " << "\t Division operation added to AST." << endl;
+    }
+    ;
+    
+factor: INTEGER 
+    { 
+        $$ = new IntegerLiteralNode($1); 
+        cout << "[INFO] " << "\t Integer literal " << $1 << " added to AST." << endl;
+    }
+    | FLOATING 
+    { 
+        $$ = new FloatLiteralNode($1); 
+        cout << "[INFO] " << "\t Float literal " << $1 << " added to AST." << endl;
+    }
+    | ID 
+    { 
+        IdentifierNode* id_node_ptr = new IdentifierNode(*$1);
+        if(st.variables.find(id_node_ptr->getIdentifier()) != st.variables.end() || st.constants.find(id_node_ptr->getIdentifier()) != st.constants.end()) {
+            $$ = id_node_ptr; 
+            cout << "[INFO] " << "\t Identifier " << *$1 << " added to AST." << endl;
+        } else {
+            yyerror("Identifier not declared.");
+            delete id_node_ptr;
+            $$ = nullptr;
+        }
+        delete $1;
+    }
+    | LEFT expression RIGHT 
+    { 
+        $$ = $2; 
+        cout << "[INFO] " << "\t Parentheses added to arithmetic expression." << endl;
+    }
+    | TRUE 
+    { 
+        $$ = new BooleanLiteralNode(true); 
+        cout << "[INFO] " << "\t Boolean literal TRUE added to AST." << endl;
+    }
+    | FALSE 
+    { 
+        $$ = new BooleanLiteralNode(false); 
+        cout << "[INFO] " << "\t Boolean literal FALSE added to AST." << endl;
+    }
     ;
 
 %%
+
 
 
 int main() { 

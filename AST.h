@@ -29,7 +29,7 @@ class TypeNode: public Node
     TypeNode() = default;
     ~TypeNode() override = default;
     
-    void accept(class Visitor& visitor) override;
+    virtual void accept(class Visitor& visitor) override = 0;
 };
 
 class ExpressionNode: public Node
@@ -66,11 +66,7 @@ class MainFunctionNode: public Node
     
     public:
     MainFunctionNode() = default;
-    ~MainFunctionNode() override {
-        for (CommandNode* command : commands) {
-            delete command;
-        }
-    }
+    ~MainFunctionNode() override;
     
     void accept(class Visitor& visitor) override;
     
@@ -83,8 +79,8 @@ class IntegerLiteralNode: public ExpressionNode
 public:
     int value;
 
-    IntegerLiteralNode(int value): value(value) {}
-    ~IntegerLiteralNode() override;
+    IntegerLiteralNode(int value);
+    ~IntegerLiteralNode() override = default;
 
     void accept(class Visitor& visitor) override;
 
@@ -96,8 +92,8 @@ class FloatLiteralNode: public ExpressionNode
 public:
     float value;
 
-    FloatLiteralNode(float value): value(value) {}
-    ~FloatLiteralNode() override;
+    FloatLiteralNode(float value);
+    ~FloatLiteralNode() override = default;
 
     void accept(class Visitor& visitor) override;
 
@@ -109,8 +105,8 @@ class BooleanLiteralNode: public ExpressionNode
 public:
     bool value;
 
-    BooleanLiteralNode(bool value): value(value) {}
-    ~BooleanLiteralNode() override;
+    BooleanLiteralNode(bool value);
+    ~BooleanLiteralNode() override = default;
 
     void accept(class Visitor& visitor) override;
 
@@ -123,8 +119,8 @@ class IdentifierNode: public ExpressionNode
 public:
     string identifier;
 
-    IdentifierNode(const string& identifier): identifier(identifier) {}
-    ~IdentifierNode() override;
+    IdentifierNode(const string& identifier);
+    ~IdentifierNode() override = default;
 
     void accept(class Visitor& visitor) override;
 
@@ -164,17 +160,8 @@ private:
     vector<ExpressionNode*> elements;
     
 public:
-    ListElementsNode(): elements() {}
-    ~ListElementsNode() override
-    {
-        for (ExpressionNode* element : elements) {
-            if(element != nullptr)
-            {
-                delete element;
-                element = nullptr;
-            }
-        }
-    }
+    ListElementsNode();
+    ~ListElementsNode() override;
 
     void accept(class Visitor& visitor) override;
 
@@ -190,16 +177,8 @@ public:
     IdentifierNode* identifier;
     ExpressionNode* initialValue; // if nullptr the variable is not initialized
 
-    VariableDeclarationNode(TypeNode* t, IdentifierNode* id, bool isMut = false, ExpressionNode* initialValue = nullptr);
-    ~VariableDeclarationNode() override
-    {
-        delete type;
-        delete identifier;
-        if(initialValue != nullptr)
-        {
-            delete initialValue;
-        }
-    }
+    VariableDeclarationNode(TypeNode* t, IdentifierNode* id, bool im = false, ExpressionNode* iv = nullptr);
+    ~VariableDeclarationNode() override;
 
     void accept(class Visitor& visitor) override;
 
@@ -216,23 +195,8 @@ IdentifierNode* identifier;
 ExpressionNode* size;
 ListElementsNode* initialElements;
 
-ArrayDeclarationNode(TypeNode* type, IdentifierNode* id, ExpressionNode* size, bool isMut = false, ListElementsNode* list = nullptr)
-    : type(type), identifier(id), size(size), initialElements(list)
-{
-    if (initialElements == nullptr) {
-        initialElements = new ListElementsNode();
-    }
-}
-~ArrayDeclarationNode() override
-{
-    delete type;
-    delete identifier;
-    delete size;
-    if(initialElements != nullptr)
-    {
-        delete initialElements;
-    }
-}
+ArrayDeclarationNode(TypeNode* type, IdentifierNode* id, ExpressionNode* size, bool isMut = false, ListElementsNode* list = nullptr);
+~ArrayDeclarationNode() override;
 
     void accept(class Visitor& visitor) override;
     
@@ -247,12 +211,8 @@ public:
     IdentifierNode* identifier;
     ExpressionNode* index;
 
-    ArrayAcessNode(IdentifierNode* id, ExpressionNode* idx): identifier(id), index(idx) {}
-    ~ArrayAcessNode() override
-    {
-        delete identifier;
-        delete index;
-    }
+    ArrayAcessNode(IdentifierNode* id, ExpressionNode* idx);
+    ~ArrayAcessNode() override;
 
     void accept(class Visitor& visitor) override;
 
@@ -266,12 +226,8 @@ public:
     IdentifierNode* identifier;
     ExpressionNode* value;
 
-    ScalarAssignmentNode(IdentifierNode* id, ExpressionNode* val): identifier(id), value(val) {}
-    ~ScalarAssignmentNode() override
-    {
-        delete identifier;
-        delete value;
-    }
+    ScalarAssignmentNode(IdentifierNode* id, ExpressionNode* val);
+    ~ScalarAssignmentNode() override;
 
     void accept(class Visitor& visitor) override;
 
@@ -286,13 +242,8 @@ class ArrayAssignmentNode: public CommandNode
     ExpressionNode* index; 
     ExpressionNode* value;
     
-    ArrayAssignmentNode(IdentifierNode* id, ExpressionNode* idx, ExpressionNode* val): identifier(id), index(idx), value(val) {}
-    ~ArrayAssignmentNode() override
-    {
-        delete identifier;
-        delete index;
-        delete value;
-    }
+    ArrayAssignmentNode(IdentifierNode* id, ExpressionNode* idx, ExpressionNode* val);
+    ~ArrayAssignmentNode() override;
     
     void accept(class Visitor& visitor) override;
     
@@ -309,17 +260,8 @@ class IfElseNode: public CommandNode
     vector<CommandNode*> ifCommands;
     vector<CommandNode*> elseCommands;
     
-    IfElseNode(LogicalExpressionNode* cond): condition(cond) {}
-    ~IfElseNode() override
-    {
-        delete condition;
-        for (CommandNode* command : ifCommands) {
-            delete command;
-        }
-        for (CommandNode* command : elseCommands) {
-            delete command;
-        }
-    }
+    IfElseNode(LogicalExpressionNode* condition);
+    ~IfElseNode() override;
     
     void accept(class Visitor& visitor) override;
     
@@ -336,14 +278,8 @@ class WhileNode: public CommandNode
     LogicalExpressionNode* condition;
     vector<CommandNode*> commands;
     
-    WhileNode(LogicalExpressionNode* cond): condition(cond) {}
-    ~WhileNode() override
-    {
-        delete condition;
-        for (CommandNode* command : commands) {
-            delete command;
-        }
-    }
+    WhileNode(LogicalExpressionNode* cond);
+    ~WhileNode() override;
     
     void accept(class Visitor& visitor) override;
     
@@ -360,24 +296,8 @@ class ForNode: public CommandNode
     string variableName;
     vector<CommandNode*> commands; 
     
-    ForNode(ArithmeticExpressionNode* initial, ArithmeticExpressionNode* final)
-        : initialvalue(initial), finalvalue(final), variableName("it" + to_string(count))
-    {
-        count++;
-    }
-    {
-        variableName = "it" + count; // Default variable name, can be changed if needed
-        count++;
-
-    }
-    ~ForNode() override
-    {
-        delete initialvalue;
-        delete finalvalue;
-        for (CommandNode* command : commands) {
-            delete command;
-        }
-    }
+    ForNode(ArithmeticExpressionNode* initial, ArithmeticExpressionNode* final);
+    ~ForNode() override;
     
     void accept(class Visitor& visitor) override;
     
@@ -393,12 +313,8 @@ public:
     ExpressionNode* left;
     ExpressionNode* right;
 
-    AdditionOperatorNode(ExpressionNode* left, ExpressionNode* right): left(left), right(right) {}
-    ~AdditionOperatorNode() override
-    {
-        delete left;
-        delete right;
-    }
+    AdditionOperatorNode(ExpressionNode* left, ExpressionNode* right);
+    ~AdditionOperatorNode() override;
 
     void accept(class Visitor& visitor) override;
 
@@ -413,12 +329,8 @@ public:
     ExpressionNode* left;
     ExpressionNode* right;
 
-    SubtractionOperatorNode(ExpressionNode* left, ExpressionNode* right): left(left), right(right) {}
-    ~SubtractionOperatorNode() override
-    {
-        delete left;
-        delete right;
-    }
+    SubtractionOperatorNode(ExpressionNode* left, ExpressionNode* right);
+    ~SubtractionOperatorNode() override;
 
     void accept(class Visitor& visitor) override;
 
@@ -433,12 +345,8 @@ public:
     ExpressionNode* left;
     ExpressionNode* right;
 
-    MultiplicationOperatorNode(ExpressionNode* left, ExpressionNode* right): left(left), right(right) {}
-    ~MultiplicationOperatorNode() override
-    {
-        delete left;
-        delete right;
-    }
+    MultiplicationOperatorNode(ExpressionNode* left, ExpressionNode* right);
+    ~MultiplicationOperatorNode() override;
 
     void accept(class Visitor& visitor) override;
 
@@ -453,12 +361,8 @@ public:
     ExpressionNode* left;
     ExpressionNode* right;
 
-    DivisionOperatorNode(ExpressionNode* left, ExpressionNode* right): left(left), right(right) {}
-    ~DivisionOperatorNode() override
-    {
-        delete left;
-        delete right;
-    }
+    DivisionOperatorNode(ExpressionNode* left, ExpressionNode* right);
+    ~DivisionOperatorNode() override;
 
     void accept(class Visitor& visitor) override;
 
@@ -473,13 +377,9 @@ public:
     ExpressionNode* left;
     ExpressionNode* right;
 
-    EqualityOperatorNode(ExpressionNode* left, ExpressionNode* right): left(left), right(right) {}
-    ~EqualityOperatorNode() override
-    {
-        delete left;
-        delete right;
-    }
-
+    EqualityOperatorNode(ExpressionNode* left, ExpressionNode* right);
+    ~EqualityOperatorNode() override;
+    
     void accept(class Visitor& visitor) override;
 
     ExpressionNode* getLeft() const;
@@ -493,12 +393,8 @@ public:
     ExpressionNode* left;
     ExpressionNode* right;
 
-    InequalityOperatorNode(ExpressionNode* left, ExpressionNode* right): left(left), right(right) {}
-    ~InequalityOperatorNode() override
-    {
-        delete left;
-        delete right;
-    }
+    InequalityOperatorNode(ExpressionNode* left, ExpressionNode* right);
+    ~InequalityOperatorNode() override;
 
     void accept(class Visitor& visitor) override;
 
@@ -513,13 +409,9 @@ public:
     ExpressionNode* left;
     ExpressionNode* right;
 
-    LessThanOrEqualOperatorNode(ExpressionNode* left, ExpressionNode* right): left(left), right(right) {}
-    ~LessThanOrEqualOperatorNode() override
-    {
-        delete left;
-        delete right;
-    }
-
+    LessThanOrEqualOperatorNode(ExpressionNode* left, ExpressionNode* right);
+    ~LessThanOrEqualOperatorNode() override;
+    
     void accept(class Visitor& visitor) override;
 
     ExpressionNode* getLeft() const;
@@ -533,12 +425,8 @@ public:
     ExpressionNode* left;
     ExpressionNode* right;
 
-    LessThanOperatorNode(ExpressionNode* left, ExpressionNode* right): left(left), right(right) {}
-    ~LessThanOperatorNode() override
-    {
-        delete left;
-        delete right;
-    }
+    LessThanOperatorNode(ExpressionNode* left, ExpressionNode* right);
+    ~LessThanOperatorNode();
 
     void accept(class Visitor& visitor) override;
 
@@ -553,12 +441,8 @@ public:
     ExpressionNode* left;
     ExpressionNode* right;
 
-    GreaterThanOrEqualOperatorNode(ExpressionNode* left, ExpressionNode* right): left(left), right(right) {}
-    ~GreaterThanOrEqualOperatorNode() override
-    {
-        delete left;
-        delete right;
-    }
+    GreaterThanOrEqualOperatorNode(ExpressionNode* left, ExpressionNode* right);
+    ~GreaterThanOrEqualOperatorNode() override;
 
     void accept(class Visitor& visitor) override;
 
@@ -573,12 +457,8 @@ public:
     ExpressionNode* left;
     ExpressionNode* right;
 
-    GreaterThanOperatorNode(ExpressionNode* left, ExpressionNode* right): left(left), right(right) {}
-    ~GreaterThanOperatorNode() override
-    {
-        delete left;
-        delete right;
-    }
+    GreaterThanOperatorNode(ExpressionNode* left, ExpressionNode* right);
+    ~GreaterThanOperatorNode() override;
 
     void accept(class Visitor& visitor) override;
 
@@ -593,12 +473,8 @@ public:
     LogicalExpressionNode* left;
     LogicalExpressionNode* right;
 
-    LogicalAndOperatorNode(LogicalExpressionNode* left, LogicalExpressionNode* right): left(left), right(right) {}
-    ~LogicalAndOperatorNode() override
-    {
-        delete left;
-        delete right;
-    }
+    LogicalAndOperatorNode(LogicalExpressionNode* left, LogicalExpressionNode* right);
+    ~LogicalAndOperatorNode() override;
 
     void accept(class Visitor& visitor) override;
 
@@ -613,12 +489,8 @@ public:
     LogicalExpressionNode* left;
     LogicalExpressionNode* right;
 
-    LogicalOrOperatorNode(LogicalExpressionNode* left, LogicalExpressionNode* right): left(left), right(right) {}
-    ~LogicalOrOperatorNode() override
-    {
-        delete left;
-        delete right;
-    }
+    LogicalOrOperatorNode(LogicalExpressionNode* left, LogicalExpressionNode* right);
+    ~LogicalOrOperatorNode() override;
 
     void accept(class Visitor& visitor) override;
 
@@ -632,11 +504,8 @@ class NotOperatorNode: public LogicalExpressionNode
 public:
     LogicalExpressionNode* expression;
 
-    NotOperatorNode(LogicalExpressionNode* expr): expression(expr) {}
-    ~NotOperatorNode() override
-    {
-        delete expression;
-    }
+    NotOperatorNode(LogicalExpressionNode* expr);
+    ~NotOperatorNode() override;
 
     void accept(class Visitor& visitor) override;
 
@@ -648,11 +517,8 @@ class InputNode: public CommandNode
 public:
     IdentifierNode* identifier;
 
-    InputNode(IdentifierNode* id): identifier(id) {}
-    ~InputNode() override
-    {
-        delete identifier;
-    }
+    InputNode(IdentifierNode* id);
+    ~InputNode() override;
 
     void accept(class Visitor& visitor) override;
 
@@ -664,11 +530,8 @@ class OutputNode: public CommandNode
 public:
     ExpressionNode* expression;
 
-    OutputNode(ExpressionNode* expr): expression(expr) {}
-    ~OutputNode() override
-    {
-        delete expression;
-    }
+    OutputNode(ExpressionNode* expr);
+    ~OutputNode() override;
 
     void accept(class Visitor& visitor) override;
 
@@ -680,11 +543,8 @@ class OutputlnNode: public CommandNode
 public:
     ExpressionNode* expression;
 
-    OutputlnNode(ExpressionNode* expr): expression(expr) {}
-    ~OutputlnNode() override
-    {
-        delete expression;
-    }
+    OutputlnNode(ExpressionNode* expr);
+    ~OutputlnNode() override;
 
     void accept(class Visitor& visitor) override;
 
