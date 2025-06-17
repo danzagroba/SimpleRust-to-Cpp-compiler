@@ -1312,7 +1312,7 @@ yyreduce:
   case 17: /* arithmetic_expression: term  */
 #line 217 "compiler.y"
     { 
-        (yyval.arith_expr_node_ptr) = (yyvsp[0].expr_node_ptr); 
+        (yyval.arith_expr_node_ptr) = static_cast<ArithmeticExpressionNode*>((yyvsp[0].expr_node_ptr)); 
         cout << "[INFO] " << "\t Term added to arithmetic expression." << endl;
     }
 #line 1319 "compiler.tab.c"
@@ -1321,7 +1321,7 @@ yyreduce:
   case 18: /* logical_expression: expression AND expression  */
 #line 224 "compiler.y"
     { 
-        (yyval.logical_expr_node_ptr) = new LogicalAndOperatorNode((yyvsp[-2].expr_node_ptr), (yyvsp[0].expr_node_ptr)); 
+        (yyval.logical_expr_node_ptr) = new LogicalAndOperatorNode(static_cast<LogicalExpressionNode*>((yyvsp[-2].expr_node_ptr)), static_cast<LogicalExpressionNode*>((yyvsp[0].expr_node_ptr)));
         cout << "[INFO] " << "\t Logical AND operation added to AST." << endl;
     }
 #line 1328 "compiler.tab.c"
@@ -1330,7 +1330,7 @@ yyreduce:
   case 19: /* logical_expression: expression OR expression  */
 #line 229 "compiler.y"
     { 
-        (yyval.logical_expr_node_ptr) = new LogicalOrOperatorNode((yyvsp[-2].expr_node_ptr), (yyvsp[0].expr_node_ptr)); 
+        (yyval.logical_expr_node_ptr) = new LogicalOrOperatorNode(static_cast<LogicalExpressionNode*>((yyvsp[-2].expr_node_ptr)), static_cast<LogicalExpressionNode*>((yyvsp[0].expr_node_ptr)));
         cout << "[INFO] " << "\t Logical OR operation added to AST." << endl;
     }
 #line 1337 "compiler.tab.c"
@@ -1339,7 +1339,7 @@ yyreduce:
   case 20: /* logical_expression: NOT expression  */
 #line 234 "compiler.y"
     { 
-        (yyval.logical_expr_node_ptr) = new NotOperatorNode((yyvsp[0].expr_node_ptr)); 
+        (yyval.logical_expr_node_ptr) = new NotOperatorNode(static_cast<LogicalExpressionNode*>((yyvsp[0].expr_node_ptr))); 
         cout << "[INFO] " << "\t Logical NOT operation added to AST." << endl;
     }
 #line 1346 "compiler.tab.c"

@@ -215,24 +215,24 @@ arithmetic_expression: arithmetic_expression '+' arithmetic_expression
     }
     | term
     { 
-        $$ = $1; 
+        $$ = static_cast<ArithmeticExpressionNode*>($1); 
         cout << "[INFO] " << "\t Term added to arithmetic expression." << endl;
     }
     ;
 
 logical_expression: expression AND expression
     { 
-        $$ = new LogicalAndOperatorNode($1, $3); 
+        $$ = new LogicalAndOperatorNode(static_cast<LogicalExpressionNode*>($1), static_cast<LogicalExpressionNode*>($3));
         cout << "[INFO] " << "\t Logical AND operation added to AST." << endl;
     }
     | expression OR expression
     { 
-        $$ = new LogicalOrOperatorNode($1, $3); 
+        $$ = new LogicalOrOperatorNode(static_cast<LogicalExpressionNode*>($1), static_cast<LogicalExpressionNode*>($3));
         cout << "[INFO] " << "\t Logical OR operation added to AST." << endl;
     }
     | NOT expression
     { 
-        $$ = new NotOperatorNode($2); 
+        $$ = new NotOperatorNode(static_cast<LogicalExpressionNode*>($2)); 
         cout << "[INFO] " << "\t Logical NOT operation added to AST." << endl;
     }
     | expression EQ expression

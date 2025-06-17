@@ -1,6 +1,7 @@
 %{
 #include <iostream>
 using namespace std;
+#include "AST.h"
 
 #include "compiler.tab.h"
 

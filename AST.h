@@ -177,7 +177,7 @@ public:
     IdentifierNode* identifier;
     ExpressionNode* initialValue; // if nullptr the variable is not initialized
 
-    VariableDeclarationNode(TypeNode* t, IdentifierNode* id, bool im = false, ExpressionNode* iv = nullptr);
+    VariableDeclarationNode(TypeNode* t, IdentifierNode* id, bool im, ExpressionNode* iv);
     ~VariableDeclarationNode() override;
 
     void accept(class Visitor& visitor) override;
@@ -193,9 +193,10 @@ public:
 TypeNode* type;
 IdentifierNode* identifier;
 ExpressionNode* size;
+bool isMut;
 ListElementsNode* initialElements;
 
-ArrayDeclarationNode(TypeNode* type, IdentifierNode* id, ExpressionNode* size, bool isMut = false, ListElementsNode* list = nullptr);
+ArrayDeclarationNode(TypeNode* type, IdentifierNode* id, ExpressionNode* size, bool isMut, ListElementsNode* list);
 ~ArrayDeclarationNode() override;
 
     void accept(class Visitor& visitor) override;

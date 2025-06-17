@@ -94,8 +94,8 @@ const vector<ExpressionNode*>& ListElementsNode::getElements() const {
     return elements;
 }
 
-VariableDeclarationNode::VariableDeclarationNode(TypeNode* t, IdentifierNode* id,bool im, ExpressionNode* iv)
-: type(t), identifier(id), isMut(im), initialValue(iv) {}
+VariableDeclarationNode::VariableDeclarationNode(TypeNode* t, IdentifierNode* id,bool im = false, ExpressionNode* iv = nullptr)
+: isMut(im), type(t), identifier(id), initialValue(iv) { }
 
 VariableDeclarationNode::~VariableDeclarationNode() {
     delete type;
@@ -121,8 +121,8 @@ void ArrayDeclarationNode::accept(class Visitor& visitor) {
     visitor.visit(*this);
 }
 
-ArrayDeclarationNode::ArrayDeclarationNode(TypeNode* type, IdentifierNode* id, ExpressionNode* size, bool isMut = false, ListElementsNode* list = nullptr)
-    : type(type), identifier(id), size(size), initialElements(list)
+ArrayDeclarationNode::ArrayDeclarationNode(TypeNode* type, IdentifierNode* id, ExpressionNode* size, bool im = false, ListElementsNode* list = nullptr)
+    : type(type), identifier(id), size(size), isMut(im), initialElements(list)
 {
     if (initialElements == nullptr) {
         initialElements = new ListElementsNode();
@@ -290,6 +290,8 @@ void ForNode::accept(class Visitor& visitor) {
 void ForNode::addCommand(CommandNode* command) {
     commands.push_back(command);
 }
+
+int ForNode::count = 0; 
 
 const vector<CommandNode*>& ForNode::getCommands() const {
     return commands;
