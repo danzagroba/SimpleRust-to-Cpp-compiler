@@ -4,7 +4,7 @@
 using namespace std;
 #include "AST.h"
 #include "SymbolTable.h"
-//#include "AtribMetadata.h"
+#include "SemanticVisitor.h"
 
 int yylex(void);
 int yywrap(void);
@@ -37,7 +37,7 @@ MainFunctionNode* ast_root = nullptr;
     VariableDeclarationNode* var_decl_node_ptr;
     ListElementsNode* list_elements_node_ptr;
     ArrayDeclarationNode* array_decl_node_ptr; 
-    ScalarAssignmentNode* scalar_assign_node_ptr; 
+    VariableAssignmentNode* Variable_assign_node_ptr; 
     ArrayAssignmentNode* array_assign_node_ptr; 
     IfElseNode* if_else_node_ptr; 
     WhileNode* while_node_ptr; 
@@ -91,7 +91,7 @@ MainFunctionNode* ast_root = nullptr;
 
 %token ATRIB EQ NE LT LE GT GE
 
-%token IF THEN ELSE BEGIN_TOKEN END
+%token IF ELSE
 
 %token READ WRITE WRITELN
 
@@ -104,8 +104,8 @@ MainFunctionNode* ast_root = nullptr;
 %type <command_node_ptr> command
 %type <type_node_ptr> TYPE
 %type <var_decl_node_ptr> declaration
-%type <scalar_assign_node_ptr> assign
-%type <boolean> OPT_MUT
+%type <Variable_assign_node_ptr> assign
+%type <if_else_node_ptr> if_else_command
 
 %type <expr_node_ptr> expression
 %type <arith_expr_node_ptr> arithmetic_expression
@@ -144,7 +144,7 @@ commands: command
 
 command: declaration { $$ = $1; }
     | assign { $$ = $1; }
-    //| if_command { $$ = $1; }
+    | if_else_command { $$ = $1; }
     //| read_command { $$ = $1; }
     //| write_command; { $$ = $1; }
 
@@ -153,84 +153,73 @@ TYPE: TINT { $$ = new IntegerTypeNode(); }
     | TBOOL { $$ = new BooleanTypeNode; }
     ;
 
-OPT_MUT: 
-    MUT { $$ = true; }
-    | /* empty */ { $$ = false; }
-    ;
-
 declaration:
 
-    LET OPT_MUT ID COLON TYPE EOL
+    LET MUT ID COLON TYPE EOL
     {   
         IdentifierNode* id_node_ptr = new IdentifierNode(*$3);
 
         TypeNode* type_node_ptr = $5;
 
-        bool is_mutable = $2;
-
-        if($2) {
-            $$ = new VariableDeclarationNode(type_node_ptr, id_node_ptr, is_mutable, nullptr);
-            st.variables.insert({id_node_ptr->getIdentifier(), type_node_ptr});
-        } else {
-            //st.constants.insert({id_node_ptr->getIdentifier(), type_node_ptr}); 
-            //Constants are not supported in this grammar anymore
-            //Also not allowed to declare constants without initialization
-            yyerror("Constants are not supported anymore, also, in rust constants must be initialized at declaration.");
-            delete id_node_ptr;
-            delete type_node_ptr;
-            $$ = nullptr;
-        }
+        $$ = new VariableDeclarationNode(type_node_ptr, id_node_ptr, nullptr);
+        st.variables.insert({id_node_ptr->getIdentifier(), type_node_ptr});
 
         cout << "[INFO] " << "\t Variable/Constant " << *$3 << " added to AST." << endl;
         delete $3;
     }
-    | LET OPT_MUT ID COLON TYPE ATRIB expression EOL
+    | LET MUT ID COLON TYPE ATRIB expression EOL
     {   
         IdentifierNode* id_node_ptr = new IdentifierNode(*$3);
 
         TypeNode* type_node_ptr = $5;
-
-        bool is_mutable = $2;
-
-
-        if($2) {
-            $$ = new VariableDeclarationNode(type_node_ptr, id_node_ptr, is_mutable, $7);
-            st.variables.insert({id_node_ptr->getIdentifier(), type_node_ptr});
-        } else {
-            //Constants are not supported in this grammar anymore
-            //st.constants.insert({id_node_ptr->getIdentifier(), type_node_ptr});
-            yyerror("Constants are not supported anymore");
-            delete id_node_ptr;
-            delete type_node_ptr;
-            delete $7;
-            $$ = nullptr;
-        }
+    
+        $$ = new VariableDeclarationNode(type_node_ptr, id_node_ptr, $7);
+        st.variables.insert({id_node_ptr->getIdentifier(), type_node_ptr});
 
         cout << "[INFO] " << "\t Variable " << *$3 << " added to AST." << endl;
         delete $3;
     }
     ;
 
-    assign: ID ATRIB expression EOL
-    {
-        IdentifierNode* id_node_ptr = new IdentifierNode(*$1);
-        if(st.variables.find(id_node_ptr->getIdentifier()) != st.variables.end()) {
-            $$ = new ScalarAssignmentNode(id_node_ptr, $3);
-            cout << "[INFO] " << "\t Scalar assignment for " << *$1 << " added to AST." << endl;
-        } 
-        //Constants are not supported in this grammar anymore
-        /*else if(st.constants.find(id_node_ptr->getIdentifier()) != st.constants.end()) {
-            yyerror("Cannot assign value to a constant.");
-            delete id_node_ptr;
-            $$ = nullptr;
-        } */
-        else {
-            yyerror("Identifier not declared.");
-            delete id_node_ptr;
-            $$ = nullptr;
+assign: ID ATRIB expression EOL
+{
+    IdentifierNode* id_node_ptr = new IdentifierNode(*$1);
+    if(st.variables.find(id_node_ptr->getIdentifier()) != st.variables.end()) {
+        $$ = new VariableAssignmentNode(id_node_ptr, $3);
+        cout << "[INFO] " << "\t Variable assignment for " << *$1 << " added to AST." << endl;
+    } 
+    else {
+        yyerror("Identifier not declared.");
+        delete id_node_ptr;
+        $$ = nullptr;
+    }
+    delete $1;
+};
+
+if_else_command: IF LEFT logical_expression RIGHT LBRACE commands RBRACE ELSE LBRACE commands RBRACE {
+        IfElseNode* if_else = new IfElseNode($3, true);
+        
+        std::vector<CommandNode*>* cmds_list = $6;
+        for (CommandNode* cmd : *cmds_list) {
+            if_else->addIfCommand(cmd);
         }
-        delete $1;
-    };
+        delete cmds_list;
+        cmds_list = $10;
+        for (CommandNode* cmd : *cmds_list) {
+            if_else->addIfCommand(cmd);
+        }
+        delete cmds_list;
+    } 
+    | IF LEFT logical_expression RIGHT LBRACE commands RBRACE{
+        IfElseNode* if_else = new IfElseNode($3, false);
+        
+        std::vector<CommandNode*>* cmds_list = $6;
+        for (CommandNode* cmd : *cmds_list) {
+            if_else->addIfCommand(cmd);
+        }
+        delete cmds_list;
+    }
+    ;
 
 expression: arithmetic_expression { $$ = $1; }
     | logical_expression { $$ = $1; }
@@ -371,6 +360,8 @@ int main() {
     if (parse_result == 0) 
     {
         cout << "Parsing successful!" << endl;
+        SemanticVisitor sm(st);
+        ast_root->accept(sm);
         if(ast_root)
         {
             delete ast_root;

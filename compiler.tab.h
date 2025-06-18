@@ -82,14 +82,11 @@ extern int yydebug;
     GT = 283,                      /* GT  */
     GE = 284,                      /* GE  */
     IF = 285,                      /* IF  */
-    THEN = 286,                    /* THEN  */
-    ELSE = 287,                    /* ELSE  */
-    BEGIN_TOKEN = 288,             /* BEGIN_TOKEN  */
-    END = 289,                     /* END  */
-    READ = 290,                    /* READ  */
-    WRITE = 291,                   /* WRITE  */
-    WRITELN = 292,                 /* WRITELN  */
-    EOL = 293                      /* EOL  */
+    ELSE = 286,                    /* ELSE  */
+    READ = 287,                    /* READ  */
+    WRITE = 288,                   /* WRITE  */
+    WRITELN = 289,                 /* WRITELN  */
+    EOL = 290                      /* EOL  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -121,7 +118,7 @@ union YYSTYPE
     VariableDeclarationNode* var_decl_node_ptr;
     ListElementsNode* list_elements_node_ptr;
     ArrayDeclarationNode* array_decl_node_ptr; 
-    ScalarAssignmentNode* scalar_assign_node_ptr; 
+    VariableAssignmentNode* Variable_assign_node_ptr; 
     ArrayAssignmentNode* array_assign_node_ptr; 
     IfElseNode* if_else_node_ptr; 
     WhileNode* while_node_ptr; 
@@ -145,7 +142,7 @@ union YYSTYPE
     ArrayAcessNode* array_access_node_ptr; 
 
 
-#line 149 "compiler.tab.h"
+#line 146 "compiler.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

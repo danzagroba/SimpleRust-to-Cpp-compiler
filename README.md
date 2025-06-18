@@ -8,9 +8,9 @@ bison -d compiler.y
 flex compiler.l
 
 # Windows:
-g++ -std=c++17 -Wno-register compiler.tab.c lex.yy.c AST.cpp SymbolTable.cpp -Wall -o compiler.exe
+g++ -std=c++17 -Wno-register compiler.tab.c lex.yy.c AST.cpp SymbolTable.cpp SemanticVisitor.cpp -Wall -o compiler.exe
 # Linux:
-g++ -std=c++17 -Wno-register compiler.tab.c lex.yy.c AST.cpp SymbolTable.cpp -Wall -o compiler
+g++ -std=c++17 -Wno-register compiler.tab.c lex.yy.c AST.cpp SymbolTable.cpp SemanticVisitor.cpp -Wall -o compiler
 
 # para executar no modo interativo
 ./compiler

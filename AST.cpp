@@ -70,7 +70,7 @@ void BooleanTypeNode::accept(class Visitor& visitor) {
     visitor.visit(*this);
 }
 
-ListElementsNode::ListElementsNode(): elements() {}
+ListElementsNode::ListElementsNode(TypeNode* t): type(t), elements() {}
 
 ListElementsNode::~ListElementsNode() {
     for (ExpressionNode* element : elements) {
@@ -80,6 +80,10 @@ ListElementsNode::~ListElementsNode() {
             element = nullptr;
         }
     }
+}
+
+TypeNode* ListElementsNode::getType() const {
+    return type;
 }
 
 void ListElementsNode::accept(class Visitor& visitor) {
@@ -94,8 +98,8 @@ const vector<ExpressionNode*>& ListElementsNode::getElements() const {
     return elements;
 }
 
-VariableDeclarationNode::VariableDeclarationNode(TypeNode* t, IdentifierNode* id,bool im = false, ExpressionNode* iv = nullptr)
-: isMut(im), type(t), identifier(id), initialValue(iv) { }
+VariableDeclarationNode::VariableDeclarationNode(TypeNode* t, IdentifierNode* id, ExpressionNode* iv = nullptr)
+: type(t), identifier(id), initialValue(iv) { }
 
 VariableDeclarationNode::~VariableDeclarationNode() {
     delete type;
@@ -121,11 +125,11 @@ void ArrayDeclarationNode::accept(class Visitor& visitor) {
     visitor.visit(*this);
 }
 
-ArrayDeclarationNode::ArrayDeclarationNode(TypeNode* type, IdentifierNode* id, ExpressionNode* size, bool im = false, ListElementsNode* list = nullptr)
-    : type(type), identifier(id), size(size), isMut(im), initialElements(list)
+ArrayDeclarationNode::ArrayDeclarationNode(TypeNode* type, IdentifierNode* id, ExpressionNode* size, ListElementsNode* list = nullptr)
+    : type(type), identifier(id), size(size), initialElements(list)
 {
     if (initialElements == nullptr) {
-        initialElements = new ListElementsNode();
+        initialElements = new ListElementsNode(type);
     }
 }
 
@@ -169,22 +173,22 @@ ExpressionNode* ArrayAcessNode::getIndex() const {
     return index;
 }
 
-ScalarAssignmentNode::ScalarAssignmentNode(IdentifierNode* id, ExpressionNode* val)
+VariableAssignmentNode::VariableAssignmentNode(IdentifierNode* id, ExpressionNode* val)
     : identifier(id), value(val) {}
 
-ScalarAssignmentNode::~ScalarAssignmentNode() {
+VariableAssignmentNode::~VariableAssignmentNode() {
     delete identifier;
     delete value;
 }
 
-void ScalarAssignmentNode::accept(class Visitor& visitor) {
+void VariableAssignmentNode::accept(class Visitor& visitor) {
     visitor.visit(*this);
 }
 
-const string& ScalarAssignmentNode::getIdentifier() const {
+const string& VariableAssignmentNode::getIdentifier() const {
     return identifier->getIdentifier();
 }
-ExpressionNode* ScalarAssignmentNode::getValue() const {
+ExpressionNode* VariableAssignmentNode::getValue() const {
     return value;
 }
 
@@ -212,8 +216,8 @@ ExpressionNode* ArrayAssignmentNode::getValue() const {
     return value;
 }
 
-IfElseNode::IfElseNode(LogicalExpressionNode* condition)
-    : condition(condition) {}
+IfElseNode::IfElseNode(LogicalExpressionNode* condition, bool has_e)
+    : condition(condition), has_else(has_e) {}
 
 IfElseNode::~IfElseNode() {
     delete condition;
@@ -222,9 +226,12 @@ IfElseNode::~IfElseNode() {
             delete command;
         }
     }
-    for (CommandNode* command : elseCommands) {
-       if(command != nullptr) { 
-            delete command;
+    if(has_else)
+    {
+        for (CommandNode* command : elseCommands) {
+           if(command != nullptr) { 
+                delete command;
+            }
         }
     }
 }

@@ -1,18 +1,24 @@
 fn main() {
     let mut xx: i32;
-    let yy: f32;
     
     let mut bb: bool;
 
-    let cc: bool = true;
-    let dd: bool = false;
+    let mut cc: i32 = 2;
 
+    let mut zz: f32 = 4;
 
-    let mut zz: i32 = 4;
+    let mut ee: i32 = 4 + cc * 3;
+    let mut kk: i32 = 1;
 
-    let ww: f32 = 3;
-    let ll: f32 = 3.5;
+    xx = 45;
+    bb = false && true;
 
-    let ee: i32 = 4.3 + ll * 3;
-    let kk: i32 = true;
+    if (xx < ee && bb || cc > zz && xx)
+    {
+        let mut ll: i32;
+    }
+    else
+    {
+        xx = 70;
+    }
 }

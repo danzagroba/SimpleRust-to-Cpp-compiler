@@ -157,14 +157,16 @@ public:
 class ListElementsNode: public Node
 {
 private:
+    TypeNode* type;
     vector<ExpressionNode*> elements;
     
 public:
-    ListElementsNode();
+    ListElementsNode(TypeNode* t);
     ~ListElementsNode() override;
 
     void accept(class Visitor& visitor) override;
 
+    TypeNode* getType() const;
     void addElement(ExpressionNode* element);
     const vector<ExpressionNode*>& getElements() const;
 };
@@ -172,13 +174,11 @@ public:
 class VariableDeclarationNode: public CommandNode
 {
 public:
-    //Constants are not supported in this grammar anymore
-    bool isMut;
     TypeNode* type;
     IdentifierNode* identifier;
     ExpressionNode* initialValue; // if nullptr the variable is not initialized
 
-    VariableDeclarationNode(TypeNode* t, IdentifierNode* id, bool im, ExpressionNode* iv);
+    VariableDeclarationNode(TypeNode* t, IdentifierNode* id, ExpressionNode* iv);
     ~VariableDeclarationNode() override;
 
     void accept(class Visitor& visitor) override;
@@ -191,14 +191,12 @@ class ArrayDeclarationNode: public CommandNode
 {
 public:
 //Constants are not supported in this grammar anymore
-//The arrays are mutable by default, so the isMut flag is not needed here
 TypeNode* type;
 IdentifierNode* identifier;
 ExpressionNode* size;
-bool isMut;
 ListElementsNode* initialElements;
 
-ArrayDeclarationNode(TypeNode* type, IdentifierNode* id, ExpressionNode* size, bool isMut, ListElementsNode* list);
+ArrayDeclarationNode(TypeNode* type, IdentifierNode* id, ExpressionNode* size, ListElementsNode* list);
 ~ArrayDeclarationNode() override;
 
     void accept(class Visitor& visitor) override;
@@ -223,14 +221,14 @@ public:
     ExpressionNode* getIndex() const;
 };
 
-class ScalarAssignmentNode: public CommandNode
+class VariableAssignmentNode: public CommandNode
 {
 public:
     IdentifierNode* identifier;
     ExpressionNode* value;
 
-    ScalarAssignmentNode(IdentifierNode* id, ExpressionNode* val);
-    ~ScalarAssignmentNode() override;
+    VariableAssignmentNode(IdentifierNode* id, ExpressionNode* val);
+    ~VariableAssignmentNode() override;
 
     void accept(class Visitor& visitor) override;
 
@@ -260,10 +258,11 @@ class IfElseNode: public CommandNode
 {
     public:
     LogicalExpressionNode* condition;
+    bool has_else;
     vector<CommandNode*> ifCommands;
     vector<CommandNode*> elseCommands;
     
-    IfElseNode(LogicalExpressionNode* condition);
+    IfElseNode(LogicalExpressionNode* condition, bool has_e);
     ~IfElseNode() override;
     
     void accept(class Visitor& visitor) override;

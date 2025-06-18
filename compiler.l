@@ -36,8 +36,8 @@ OP [+*/-]
 "{" {return LBRACE;}
 "}" {return RBRACE;}
 
-"&" {return AND;}
-"|" {return OR;}
+"&&" {return AND;}
+"||" {return OR;}
 
 "true" { return TRUE; }
 "false" { return FALSE; }
@@ -55,10 +55,7 @@ OP [+*/-]
 ":" { return COLON; }
 
 "if"    { return IF;    }
-"then"  { return THEN;  }
 "else"  { return ELSE;  }
-"begin" { return BEGIN_TOKEN; }
-"end"   { return END;   }
 
 "input!"  { return READ;  }
 "print!" { return WRITE; }
