@@ -15,9 +15,6 @@ bool SemanticVisitor::compareTypes(TypeNode* type1, TypeNode* type2)
     else if(dynamic_cast<BooleanTypeNode*>(type1) && dynamic_cast<BooleanTypeNode*>(type2)) {
         return true;
     }
-    else if(dynamic_cast<FloatTypeNode*>(type1) && dynamic_cast<IntegerTypeNode*>(type2)) {
-        return true; //Float can be assigned from Integer
-    }
     else{
         return false;
     }
@@ -234,8 +231,22 @@ void SemanticVisitor::visit(WhileNode& whileNode) {
 }
 
 void SemanticVisitor::visit(ForNode& forNode) {
+    
+    string iteratorName = forNode.identifier->getIdentifier();
+    auto it = symbolTable.variables.find(iteratorName);
+    
+    if (it == symbolTable.variables.end()) {
+        symbolTable.variables.insert({iteratorName, new IntegerTypeNode()});
+        cerr << "[INFO] Iterator '" << iteratorName << "' declared as Integer in symbol table during semantic visit." << endl;
+    } else {
+        if (!dynamic_cast<IntegerTypeNode*>(it->second)) {
+            cerr << "[ERROR] For loop iterator must be of type Integer: " << iteratorName << endl;
+        }
+    }
+    lastType = nullptr;
     forNode.initialvalue->accept(*this);
     TypeNode* initialType = lastType;
+    lastType = nullptr;
     forNode.finalvalue->accept(*this);
     TypeNode* finalType = lastType;
     lastType = nullptr;

@@ -3,9 +3,14 @@ fn main() {
     
     let mut bb: bool;
 
+    if(xx == xx && bb)
+    {
+        xx = 4;
+    }
+
     let mut cc: i32 = 2;
 
-    let mut zz: f32 = 4;
+    let mut zz: f32 = 4.3;
 
     let mut ee: i32 = 4 + cc * 3;
     let mut kk: i32 = 1;
@@ -13,12 +18,11 @@ fn main() {
     xx = 45;
     bb = false && true;
 
-    if (xx < ee && bb || cc > zz && xx)
-    {
-        let mut ll: i32;
-    }
-    else
-    {
-        xx = 70;
+    for mut ii in 0 .. 5 {
+        bb = true;
+        for mut xx in 3..59 
+        {
+            kk = kk + 2;
+        }
     }
 }

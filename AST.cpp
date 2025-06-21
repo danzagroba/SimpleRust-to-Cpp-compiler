@@ -275,14 +275,14 @@ const vector<CommandNode*>& WhileNode::getCommands() const {
     return commands;
 }
 
-ForNode::ForNode(ArithmeticExpressionNode* initial, ArithmeticExpressionNode* final)
-    : initialvalue(initial), finalvalue(final), variableName("it" + to_string(count))
-{        
-    count++;
+ForNode::ForNode(IdentifierNode* id,ArithmeticExpressionNode* initial, ArithmeticExpressionNode* final)
+    : identifier(id), initialvalue(initial), finalvalue(final)
+{
 }
 
 ForNode::~ForNode()
 {
+    delete identifier;
     delete initialvalue;
     delete finalvalue;
     for (CommandNode* command : commands) {
@@ -296,9 +296,7 @@ void ForNode::accept(class Visitor& visitor) {
 
 void ForNode::addCommand(CommandNode* command) {
     commands.push_back(command);
-}
-
-int ForNode::count = 0; 
+} 
 
 const vector<CommandNode*>& ForNode::getCommands() const {
     return commands;
@@ -481,7 +479,7 @@ ExpressionNode* GreaterThanOperatorNode::getRight() const {
     return right;
 }
 
-LogicalAndOperatorNode::LogicalAndOperatorNode(LogicalExpressionNode* left, LogicalExpressionNode* right)
+LogicalAndOperatorNode::LogicalAndOperatorNode(ExpressionNode* left, ExpressionNode* right)
 : left(left), right(right) {}
 LogicalAndOperatorNode::~LogicalAndOperatorNode() {
     delete left;
@@ -490,14 +488,14 @@ LogicalAndOperatorNode::~LogicalAndOperatorNode() {
 void LogicalAndOperatorNode::accept(class Visitor& visitor) {
     visitor.visit(*this);
 }
-LogicalExpressionNode* LogicalAndOperatorNode::getLeft() const {
+ExpressionNode* LogicalAndOperatorNode::getLeft() const {
     return left;
 }
-LogicalExpressionNode* LogicalAndOperatorNode::getRight() const {
+ExpressionNode* LogicalAndOperatorNode::getRight() const {
     return right;
 }
 
-LogicalOrOperatorNode::LogicalOrOperatorNode(LogicalExpressionNode* left, LogicalExpressionNode* right)
+LogicalOrOperatorNode::LogicalOrOperatorNode(ExpressionNode* left, ExpressionNode* right)
 : left(left), right(right) {}
 LogicalOrOperatorNode::~LogicalOrOperatorNode() {
     delete left;
@@ -506,14 +504,14 @@ LogicalOrOperatorNode::~LogicalOrOperatorNode() {
 void LogicalOrOperatorNode::accept(class Visitor& visitor) {
     visitor.visit(*this);
 }
-LogicalExpressionNode* LogicalOrOperatorNode::getLeft() const {
+ExpressionNode* LogicalOrOperatorNode::getLeft() const {
     return left;
 }
-LogicalExpressionNode* LogicalOrOperatorNode::getRight() const {
+ExpressionNode* LogicalOrOperatorNode::getRight() const {
     return right;
 }
 
-NotOperatorNode::NotOperatorNode(LogicalExpressionNode* expr)
+NotOperatorNode::NotOperatorNode(ExpressionNode* expr)
 : expression(expr) {}
 NotOperatorNode::~NotOperatorNode() {
     delete expression;
@@ -521,7 +519,7 @@ NotOperatorNode::~NotOperatorNode() {
 void NotOperatorNode::accept(class Visitor& visitor) {
     visitor.visit(*this);
 }
-LogicalExpressionNode* NotOperatorNode::getExpression() const {
+ExpressionNode* NotOperatorNode::getExpression() const {
     return expression;
 }
 void LogicalExpressionNode::accept(class Visitor& visitor) {

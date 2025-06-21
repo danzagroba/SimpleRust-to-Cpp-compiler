@@ -93,6 +93,9 @@ MainFunctionNode* ast_root = nullptr;
 
 %token IF ELSE
 
+%token FOR IN TO
+%token WHILE
+
 %token READ WRITE WRITELN
 
 %token EOL 
@@ -106,6 +109,7 @@ MainFunctionNode* ast_root = nullptr;
 %type <var_decl_node_ptr> declaration
 %type <Variable_assign_node_ptr> assign
 %type <if_else_node_ptr> if_else_command
+%type <for_node_ptr> for_command
 
 %type <expr_node_ptr> expression
 %type <arith_expr_node_ptr> arithmetic_expression
@@ -113,6 +117,14 @@ MainFunctionNode* ast_root = nullptr;
 
 %type <expr_node_ptr> factor
 %type <expr_node_ptr> term
+
+%left OR
+%left AND
+%left EQ NE
+%left LT LE GT GE
+%left '+' '-'
+%left '*' '/'
+%right NOT
 
 
 /*=========================================================================
@@ -145,6 +157,7 @@ commands: command
 command: declaration { $$ = $1; }
     | assign { $$ = $1; }
     | if_else_command { $$ = $1; }
+    | for_command { $$ = $1;}
     //| read_command { $$ = $1; }
     //| write_command; { $$ = $1; }
 
@@ -179,7 +192,7 @@ declaration:
         cout << "[INFO] " << "\t Variable " << *$3 << " added to AST." << endl;
         delete $3;
     }
-    ;
+;
 
 assign: ID ATRIB expression EOL
 {
@@ -194,7 +207,8 @@ assign: ID ATRIB expression EOL
         $$ = nullptr;
     }
     delete $1;
-};
+}
+;
 
 if_else_command: IF LEFT logical_expression RIGHT LBRACE commands RBRACE ELSE LBRACE commands RBRACE {
         IfElseNode* if_else = new IfElseNode($3, true);
@@ -209,6 +223,7 @@ if_else_command: IF LEFT logical_expression RIGHT LBRACE commands RBRACE ELSE LB
             if_else->addIfCommand(cmd);
         }
         delete cmds_list;
+        $$ = if_else;
     } 
     | IF LEFT logical_expression RIGHT LBRACE commands RBRACE{
         IfElseNode* if_else = new IfElseNode($3, false);
@@ -218,9 +233,29 @@ if_else_command: IF LEFT logical_expression RIGHT LBRACE commands RBRACE ELSE LB
             if_else->addIfCommand(cmd);
         }
         delete cmds_list;
+        $$ = if_else;
     }
-    ;
+;
 
+for_command: FOR MUT ID IN arithmetic_expression TO arithmetic_expression LBRACE commands RBRACE
+    {
+        IdentifierNode* iterator_id_node = new IdentifierNode(*($3));
+
+        ForNode* for_node = new ForNode(iterator_id_node, $5, $7);
+
+        std::vector<CommandNode*>* cmds_list = $9;
+        for (CommandNode* cmd : *cmds_list) {
+            for_node->addCommand(cmd);
+        }
+        delete cmds_list;
+
+        $$ = for_node;
+
+         cout << "[INFO] " << "\t For loop command AST node created." << endl;
+
+        delete $3;
+    }
+;
 expression: arithmetic_expression { $$ = $1; }
     | logical_expression { $$ = $1; }
     ;
@@ -244,17 +279,17 @@ arithmetic_expression: arithmetic_expression '+' arithmetic_expression
 
 logical_expression: expression AND expression
     { 
-        $$ = new LogicalAndOperatorNode(static_cast<LogicalExpressionNode*>($1), static_cast<LogicalExpressionNode*>($3));
+        $$ = new LogicalAndOperatorNode($1, $3);
         cout << "[INFO] " << "\t Logical AND operation added to AST." << endl;
     }
     | expression OR expression
     { 
-        $$ = new LogicalOrOperatorNode(static_cast<LogicalExpressionNode*>($1), static_cast<LogicalExpressionNode*>($3));
+        $$ = new LogicalOrOperatorNode($1, $3);
         cout << "[INFO] " << "\t Logical OR operation added to AST." << endl;
     }
     | NOT expression
     { 
-        $$ = new NotOperatorNode(static_cast<LogicalExpressionNode*>($2)); 
+        $$ = new NotOperatorNode($2); 
         cout << "[INFO] " << "\t Logical NOT operation added to AST." << endl;
     }
     | expression EQ expression

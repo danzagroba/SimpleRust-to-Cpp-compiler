@@ -293,12 +293,12 @@ class ForNode: public CommandNode
 {
     public:
     static int count; // used to define the name of the variable in the for loop, like "it0", "it1", etc.
+    IdentifierNode* identifier;
     ArithmeticExpressionNode* initialvalue;  //"0"..5
     ArithmeticExpressionNode* finalvalue;   //0.."5"
-    string variableName;
     vector<CommandNode*> commands; 
     
-    ForNode(ArithmeticExpressionNode* initial, ArithmeticExpressionNode* final);
+    ForNode(IdentifierNode* id,ArithmeticExpressionNode* initial, ArithmeticExpressionNode* final);
     ~ForNode() override;
     
     void accept(class Visitor& visitor) override;
@@ -472,46 +472,46 @@ public:
 class LogicalAndOperatorNode: public LogicalExpressionNode
 {
 public:
-    LogicalExpressionNode* left;
-    LogicalExpressionNode* right;
+    ExpressionNode* left;
+    ExpressionNode* right;
 
-    LogicalAndOperatorNode(LogicalExpressionNode* left, LogicalExpressionNode* right);
+    LogicalAndOperatorNode(ExpressionNode* left, ExpressionNode* right);
     ~LogicalAndOperatorNode() override;
 
     void accept(class Visitor& visitor) override;
 
-    LogicalExpressionNode* getLeft() const;
-    LogicalExpressionNode* getRight() const;
+    ExpressionNode* getLeft() const;
+    ExpressionNode* getRight() const;
 };
 
 // ||
 class LogicalOrOperatorNode: public LogicalExpressionNode
 {
 public:
-    LogicalExpressionNode* left;
-    LogicalExpressionNode* right;
+    ExpressionNode* left;
+    ExpressionNode* right;
 
-    LogicalOrOperatorNode(LogicalExpressionNode* left, LogicalExpressionNode* right);
+    LogicalOrOperatorNode(ExpressionNode* left, ExpressionNode* right);
     ~LogicalOrOperatorNode() override;
 
     void accept(class Visitor& visitor) override;
 
-    LogicalExpressionNode* getLeft() const;
-    LogicalExpressionNode* getRight() const;
+    ExpressionNode* getLeft() const;
+    ExpressionNode* getRight() const;
 };
 
 // !
 class NotOperatorNode: public LogicalExpressionNode
 {
 public:
-    LogicalExpressionNode* expression;
+    ExpressionNode* expression;
 
-    NotOperatorNode(LogicalExpressionNode* expr);
+    NotOperatorNode(ExpressionNode* expr);
     ~NotOperatorNode() override;
 
     void accept(class Visitor& visitor) override;
 
-    LogicalExpressionNode* getExpression() const;
+    ExpressionNode* getExpression() const;
 };
 
 class InputNode: public CommandNode

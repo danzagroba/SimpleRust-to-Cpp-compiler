@@ -57,6 +57,10 @@ OP [+*/-]
 "if"    { return IF;    }
 "else"  { return ELSE;  }
 
+"for"   { return FOR; }
+"in"    { return IN; }
+".."    { return TO; }
+
 "input!"  { return READ;  }
 "print!" { return WRITE; }
 "println!" { return WRITELN; }

@@ -83,10 +83,14 @@ extern int yydebug;
     GE = 284,                      /* GE  */
     IF = 285,                      /* IF  */
     ELSE = 286,                    /* ELSE  */
-    READ = 287,                    /* READ  */
-    WRITE = 288,                   /* WRITE  */
-    WRITELN = 289,                 /* WRITELN  */
-    EOL = 290                      /* EOL  */
+    FOR = 287,                     /* FOR  */
+    IN = 288,                      /* IN  */
+    TO = 289,                      /* TO  */
+    WHILE = 290,                   /* WHILE  */
+    READ = 291,                    /* READ  */
+    WRITE = 292,                   /* WRITE  */
+    WRITELN = 293,                 /* WRITELN  */
+    EOL = 294                      /* EOL  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -142,7 +146,7 @@ union YYSTYPE
     ArrayAcessNode* array_access_node_ptr; 
 
 
-#line 146 "compiler.tab.h"
+#line 150 "compiler.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
