@@ -60,6 +60,7 @@ OP [+*/-]
 "for"   { return FOR; }
 "in"    { return IN; }
 ".."    { return TO; }
+"while" { return WHILE; }
 
 "input!"  { return READ;  }
 "print!" { return WRITE; }

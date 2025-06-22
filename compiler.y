@@ -110,6 +110,7 @@ MainFunctionNode* ast_root = nullptr;
 %type <Variable_assign_node_ptr> assign
 %type <if_else_node_ptr> if_else_command
 %type <for_node_ptr> for_command
+%type <while_node_ptr> while_command
 
 %type <expr_node_ptr> expression
 %type <arith_expr_node_ptr> arithmetic_expression
@@ -157,9 +158,10 @@ commands: command
 command: declaration { $$ = $1; }
     | assign { $$ = $1; }
     | if_else_command { $$ = $1; }
-    | for_command { $$ = $1;}
-    //| read_command { $$ = $1; }
-    //| write_command; { $$ = $1; }
+    | for_command { $$ = $1; }
+    | while_command { $$ = $1; }
+    | read_command { $$ = $1; }
+    | write_command; { $$ = $1; }
 
 TYPE: TINT { $$ = new IntegerTypeNode(); }
     | TFLOAT { $$ = new FloatTypeNode(); }
@@ -210,25 +212,25 @@ assign: ID ATRIB expression EOL
 }
 ;
 
-if_else_command: IF LEFT logical_expression RIGHT LBRACE commands RBRACE ELSE LBRACE commands RBRACE {
-        IfElseNode* if_else = new IfElseNode($3, true);
+if_else_command: IF logical_expression LBRACE commands RBRACE ELSE LBRACE commands RBRACE {
+        IfElseNode* if_else = new IfElseNode($2, true);
         
-        std::vector<CommandNode*>* cmds_list = $6;
+        std::vector<CommandNode*>* cmds_list = $4;
         for (CommandNode* cmd : *cmds_list) {
             if_else->addIfCommand(cmd);
         }
         delete cmds_list;
-        cmds_list = $10;
+        cmds_list = $8;
         for (CommandNode* cmd : *cmds_list) {
             if_else->addIfCommand(cmd);
         }
         delete cmds_list;
         $$ = if_else;
     } 
-    | IF LEFT logical_expression RIGHT LBRACE commands RBRACE{
-        IfElseNode* if_else = new IfElseNode($3, false);
+    | IF logical_expression LBRACE commands RBRACE{
+        IfElseNode* if_else = new IfElseNode($2, false);
         
-        std::vector<CommandNode*>* cmds_list = $6;
+        std::vector<CommandNode*>* cmds_list = $4;
         for (CommandNode* cmd : *cmds_list) {
             if_else->addIfCommand(cmd);
         }
@@ -256,6 +258,28 @@ for_command: FOR MUT ID IN arithmetic_expression TO arithmetic_expression LBRACE
         delete $3;
     }
 ;
+while_command: WHILE logical_expression LBRACE commands RBRACE
+{
+    WhileNode* while_node = new WhileNode($2);
+    std::vector<CommandNode*>* cmds_list = $4;
+    for (CommandNode* cmd : *cmds_list) {
+        while_node->addCommand(cmd);
+    }
+    delete cmds_list;
+    cout << "[INFO] " << "\t While loop command AST node created." << endl;
+} 
+
+read_command: READ LEFT expression RIGHT
+    {
+        
+    }
+    ;
+
+write_command: WRITE LEFT ID RIGHT
+    {
+        
+    }
+    ;
 expression: arithmetic_expression { $$ = $1; }
     | logical_expression { $$ = $1; }
     ;

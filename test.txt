@@ -25,4 +25,8 @@ fn main() {
             kk = kk + 2;
         }
     }
+
+    while bb == true {
+        xx = 5;
+    }
 }
