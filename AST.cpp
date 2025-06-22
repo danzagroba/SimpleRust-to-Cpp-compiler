@@ -538,8 +538,8 @@ const string& InputNode::getIdentifier() const {
     return identifier->getIdentifier();
 }
 
-OutputNode::OutputNode(ExpressionNode* expr)
-: expression(expr) {}
+OutputNode::OutputNode(ExpressionNode* expr, bool ln)
+: expression(expr), line(ln) {}
 OutputNode::~OutputNode() {
     delete expression;
 }
@@ -547,18 +547,6 @@ void OutputNode::accept(class Visitor& visitor) {
     visitor.visit(*this);
 }
 ExpressionNode* OutputNode::getExpression() const {
-    return expression;
-}
-
-OutputlnNode::OutputlnNode(ExpressionNode* expr)
-: expression(expr) {}
-OutputlnNode::~OutputlnNode() {
-    delete expression;
-}
-void OutputlnNode::accept(class Visitor& visitor) {
-    visitor.visit(*this);
-}
-ExpressionNode* OutputlnNode::getExpression() const {
     return expression;
 }
 

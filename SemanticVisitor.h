@@ -46,7 +46,6 @@ public:
     void visit(NotOperatorNode& notOperatorNode);
     void visit(InputNode& inputNode);
     void visit(OutputNode& outputNode);
-    void visit(OutputlnNode& outputlnNode);
 
 
 };

@@ -531,26 +531,12 @@ class OutputNode: public CommandNode
 {
 public:
     ExpressionNode* expression;
+    bool line;
 
-    OutputNode(ExpressionNode* expr);
+    OutputNode(ExpressionNode* expr, bool ln);
     ~OutputNode() override;
 
     void accept(class Visitor& visitor) override;
 
     ExpressionNode* getExpression() const;
 };
-
-class OutputlnNode: public CommandNode
-{
-public:
-    ExpressionNode* expression;
-
-    OutputlnNode(ExpressionNode* expr);
-    ~OutputlnNode() override;
-
-    void accept(class Visitor& visitor) override;
-
-    ExpressionNode* getExpression() const;
-};
-
-

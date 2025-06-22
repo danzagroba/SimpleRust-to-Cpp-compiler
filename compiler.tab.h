@@ -142,11 +142,10 @@ union YYSTYPE
     NotOperatorNode* not_op_node_ptr; 
     InputNode* input_node_ptr; 
     OutputNode* output_node_ptr; 
-    OutputlnNode* outputln_node_ptr; 
     ArrayAcessNode* array_access_node_ptr; 
 
 
-#line 150 "compiler.tab.h"
+#line 149 "compiler.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

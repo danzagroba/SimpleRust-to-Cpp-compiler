@@ -57,7 +57,6 @@ MainFunctionNode* ast_root = nullptr;
     NotOperatorNode* not_op_node_ptr; 
     InputNode* input_node_ptr; 
     OutputNode* output_node_ptr; 
-    OutputlnNode* outputln_node_ptr; 
     ArrayAcessNode* array_access_node_ptr; 
 
 };
@@ -119,6 +118,9 @@ MainFunctionNode* ast_root = nullptr;
 %type <expr_node_ptr> factor
 %type <expr_node_ptr> term
 
+%type <input_node_ptr> read_command
+%type <output_node_ptr> write_command
+
 %left OR
 %left AND
 %left EQ NE
@@ -161,7 +163,8 @@ command: declaration { $$ = $1; }
     | for_command { $$ = $1; }
     | while_command { $$ = $1; }
     | read_command { $$ = $1; }
-    | write_command; { $$ = $1; }
+    | write_command { $$ = $1; }
+    ;
 
 TYPE: TINT { $$ = new IntegerTypeNode(); }
     | TFLOAT { $$ = new FloatTypeNode(); }
@@ -269,15 +272,24 @@ while_command: WHILE logical_expression LBRACE commands RBRACE
     cout << "[INFO] " << "\t While loop command AST node created." << endl;
 } 
 
-read_command: READ LEFT expression RIGHT
+read_command: READ LEFT ID RIGHT EOL
     {
-        
+        IdentifierNode* id_node_ptr = new IdentifierNode(*($3));
+        $$ = new InputNode(id_node_ptr);
+        cout << "[INFO] " << "\t Input command AST node created." << endl;
+        delete $3;
     }
     ;
 
-write_command: WRITE LEFT ID RIGHT
+write_command: WRITE LEFT expression RIGHT EOL
     {
-        
+        $$ = new OutputNode($3,false);
+        cout << "[INFO] " << "\t Output command AST node created." << endl;
+    }
+    | WRITELN LEFT expression RIGHT EOL
+    {
+        $$ = new OutputNode($3, true);
+        cout << "[INFO] " << "\t Output command AST node created." << endl;
     }
     ;
 expression: arithmetic_expression { $$ = $1; }

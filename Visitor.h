@@ -37,7 +37,6 @@ public:
     virtual void visit(NotOperatorNode& notOperatorNode) = 0;
     virtual void visit(InputNode& inputNode) = 0;
     virtual void visit(OutputNode& outputNode) = 0;
-    virtual void visit(OutputlnNode& outputlnNode) = 0;
 
     virtual ~Visitor() = default;
 };

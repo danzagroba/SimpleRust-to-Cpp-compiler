@@ -526,16 +526,3 @@ void SemanticVisitor::visit(OutputNode& outputNode) {
 
     delete expressionType;
 }
-void SemanticVisitor::visit(OutputlnNode& outputlnNode) {
-    outputlnNode.getExpression()->accept(*this);
-    TypeNode* expressionType = lastType;
-    lastType = nullptr;
-
-    if (!dynamic_cast<IntegerTypeNode*>(expressionType) && 
-        !dynamic_cast<FloatTypeNode*>(expressionType) && 
-        !dynamic_cast<BooleanTypeNode*>(expressionType)) {
-        cerr << "[ERROR] Output expression must be of type Integer, Float, or Boolean." << endl;
-    }
-
-    delete expressionType;
-}
