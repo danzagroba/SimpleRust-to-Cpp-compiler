@@ -6,5 +6,8 @@ SymbolTable::SymbolTable() {
 }
 
 SymbolTable::~SymbolTable() {
+    for (auto const& [key, val] : variables) {
+        delete val;
+    }
     variables.clear();
 }

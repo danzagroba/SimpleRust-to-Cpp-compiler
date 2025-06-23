@@ -74,7 +74,7 @@ class MainFunctionNode: public Node
     const vector<class CommandNode*>& getCommands() const;
 };
 
-class IntegerLiteralNode: public ExpressionNode
+class IntegerLiteralNode: public ArithmeticExpressionNode
 {
 public:
     int value;
@@ -87,7 +87,7 @@ public:
     int getValue() const;
 };
 
-class FloatLiteralNode: public ExpressionNode
+class FloatLiteralNode: public ArithmeticExpressionNode
 {
 public:
     float value;
@@ -100,7 +100,7 @@ public:
     float getValue() const;
 };
 
-class BooleanLiteralNode: public ExpressionNode
+class BooleanLiteralNode: public LogicalExpressionNode
 {
 public:
     bool value;
@@ -294,8 +294,8 @@ class ForNode: public CommandNode
     public:
     static int count; // used to define the name of the variable in the for loop, like "it0", "it1", etc.
     IdentifierNode* identifier;
-    ArithmeticExpressionNode* initialvalue;  //"0"..5
-    ArithmeticExpressionNode* finalvalue;   //0.."5"
+    ExpressionNode* initialvalue;  //"0"..5
+    ExpressionNode* finalvalue;   //0.."5"
     vector<CommandNode*> commands; 
     
     ForNode(IdentifierNode* id,ArithmeticExpressionNode* initial, ArithmeticExpressionNode* final);

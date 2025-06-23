@@ -229,6 +229,7 @@ if_else_command: IF logical_expression LBRACE commands RBRACE ELSE LBRACE comman
         }
         delete cmds_list;
         $$ = if_else;
+        cout << "[INFO] " << "\t If-Else command AST node created." << endl;
     } 
     | IF logical_expression LBRACE commands RBRACE{
         IfElseNode* if_else = new IfElseNode($2, false);
@@ -239,11 +240,11 @@ if_else_command: IF logical_expression LBRACE commands RBRACE ELSE LBRACE comman
         }
         delete cmds_list;
         $$ = if_else;
+        cout << "[INFO] " << "\t If command AST node created." << endl;
     }
 ;
 
-for_command: FOR MUT ID IN arithmetic_expression TO arithmetic_expression LBRACE commands RBRACE
-    {
+for_command: FOR MUT ID IN arithmetic_expression TO arithmetic_expression LBRACE commands RBRACE {
         IdentifierNode* iterator_id_node = new IdentifierNode(*($3));
 
         ForNode* for_node = new ForNode(iterator_id_node, $5, $7);

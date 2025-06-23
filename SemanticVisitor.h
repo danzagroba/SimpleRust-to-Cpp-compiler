@@ -1,11 +1,12 @@
 #pragma once
 #include "Visitor.h"
 #include "SymbolTable.h"
+#include <memory>
 
 class SemanticVisitor : public Visitor {
 public:
     SymbolTable& symbolTable; 
-    TypeNode* lastType = nullptr;
+    unique_ptr<TypeNode> lastType;
 
     SemanticVisitor(SymbolTable& symbolTable);
     ~SemanticVisitor() override;

@@ -12,6 +12,7 @@ fn main() {
 
     let mut zz: f32 = 4.3;
 
+    let mut ff: f32;
     let mut ee: i32 = 4 + cc * 3;
     let mut kk: i32 = 1;
 
@@ -25,11 +26,12 @@ fn main() {
             kk = kk + 2;
         }
     }
-
+    let mut daniel: bool = true;
     while bb == true {
-        xx = 5;
+        xx = 5.3;
         print!(xx);
         println!(bb);
     }
+    daniel = false;
     input!(xx);
 }

@@ -16,5 +16,5 @@ g++ -std=c++17 -Wno-register compiler.tab.c lex.yy.c AST.cpp SymbolTable.cpp Sem
 ./compiler
 
 # Para executar o arquivo de teste
-./compiler < test01.txt 
+./compiler < test.txt 
 ```
