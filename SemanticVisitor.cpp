@@ -39,7 +39,6 @@ void SemanticVisitor::visit(class MainFunctionNode& mainFunctionNode) {
     for (CommandNode* command : mainFunctionNode.getCommands()) {
         command->accept(*this);
     }
-    cout << "[DEBUG] Terminando programa." << endl;
 }
 void SemanticVisitor::visit(class IntegerLiteralNode& integerLiteralNode) {
     lastType = std::make_unique<IntegerTypeNode>();
@@ -202,8 +201,6 @@ void SemanticVisitor::visit(IfElseNode& IfElseNode)
 }
 
 void SemanticVisitor::visit(WhileNode& whileNode) {
-    cout << "[DEBUG] Entrando no visit(WhileNode)." << endl;
-    
     whileNode.condition->accept(*this);
     std::unique_ptr<TypeNode> conditionType = move(lastType);
     
@@ -246,7 +243,6 @@ void SemanticVisitor::visit(ForNode& forNode) {
     for (CommandNode* command : forNode.getCommands()) {
         command->accept(*this);
     }
-    cout << "[DÈBUG] SAINDO DO FOR";
 }
 
 void SemanticVisitor::visit(AdditionOperatorNode& additionOperatorNode) {

@@ -564,9 +564,9 @@ static const yytype_int16 yyrline[] =
 {
        0,   137,   137,   147,   153,   160,   161,   162,   163,   164,
      165,   166,   169,   170,   171,   176,   188,   202,   218,   234,
-     247,   265,   276,   285,   290,   296,   297,   300,   305,   310,
-     317,   322,   327,   332,   337,   342,   347,   352,   357,   362,
-     369,   370,   375,   382,   387,   392,   408,   413,   418
+     247,   265,   278,   287,   292,   298,   299,   302,   307,   312,
+     319,   324,   329,   334,   339,   344,   349,   354,   359,   364,
+     371,   372,   377,   384,   389,   394,   410,   415,   420
 };
 #endif
 
@@ -1434,207 +1434,209 @@ yyreduce:
         while_node->addCommand(cmd);
     }
     delete cmds_list;
+
+    (yyval.while_node_ptr) = while_node;
     cout << "[INFO] " << "\t While loop command AST node created." << endl;
 }
-#line 1440 "compiler.tab.c"
+#line 1442 "compiler.tab.c"
     break;
 
   case 22: /* read_command: READ LEFT ID RIGHT EOL  */
-#line 277 "compiler.y"
+#line 279 "compiler.y"
     {
         IdentifierNode* id_node_ptr = new IdentifierNode(*((yyvsp[-2].str)));
         (yyval.input_node_ptr) = new InputNode(id_node_ptr);
         cout << "[INFO] " << "\t Input command AST node created." << endl;
         delete (yyvsp[-2].str);
     }
-#line 1451 "compiler.tab.c"
+#line 1453 "compiler.tab.c"
     break;
 
   case 23: /* write_command: WRITE LEFT expression RIGHT EOL  */
-#line 286 "compiler.y"
+#line 288 "compiler.y"
     {
         (yyval.output_node_ptr) = new OutputNode((yyvsp[-2].expr_node_ptr),false);
         cout << "[INFO] " << "\t Output command AST node created." << endl;
     }
-#line 1460 "compiler.tab.c"
+#line 1462 "compiler.tab.c"
     break;
 
   case 24: /* write_command: WRITELN LEFT expression RIGHT EOL  */
-#line 291 "compiler.y"
+#line 293 "compiler.y"
     {
         (yyval.output_node_ptr) = new OutputNode((yyvsp[-2].expr_node_ptr), true);
         cout << "[INFO] " << "\t Output command AST node created." << endl;
     }
-#line 1469 "compiler.tab.c"
+#line 1471 "compiler.tab.c"
     break;
 
   case 25: /* expression: arithmetic_expression  */
-#line 296 "compiler.y"
+#line 298 "compiler.y"
                                   { (yyval.expr_node_ptr) = (yyvsp[0].arith_expr_node_ptr); }
-#line 1475 "compiler.tab.c"
+#line 1477 "compiler.tab.c"
     break;
 
   case 26: /* expression: logical_expression  */
-#line 297 "compiler.y"
+#line 299 "compiler.y"
                          { (yyval.expr_node_ptr) = (yyvsp[0].logical_expr_node_ptr); }
-#line 1481 "compiler.tab.c"
+#line 1483 "compiler.tab.c"
     break;
 
   case 27: /* arithmetic_expression: arithmetic_expression '+' arithmetic_expression  */
-#line 301 "compiler.y"
+#line 303 "compiler.y"
     { 
         (yyval.arith_expr_node_ptr) = new AdditionOperatorNode((yyvsp[-2].arith_expr_node_ptr), (yyvsp[0].arith_expr_node_ptr)); 
         cout << "[INFO] " << "\t Addition operation added to AST." << endl;
     }
-#line 1490 "compiler.tab.c"
+#line 1492 "compiler.tab.c"
     break;
 
   case 28: /* arithmetic_expression: arithmetic_expression '-' arithmetic_expression  */
-#line 306 "compiler.y"
+#line 308 "compiler.y"
     { 
         (yyval.arith_expr_node_ptr) = new SubtractionOperatorNode((yyvsp[-2].arith_expr_node_ptr), (yyvsp[0].arith_expr_node_ptr)); 
         cout << "[INFO] " << "\t Subtraction operation added to AST." << endl;
     }
-#line 1499 "compiler.tab.c"
+#line 1501 "compiler.tab.c"
     break;
 
   case 29: /* arithmetic_expression: term  */
-#line 311 "compiler.y"
+#line 313 "compiler.y"
     { 
         (yyval.arith_expr_node_ptr) = static_cast<ArithmeticExpressionNode*>((yyvsp[0].expr_node_ptr)); 
         cout << "[INFO] " << "\t Term added to arithmetic expression." << endl;
     }
-#line 1508 "compiler.tab.c"
+#line 1510 "compiler.tab.c"
     break;
 
   case 30: /* logical_expression: expression AND expression  */
-#line 318 "compiler.y"
+#line 320 "compiler.y"
     { 
         (yyval.logical_expr_node_ptr) = new LogicalAndOperatorNode((yyvsp[-2].expr_node_ptr), (yyvsp[0].expr_node_ptr));
         cout << "[INFO] " << "\t Logical AND operation added to AST." << endl;
     }
-#line 1517 "compiler.tab.c"
+#line 1519 "compiler.tab.c"
     break;
 
   case 31: /* logical_expression: expression OR expression  */
-#line 323 "compiler.y"
+#line 325 "compiler.y"
     { 
         (yyval.logical_expr_node_ptr) = new LogicalOrOperatorNode((yyvsp[-2].expr_node_ptr), (yyvsp[0].expr_node_ptr));
         cout << "[INFO] " << "\t Logical OR operation added to AST." << endl;
     }
-#line 1526 "compiler.tab.c"
+#line 1528 "compiler.tab.c"
     break;
 
   case 32: /* logical_expression: NOT expression  */
-#line 328 "compiler.y"
+#line 330 "compiler.y"
     { 
         (yyval.logical_expr_node_ptr) = new NotOperatorNode((yyvsp[0].expr_node_ptr)); 
         cout << "[INFO] " << "\t Logical NOT operation added to AST." << endl;
     }
-#line 1535 "compiler.tab.c"
+#line 1537 "compiler.tab.c"
     break;
 
   case 33: /* logical_expression: expression EQ expression  */
-#line 333 "compiler.y"
+#line 335 "compiler.y"
     { 
         (yyval.logical_expr_node_ptr) = new EqualityOperatorNode((yyvsp[-2].expr_node_ptr), (yyvsp[0].expr_node_ptr)); 
         cout << "[INFO] " << "\t Equality operation added to AST." << endl;
     }
-#line 1544 "compiler.tab.c"
+#line 1546 "compiler.tab.c"
     break;
 
   case 34: /* logical_expression: expression NE expression  */
-#line 338 "compiler.y"
+#line 340 "compiler.y"
     { 
         (yyval.logical_expr_node_ptr) = new InequalityOperatorNode((yyvsp[-2].expr_node_ptr), (yyvsp[0].expr_node_ptr)); 
         cout << "[INFO] " << "\t Inequality operation added to AST." << endl;
     }
-#line 1553 "compiler.tab.c"
+#line 1555 "compiler.tab.c"
     break;
 
   case 35: /* logical_expression: expression LT expression  */
-#line 343 "compiler.y"
+#line 345 "compiler.y"
     { 
         (yyval.logical_expr_node_ptr) = new LessThanOperatorNode((yyvsp[-2].expr_node_ptr), (yyvsp[0].expr_node_ptr)); 
         cout << "[INFO] " << "\t Less than operation added to AST." << endl;
     }
-#line 1562 "compiler.tab.c"
+#line 1564 "compiler.tab.c"
     break;
 
   case 36: /* logical_expression: expression LE expression  */
-#line 348 "compiler.y"
+#line 350 "compiler.y"
     { 
         (yyval.logical_expr_node_ptr) = new LessThanOrEqualOperatorNode((yyvsp[-2].expr_node_ptr), (yyvsp[0].expr_node_ptr)); 
         cout << "[INFO] " << "\t Less than or equal operation added to AST." << endl;
     }
-#line 1571 "compiler.tab.c"
+#line 1573 "compiler.tab.c"
     break;
 
   case 37: /* logical_expression: expression GT expression  */
-#line 353 "compiler.y"
+#line 355 "compiler.y"
     { 
         (yyval.logical_expr_node_ptr) = new GreaterThanOperatorNode((yyvsp[-2].expr_node_ptr), (yyvsp[0].expr_node_ptr)); 
         cout << "[INFO] " << "\t Greater than operation added to AST." << endl;
     }
-#line 1580 "compiler.tab.c"
+#line 1582 "compiler.tab.c"
     break;
 
   case 38: /* logical_expression: expression GE expression  */
-#line 358 "compiler.y"
+#line 360 "compiler.y"
     { 
         (yyval.logical_expr_node_ptr) = new GreaterThanOrEqualOperatorNode((yyvsp[-2].expr_node_ptr), (yyvsp[0].expr_node_ptr)); 
         cout << "[INFO] " << "\t Greater than or equal operation added to AST." << endl;
     }
-#line 1589 "compiler.tab.c"
+#line 1591 "compiler.tab.c"
     break;
 
   case 39: /* logical_expression: LEFT logical_expression RIGHT  */
-#line 363 "compiler.y"
+#line 365 "compiler.y"
     { 
         (yyval.logical_expr_node_ptr) = (yyvsp[-1].logical_expr_node_ptr); 
         cout << "[INFO] " << "\t Parentheses added to logical expression." << endl;
     }
-#line 1598 "compiler.tab.c"
+#line 1600 "compiler.tab.c"
     break;
 
   case 41: /* term: term '*' factor  */
-#line 371 "compiler.y"
+#line 373 "compiler.y"
     { 
         (yyval.expr_node_ptr) = new MultiplicationOperatorNode((yyvsp[-2].expr_node_ptr), (yyvsp[0].expr_node_ptr)); 
         cout << "[INFO] " << "\t Multiplication operation added to AST." << endl;
     }
-#line 1607 "compiler.tab.c"
+#line 1609 "compiler.tab.c"
     break;
 
   case 42: /* term: term '/' factor  */
-#line 376 "compiler.y"
+#line 378 "compiler.y"
     { 
         (yyval.expr_node_ptr) = new DivisionOperatorNode((yyvsp[-2].expr_node_ptr), (yyvsp[0].expr_node_ptr)); 
         cout << "[INFO] " << "\t Division operation added to AST." << endl;
     }
-#line 1616 "compiler.tab.c"
+#line 1618 "compiler.tab.c"
     break;
 
   case 43: /* factor: INTEGER  */
-#line 383 "compiler.y"
+#line 385 "compiler.y"
     { 
         (yyval.expr_node_ptr) = new IntegerLiteralNode((yyvsp[0].ival)); 
         cout << "[INFO] " << "\t Integer literal " << (yyvsp[0].ival) << " added to AST." << endl;
     }
-#line 1625 "compiler.tab.c"
+#line 1627 "compiler.tab.c"
     break;
 
   case 44: /* factor: FLOATING  */
-#line 388 "compiler.y"
+#line 390 "compiler.y"
     { 
         (yyval.expr_node_ptr) = new FloatLiteralNode((yyvsp[0].fval)); 
         cout << "[INFO] " << "\t Float literal " << (yyvsp[0].fval) << " added to AST." << endl;
     }
-#line 1634 "compiler.tab.c"
+#line 1636 "compiler.tab.c"
     break;
 
   case 45: /* factor: ID  */
-#line 393 "compiler.y"
+#line 395 "compiler.y"
     { 
         IdentifierNode* id_node_ptr = new IdentifierNode(*(yyvsp[0].str));
         if(st.variables.find(id_node_ptr->getIdentifier()) != st.variables.end() 
@@ -1650,38 +1652,38 @@ yyreduce:
         }
         delete (yyvsp[0].str);
     }
-#line 1654 "compiler.tab.c"
+#line 1656 "compiler.tab.c"
     break;
 
   case 46: /* factor: LEFT expression RIGHT  */
-#line 409 "compiler.y"
+#line 411 "compiler.y"
     { 
         (yyval.expr_node_ptr) = (yyvsp[-1].expr_node_ptr); 
         cout << "[INFO] " << "\t Parentheses added to arithmetic expression." << endl;
     }
-#line 1663 "compiler.tab.c"
+#line 1665 "compiler.tab.c"
     break;
 
   case 47: /* factor: TRUE  */
-#line 414 "compiler.y"
+#line 416 "compiler.y"
     { 
         (yyval.expr_node_ptr) = new BooleanLiteralNode(true); 
         cout << "[INFO] " << "\t Boolean literal TRUE added to AST." << endl;
     }
-#line 1672 "compiler.tab.c"
+#line 1674 "compiler.tab.c"
     break;
 
   case 48: /* factor: FALSE  */
-#line 419 "compiler.y"
+#line 421 "compiler.y"
     { 
         (yyval.expr_node_ptr) = new BooleanLiteralNode(false); 
         cout << "[INFO] " << "\t Boolean literal FALSE added to AST." << endl;
     }
-#line 1681 "compiler.tab.c"
+#line 1683 "compiler.tab.c"
     break;
 
 
-#line 1685 "compiler.tab.c"
+#line 1687 "compiler.tab.c"
 
       default: break;
     }
@@ -1874,7 +1876,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 425 "compiler.y"
+#line 427 "compiler.y"
 
 
 

@@ -270,6 +270,8 @@ while_command: WHILE logical_expression LBRACE commands RBRACE
         while_node->addCommand(cmd);
     }
     delete cmds_list;
+
+    $$ = while_node;
     cout << "[INFO] " << "\t While loop command AST node created." << endl;
 } 
 
