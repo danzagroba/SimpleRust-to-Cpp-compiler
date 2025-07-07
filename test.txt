@@ -19,6 +19,19 @@ fn main() {
     xx = 45;
     bb = false && true;
 
+    while bb == false
+    {
+        let mut dd: i32 = 29;
+        for mut jj in dd .. xx {
+            print!(jj);
+        }
+        dd = dd + 3;
+        if(dd > xx)
+        {
+            bb = true;
+        }
+    }
+
     for mut ii in 0 .. 5 {
         bb = true;
         for mut xx in 3..59 
@@ -26,12 +39,12 @@ fn main() {
             kk = kk + 2;
         }
     }
-    let mut daniel: bool = true;
+    let mut zagroba: bool = true;
     while bb == true {
-        xx = 5.3;
+        xx = 5;
         print!(xx);
         println!(bb);
     }
-    daniel = false;
+    zagroba = false;
     input!(xx);
 }

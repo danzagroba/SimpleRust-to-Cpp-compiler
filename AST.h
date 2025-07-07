@@ -10,6 +10,7 @@ class Node
 public:
     virtual ~Node() = default; 
     virtual void accept(class Visitor& visitor) = 0;
+    virtual void print(int indent = 0);
 };
 
 
@@ -70,6 +71,8 @@ class MainFunctionNode: public Node
     
     void accept(class Visitor& visitor) override;
     
+    void print(int indent = 0) override;
+
     void addCommand(class CommandNode* command);
     const vector<class CommandNode*>& getCommands() const;
 };
@@ -178,7 +181,7 @@ public:
     IdentifierNode* identifier;
     ExpressionNode* initialValue; // if nullptr the variable is not initialized
 
-    VariableDeclarationNode(TypeNode* t, IdentifierNode* id, ExpressionNode* iv);
+    VariableDeclarationNode(TypeNode* t, IdentifierNode* id, ExpressionNode* iv = nullptr);
     ~VariableDeclarationNode() override;
 
     void accept(class Visitor& visitor) override;
@@ -303,6 +306,7 @@ class ForNode: public CommandNode
     
     void accept(class Visitor& visitor) override;
     
+    const string& getIdentifier() const;
     void addCommand(CommandNode* command);
     const vector<CommandNode*>& getCommands() const;
 };

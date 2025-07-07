@@ -1,6 +1,11 @@
 #include "AST.h"
 #include "Visitor.h"
 
+void Node::print(int indent) {
+    for(int i = 0; i < indent; ++i) std::cout << "  ";
+    std::cout << typeid(*this).name() << " @ " << this << std::endl;
+}
+
 MainFunctionNode::~MainFunctionNode() {
     for (CommandNode* command : commands) {
         delete command;
@@ -9,6 +14,15 @@ MainFunctionNode::~MainFunctionNode() {
 
 void MainFunctionNode::accept(class Visitor& visitor) {
     visitor.visit(*this);
+}
+
+void MainFunctionNode::print(int indent) {
+    Node::print(indent); 
+    for (CommandNode* command : commands) {
+        if (command) {
+            command->print(indent + 1); 
+        }
+    }
 }
 
 void MainFunctionNode::addCommand(CommandNode* command) {
@@ -98,7 +112,7 @@ const vector<ExpressionNode*>& ListElementsNode::getElements() const {
     return elements;
 }
 
-VariableDeclarationNode::VariableDeclarationNode(TypeNode* t, IdentifierNode* id, ExpressionNode* iv = nullptr)
+VariableDeclarationNode::VariableDeclarationNode(TypeNode* t, IdentifierNode* id, ExpressionNode* iv)
 : type(t), identifier(id), initialValue(iv) { }
 
 VariableDeclarationNode::~VariableDeclarationNode() {
@@ -292,6 +306,10 @@ ForNode::~ForNode()
 
 void ForNode::accept(class Visitor& visitor) {
     visitor.visit(*this);
+}
+
+const string& ForNode::getIdentifier() const {
+    return identifier->getIdentifier();
 }
 
 void ForNode::addCommand(CommandNode* command) {
