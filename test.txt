@@ -1,4 +1,6 @@
 fn main() {
+    let mut array: [i32; 3];
+
     let mut xx: i32;
     
     let mut bb: bool;
@@ -29,6 +31,10 @@ fn main() {
         if(dd > xx)
         {
             bb = true;
+        }
+        else
+        {
+            bb = false;
         }
     }
 

@@ -83,7 +83,7 @@ MainFunctionNode* ast_root = nullptr;
 
 %token LET MUT COLON
 
-%token LEFT RIGHT LBRACE RBRACE
+%token LEFT RIGHT LBRACE RBRACE LBRACKET RBRACKET
 
 %token NOT AND OR
 
@@ -107,6 +107,7 @@ MainFunctionNode* ast_root = nullptr;
 %type <command_node_ptr> command
 %type <type_node_ptr> TYPE
 %type <var_decl_node_ptr> declaration
+%type <array_decl_node_ptr> array_declaration
 %type <Variable_assign_node_ptr> assign
 %type <if_else_node_ptr> if_else_command
 %type <for_node_ptr> for_command
@@ -159,6 +160,7 @@ commands: command
     };
 
 command: declaration { $$ = $1; }
+    | array_declaration { $$ = $1; }
     | assign { $$ = $1; }
     | if_else_command { $$ = $1; }
     | for_command { $$ = $1; }
@@ -200,6 +202,17 @@ declaration:
     }
 ;
 
+array_declaration: LET MUT ID COLON LBRACKET TYPE EOL expression RBRACKET EOL
+{
+    IdentifierNode* id_node_ptr = new IdentifierNode(*$3);
+    TypeNode* type_node_ptr = $6;
+
+    $$ = new ArrayDeclarationNode(type_node_ptr, id_node_ptr, $8);
+    st.vectors.insert({id_node_ptr->getIdentifier(), type_node_ptr});
+
+    delete $3;
+}
+;
 assign: ID ATRIB expression EOL
 {
     IdentifierNode* id_node_ptr = new IdentifierNode(*$1);
@@ -226,7 +239,7 @@ if_else_command: IF logical_expression LBRACE commands RBRACE ELSE LBRACE comman
         delete cmds_list;
         cmds_list = $8;
         for (CommandNode* cmd : *cmds_list) {
-            if_else->addIfCommand(cmd);
+            if_else->addElseCommand(cmd);
         }
         delete cmds_list;
         $$ = if_else;
@@ -423,13 +436,19 @@ factor: INTEGER
 int main() { 
 
     int parse_result = yyparse();
+    int semantic_result = false;
     if (parse_result == 0) 
     {
         cout << "Parsing successful!" << endl;
         if(ast_root){
             SemanticVisitor semantic(st);
             ast_root->accept(semantic);
-            //ast_root->print();
+            if(semantic.hasError) {
+                cout << "Semantic errors found." << endl;
+            } else {
+                cout << "Semantic analysis completed successfully." << endl;
+            }
+            semantic_result = semantic.hasError;
         }
     } 
     else 
@@ -437,7 +456,7 @@ int main() {
         cout << "Parsing failed." << endl;
     }
 
-    if(parse_result == 0 && ast_root)
+    if(parse_result == 0 && ast_root && semantic_result == 0)
     {
         CodeVisitor code(st);
         ast_root->accept(code);

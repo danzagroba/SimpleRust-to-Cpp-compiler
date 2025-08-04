@@ -34,6 +34,7 @@ public:
     void visit(VariableDeclarationNode& variableDeclarationNode);
     void visit(VariableAssignmentNode& VariableAssignmentNode);
     void visit(ListElementsNode& listElementsNode);
+    void visit(ArrayDeclarationNode& arrayDeclarationNode);
     void visit(ArrayAssignmentNode& arrayAssignmentNode);
     void visit(IfElseNode& ifElseNode);
     void visit(WhileNode& whileNode);

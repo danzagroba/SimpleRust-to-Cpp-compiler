@@ -22,7 +22,7 @@ bool SemanticVisitor::compareTypes(TypeNode* type1, TypeNode* type2)
 }
 
 SemanticVisitor::SemanticVisitor(SymbolTable& symbolTable)
-    : symbolTable(symbolTable), lastType(nullptr) {}
+    : symbolTable(symbolTable), lastType(nullptr), hasError(false) {}
 
 SemanticVisitor::~SemanticVisitor() {
 }
@@ -62,6 +62,7 @@ void SemanticVisitor::visit(class IdentifierNode& identifierNode) {
             lastType = std::make_unique<BooleanTypeNode>();
         }
     } else {
+        hasError = true;
         cerr << "[ERROR] Identifier not found: " << identifierNode.getIdentifier() << endl;
     }
     
@@ -73,6 +74,7 @@ void SemanticVisitor::visit(ArrayAcessNode& arrayAccessNode) {
     
 
     if (indexType && !dynamic_cast<IntegerTypeNode*>(indexType.get())) {
+        hasError = true;
         cerr << "[ERROR] Index must be of type Integer for array access."<< arrayAccessNode.getIdentifier() << endl;
     }
     arrayAccessNode.identifier->accept(*this);
@@ -86,6 +88,7 @@ void SemanticVisitor::visit(VariableDeclarationNode& variableDeclarationNode) {
         if (it != symbolTable.variables.end()) {
             varType = it->second;
         } else {
+            hasError = true;
             cerr << "[ERROR] Trying to assign a variable that does not exist: " << variableDeclarationNode.getIdentifier() << endl;
             return;
         }
@@ -95,6 +98,7 @@ void SemanticVisitor::visit(VariableDeclarationNode& variableDeclarationNode) {
         
 
         if (!compareTypes(varType, expressionType.get())) {
+            hasError = true;
             cerr << "[ERROR] Type of the expression is incompatible with the variable type: " << variableDeclarationNode.getIdentifier() << endl;
         }
 
@@ -107,6 +111,7 @@ void SemanticVisitor::visit(VariableAssignmentNode& node) {
     if (it != symbolTable.variables.end()) {
         varType = it->second;
     } else {
+        hasError = true;
         cerr << "[ERROR] Trying to assign a variable that does not exist: " << node.getIdentifier() << endl;
         return;
     }
@@ -116,6 +121,7 @@ void SemanticVisitor::visit(VariableAssignmentNode& node) {
     
 
     if (!compareTypes(varType, expressionType.get())) {
+        hasError = true;
         cerr << "[ERROR] Type of the expression is incompatible with the variable type: " << node.getIdentifier() << endl;
     }
 
@@ -133,6 +139,7 @@ void SemanticVisitor::visit(ListElementsNode& listElementsNode) {
         
 
         if (!compareTypes(expectedType, currentElementType.get())) {
+            hasError = true;
             cerr << "[ERROR] Inconsistents types on list of initialing vector." << endl;
         }
         
@@ -144,9 +151,37 @@ void SemanticVisitor::visit(ListElementsNode& listElementsNode) {
     } else if (dynamic_cast<BooleanTypeNode*>(expectedType)) {
         lastType = std::make_unique<BooleanTypeNode>();
     } else {
+        hasError = true;
         cerr << "[ERROR] Unsupported type in listElementsNode.getType()." << endl;
     }
 }
+void SemanticVisitor::visit(ArrayDeclarationNode& arrayDeclarationNode) {
+    TypeNode* varType = nullptr;
+    auto it = symbolTable.vectors.find(arrayDeclarationNode.getIdentifier());
+    if (it != symbolTable.vectors.end()) {
+        varType = it->second;
+    }
+    else {
+        hasError = true;
+        cerr << "[ERROR] Trying to declare an array that already exists: " << arrayDeclarationNode.getIdentifier() << endl;
+        return;
+    }
+    arrayDeclarationNode.getSize()->accept(*this);
+
+    std::unique_ptr<TypeNode> sizeType = move(lastType);
+
+    if (!dynamic_cast<IntegerTypeNode*>(sizeType.get())) {
+        hasError = true;
+        cerr << "[ERROR] Size of the array must be of type Integer: " << arrayDeclarationNode.getIdentifier() << endl;
+        return;
+    }
+    if (!compareTypes(varType, arrayDeclarationNode.getType())) {
+        hasError = true;
+        cerr << "[ERROR] Type of the array is incompatible with the declared type: " << arrayDeclarationNode.getIdentifier() << endl;
+        return;
+    }
+}
+    
 
 void SemanticVisitor::visit(ArrayAssignmentNode& arrayAssignmentNode) {
     TypeNode* varType = nullptr;
@@ -154,6 +189,7 @@ void SemanticVisitor::visit(ArrayAssignmentNode& arrayAssignmentNode) {
     if (it != symbolTable.variables.end()) {
         varType = it->second;
     } else {
+        hasError = true;
         cerr << "[ERROR] Trying to assign to an array that does not exist: " << arrayAssignmentNode.getIdentifier() << endl;
         return;
     }
@@ -163,6 +199,7 @@ void SemanticVisitor::visit(ArrayAssignmentNode& arrayAssignmentNode) {
     
 
     if (!dynamic_cast<IntegerTypeNode*>(indexType.get())) {
+        hasError = true;
         cerr << "[ERROR] Index must be of type Integer for array access: " << arrayAssignmentNode.getIdentifier() << endl;
     }
 
@@ -172,6 +209,7 @@ void SemanticVisitor::visit(ArrayAssignmentNode& arrayAssignmentNode) {
     
 
     if (!compareTypes(varType, valueType.get())) {
+        hasError = true;
         cerr << "[ERROR] Type of the value is incompatible with the array type: " << arrayAssignmentNode.getIdentifier() << endl;
     }
 
@@ -184,6 +222,7 @@ void SemanticVisitor::visit(IfElseNode& IfElseNode)
     
 
     if (!dynamic_cast<BooleanTypeNode*>(conditionType.get())) {
+        hasError = true;
         cerr << "[ERROR] Condition must be of type Boolean in If-Else statement." << endl;
     }
 
@@ -206,6 +245,7 @@ void SemanticVisitor::visit(WhileNode& whileNode) {
     
 
     if (!dynamic_cast<BooleanTypeNode*>(conditionType.get())) {
+        hasError = true;
         cerr << "[ERROR] Condition must be of type Boolean in While statement." << endl;
     }
 
@@ -225,6 +265,7 @@ void SemanticVisitor::visit(ForNode& forNode) {
         cerr << "[INFO] Iterator '" << iteratorName << "' declared as Integer in symbol table during semantic visit." << endl;
     } else {
         if (!dynamic_cast<IntegerTypeNode*>(it->second)) {
+            hasError = true;
             cerr << "[ERROR] For loop iterator must be of type Integer: " << iteratorName << endl;
         }
     }
@@ -237,6 +278,7 @@ void SemanticVisitor::visit(ForNode& forNode) {
     
 
     if (!dynamic_cast<IntegerTypeNode*>(initialType.get()) || !dynamic_cast<IntegerTypeNode*>(finalType.get())) {
+        hasError = true;
         cerr << "[ERROR] Initial and final values must be of type Integer in For loop." << endl;
     }
 
@@ -254,6 +296,7 @@ void SemanticVisitor::visit(AdditionOperatorNode& additionOperatorNode) {
     
 
     if (!compareTypes(leftType.get(), rightType.get())) {
+        hasError = true;
         cerr << "[ERROR] Types of operands in Addition must be compatible." << endl;
     }
     if(dynamic_cast<FloatTypeNode*>(leftType.get()) || dynamic_cast<FloatTypeNode*>(rightType.get())) {
@@ -275,6 +318,7 @@ void SemanticVisitor::visit(SubtractionOperatorNode& subtractionOperatorNode) {
     
 
     if (!compareTypes(leftType.get(), rightType.get())) {
+        hasError = true;
         cerr << "[ERROR] Types of operands in Subtraction must be compatible." << endl;
     }
     if(dynamic_cast<FloatTypeNode*>(leftType.get()) || dynamic_cast<FloatTypeNode*>(rightType.get())) {
@@ -296,6 +340,7 @@ void SemanticVisitor::visit(MultiplicationOperatorNode& multiplicationOperatorNo
     
 
     if (!compareTypes(leftType.get(), rightType.get())) {
+        hasError = true;
         cerr << "[ERROR] Types of operands in Multiplication must be compatible." << endl;
     }
     if(dynamic_cast<FloatTypeNode*>(leftType.get()) || dynamic_cast<FloatTypeNode*>(rightType.get())) {
@@ -317,6 +362,7 @@ void SemanticVisitor::visit(DivisionOperatorNode& divisionOperatorNode) {
     
 
     if (!compareTypes(leftType.get(), rightType.get())) {
+        hasError = true;
         cerr << "[ERROR] Types of operands in Division must be compatible." << endl;
     }
     if(dynamic_cast<FloatTypeNode*>(leftType.get()) || dynamic_cast<FloatTypeNode*>(rightType.get())) {
@@ -338,6 +384,7 @@ void SemanticVisitor::visit(EqualityOperatorNode& equalityOperatorNode) {
     
 
     if (!compareTypes(leftType.get(), rightType.get())) {
+        hasError = true;
         cerr << "[ERROR] Types of operands in Equality must be compatible." << endl;
     }
     lastType = std::make_unique<BooleanTypeNode>();
@@ -354,6 +401,7 @@ void SemanticVisitor::visit(InequalityOperatorNode& inequalityOperatorNode) {
     
 
     if (!compareTypes(leftType.get(), rightType.get())) {
+        hasError = true;
         cerr << "[ERROR] Types of operands in Inequality must be compatible." << endl;
     }
     lastType = std::make_unique<BooleanTypeNode>();
@@ -368,6 +416,7 @@ void SemanticVisitor::visit(LessThanOrEqualOperatorNode& lessThanOrEqualOperator
     
 
     if (!compareTypes(leftType.get(), rightType.get())) {
+        hasError = true;
         cerr << "[ERROR] Types of operands in Less Than or Equal must be compatible." << endl;
     }
     lastType = std::make_unique<BooleanTypeNode>();
@@ -384,6 +433,7 @@ void SemanticVisitor::visit(LessThanOperatorNode& lessThanOperatorNode) {
     
 
     if (!compareTypes(leftType.get(), rightType.get())) {
+        hasError = true;
         cerr << "[ERROR] Types of operands in Less Than must be compatible." << endl;
     }
     lastType = std::make_unique<BooleanTypeNode>();
@@ -398,6 +448,7 @@ void SemanticVisitor::visit(GreaterThanOrEqualOperatorNode& greaterThanOrEqualOp
     
 
     if (!compareTypes(leftType.get(), rightType.get())) {
+        hasError = true;
         cerr << "[ERROR] Types of operands in Greater Than or Equal must be compatible." << endl;
     }
     lastType = std::make_unique<BooleanTypeNode>();
@@ -412,6 +463,7 @@ void SemanticVisitor::visit(GreaterThanOperatorNode& greaterThanOperatorNode) {
     std::unique_ptr<TypeNode> rightType = move(lastType);
 
     if (!compareTypes(leftType.get(), rightType.get())) {
+        hasError = true;
         cerr << "[ERROR] Types of operands in Greater Than must be compatible." << endl;
     }
     lastType = std::make_unique<BooleanTypeNode>();
@@ -424,6 +476,7 @@ void SemanticVisitor::visit(LogicalAndOperatorNode& logicalAndOperatorNode) {
     std::unique_ptr<TypeNode> rightType = move(lastType);
 
     if (!dynamic_cast<BooleanTypeNode*>(leftType.get()) || !dynamic_cast<BooleanTypeNode*>(rightType.get())) {
+        hasError = true;
         cerr << "[ERROR] Both operands in Logical And must be of type Boolean." << endl;
     }
     lastType = std::make_unique<BooleanTypeNode>();
@@ -436,6 +489,7 @@ void SemanticVisitor::visit(LogicalOrOperatorNode& logicalOrOperatorNode) {
     std::unique_ptr<TypeNode> rightType = move(lastType);
 
     if (!dynamic_cast<BooleanTypeNode*>(leftType.get()) || !dynamic_cast<BooleanTypeNode*>(rightType.get())) {
+        hasError = true;
         cerr << "[ERROR] Both operands in Logical Or must be of type Boolean." << endl;
     }
     lastType = std::make_unique<BooleanTypeNode>();
@@ -449,6 +503,7 @@ void SemanticVisitor::visit(NotOperatorNode& notOperatorNode) {
     
 
     if (!dynamic_cast<BooleanTypeNode*>(expressionType.get())) {
+        hasError = true;
         cerr << "[ERROR] Operand in Not Operator must be of type Boolean." << endl;
     }
     lastType = std::make_unique<BooleanTypeNode>();
@@ -463,6 +518,7 @@ void SemanticVisitor::visit(InputNode& InputNode) {
     if (!dynamic_cast<IntegerTypeNode*>(identifierType.get()) && 
         !dynamic_cast<FloatTypeNode*>(identifierType.get()) && 
         !dynamic_cast<BooleanTypeNode*>(identifierType.get())) {
+        hasError = true;
         cerr << "[ERROR] Input identifier must be of type Integer, Float, or Boolean." << endl;
     }
 }
@@ -473,6 +529,7 @@ void SemanticVisitor::visit(OutputNode& outputNode) {
     if (!dynamic_cast<IntegerTypeNode*>(expressionType.get()) && 
         !dynamic_cast<FloatTypeNode*>(expressionType.get()) && 
         !dynamic_cast<BooleanTypeNode*>(expressionType.get())) {
+        hasError = true;
         cerr << "[ERROR] Output expression must be of type Integer, Float, or Boolean." << endl;
     }
 }

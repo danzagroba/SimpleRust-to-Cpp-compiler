@@ -69,28 +69,30 @@ extern int yydebug;
     RIGHT = 270,                   /* RIGHT  */
     LBRACE = 271,                  /* LBRACE  */
     RBRACE = 272,                  /* RBRACE  */
-    NOT = 273,                     /* NOT  */
-    AND = 274,                     /* AND  */
-    OR = 275,                      /* OR  */
-    TRUE = 276,                    /* TRUE  */
-    FALSE = 277,                   /* FALSE  */
-    ATRIB = 278,                   /* ATRIB  */
-    EQ = 279,                      /* EQ  */
-    NE = 280,                      /* NE  */
-    LT = 281,                      /* LT  */
-    LE = 282,                      /* LE  */
-    GT = 283,                      /* GT  */
-    GE = 284,                      /* GE  */
-    IF = 285,                      /* IF  */
-    ELSE = 286,                    /* ELSE  */
-    FOR = 287,                     /* FOR  */
-    IN = 288,                      /* IN  */
-    TO = 289,                      /* TO  */
-    WHILE = 290,                   /* WHILE  */
-    READ = 291,                    /* READ  */
-    WRITE = 292,                   /* WRITE  */
-    WRITELN = 293,                 /* WRITELN  */
-    EOL = 294                      /* EOL  */
+    LBRACKET = 273,                /* LBRACKET  */
+    RBRACKET = 274,                /* RBRACKET  */
+    NOT = 275,                     /* NOT  */
+    AND = 276,                     /* AND  */
+    OR = 277,                      /* OR  */
+    TRUE = 278,                    /* TRUE  */
+    FALSE = 279,                   /* FALSE  */
+    ATRIB = 280,                   /* ATRIB  */
+    EQ = 281,                      /* EQ  */
+    NE = 282,                      /* NE  */
+    LT = 283,                      /* LT  */
+    LE = 284,                      /* LE  */
+    GT = 285,                      /* GT  */
+    GE = 286,                      /* GE  */
+    IF = 287,                      /* IF  */
+    ELSE = 288,                    /* ELSE  */
+    FOR = 289,                     /* FOR  */
+    IN = 290,                      /* IN  */
+    TO = 291,                      /* TO  */
+    WHILE = 292,                   /* WHILE  */
+    READ = 293,                    /* READ  */
+    WRITE = 294,                   /* WRITE  */
+    WRITELN = 295,                 /* WRITELN  */
+    EOL = 296                      /* EOL  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -145,7 +147,7 @@ union YYSTYPE
     ArrayAcessNode* array_access_node_ptr; 
 
 
-#line 149 "compiler.tab.h"
+#line 151 "compiler.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

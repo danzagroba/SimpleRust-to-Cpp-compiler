@@ -6,7 +6,7 @@
 class SymbolTable{
     public:
     std::unordered_map<std::string, TypeNode*> variables;
-
+    std::unordered_map<std::string, TypeNode*> vectors;
     SymbolTable();
     ~SymbolTable();
 };

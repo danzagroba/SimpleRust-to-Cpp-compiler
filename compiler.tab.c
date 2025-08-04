@@ -131,49 +131,52 @@ enum yysymbol_kind_t
   YYSYMBOL_RIGHT = 15,                     /* RIGHT  */
   YYSYMBOL_LBRACE = 16,                    /* LBRACE  */
   YYSYMBOL_RBRACE = 17,                    /* RBRACE  */
-  YYSYMBOL_NOT = 18,                       /* NOT  */
-  YYSYMBOL_AND = 19,                       /* AND  */
-  YYSYMBOL_OR = 20,                        /* OR  */
-  YYSYMBOL_TRUE = 21,                      /* TRUE  */
-  YYSYMBOL_FALSE = 22,                     /* FALSE  */
-  YYSYMBOL_ATRIB = 23,                     /* ATRIB  */
-  YYSYMBOL_EQ = 24,                        /* EQ  */
-  YYSYMBOL_NE = 25,                        /* NE  */
-  YYSYMBOL_LT = 26,                        /* LT  */
-  YYSYMBOL_LE = 27,                        /* LE  */
-  YYSYMBOL_GT = 28,                        /* GT  */
-  YYSYMBOL_GE = 29,                        /* GE  */
-  YYSYMBOL_IF = 30,                        /* IF  */
-  YYSYMBOL_ELSE = 31,                      /* ELSE  */
-  YYSYMBOL_FOR = 32,                       /* FOR  */
-  YYSYMBOL_IN = 33,                        /* IN  */
-  YYSYMBOL_TO = 34,                        /* TO  */
-  YYSYMBOL_WHILE = 35,                     /* WHILE  */
-  YYSYMBOL_READ = 36,                      /* READ  */
-  YYSYMBOL_WRITE = 37,                     /* WRITE  */
-  YYSYMBOL_WRITELN = 38,                   /* WRITELN  */
-  YYSYMBOL_EOL = 39,                       /* EOL  */
-  YYSYMBOL_40_ = 40,                       /* '+'  */
-  YYSYMBOL_41_ = 41,                       /* '-'  */
-  YYSYMBOL_42_ = 42,                       /* '*'  */
-  YYSYMBOL_43_ = 43,                       /* '/'  */
-  YYSYMBOL_YYACCEPT = 44,                  /* $accept  */
-  YYSYMBOL_program = 45,                   /* program  */
-  YYSYMBOL_commands = 46,                  /* commands  */
-  YYSYMBOL_command = 47,                   /* command  */
-  YYSYMBOL_TYPE = 48,                      /* TYPE  */
-  YYSYMBOL_declaration = 49,               /* declaration  */
-  YYSYMBOL_assign = 50,                    /* assign  */
-  YYSYMBOL_if_else_command = 51,           /* if_else_command  */
-  YYSYMBOL_for_command = 52,               /* for_command  */
-  YYSYMBOL_while_command = 53,             /* while_command  */
-  YYSYMBOL_read_command = 54,              /* read_command  */
-  YYSYMBOL_write_command = 55,             /* write_command  */
-  YYSYMBOL_expression = 56,                /* expression  */
-  YYSYMBOL_arithmetic_expression = 57,     /* arithmetic_expression  */
-  YYSYMBOL_logical_expression = 58,        /* logical_expression  */
-  YYSYMBOL_term = 59,                      /* term  */
-  YYSYMBOL_factor = 60                     /* factor  */
+  YYSYMBOL_LBRACKET = 18,                  /* LBRACKET  */
+  YYSYMBOL_RBRACKET = 19,                  /* RBRACKET  */
+  YYSYMBOL_NOT = 20,                       /* NOT  */
+  YYSYMBOL_AND = 21,                       /* AND  */
+  YYSYMBOL_OR = 22,                        /* OR  */
+  YYSYMBOL_TRUE = 23,                      /* TRUE  */
+  YYSYMBOL_FALSE = 24,                     /* FALSE  */
+  YYSYMBOL_ATRIB = 25,                     /* ATRIB  */
+  YYSYMBOL_EQ = 26,                        /* EQ  */
+  YYSYMBOL_NE = 27,                        /* NE  */
+  YYSYMBOL_LT = 28,                        /* LT  */
+  YYSYMBOL_LE = 29,                        /* LE  */
+  YYSYMBOL_GT = 30,                        /* GT  */
+  YYSYMBOL_GE = 31,                        /* GE  */
+  YYSYMBOL_IF = 32,                        /* IF  */
+  YYSYMBOL_ELSE = 33,                      /* ELSE  */
+  YYSYMBOL_FOR = 34,                       /* FOR  */
+  YYSYMBOL_IN = 35,                        /* IN  */
+  YYSYMBOL_TO = 36,                        /* TO  */
+  YYSYMBOL_WHILE = 37,                     /* WHILE  */
+  YYSYMBOL_READ = 38,                      /* READ  */
+  YYSYMBOL_WRITE = 39,                     /* WRITE  */
+  YYSYMBOL_WRITELN = 40,                   /* WRITELN  */
+  YYSYMBOL_EOL = 41,                       /* EOL  */
+  YYSYMBOL_42_ = 42,                       /* '+'  */
+  YYSYMBOL_43_ = 43,                       /* '-'  */
+  YYSYMBOL_44_ = 44,                       /* '*'  */
+  YYSYMBOL_45_ = 45,                       /* '/'  */
+  YYSYMBOL_YYACCEPT = 46,                  /* $accept  */
+  YYSYMBOL_program = 47,                   /* program  */
+  YYSYMBOL_commands = 48,                  /* commands  */
+  YYSYMBOL_command = 49,                   /* command  */
+  YYSYMBOL_TYPE = 50,                      /* TYPE  */
+  YYSYMBOL_declaration = 51,               /* declaration  */
+  YYSYMBOL_array_declaration = 52,         /* array_declaration  */
+  YYSYMBOL_assign = 53,                    /* assign  */
+  YYSYMBOL_if_else_command = 54,           /* if_else_command  */
+  YYSYMBOL_for_command = 55,               /* for_command  */
+  YYSYMBOL_while_command = 56,             /* while_command  */
+  YYSYMBOL_read_command = 57,              /* read_command  */
+  YYSYMBOL_write_command = 58,             /* write_command  */
+  YYSYMBOL_expression = 59,                /* expression  */
+  YYSYMBOL_arithmetic_expression = 60,     /* arithmetic_expression  */
+  YYSYMBOL_logical_expression = 61,        /* logical_expression  */
+  YYSYMBOL_term = 62,                      /* term  */
+  YYSYMBOL_factor = 63                     /* factor  */
 };
 typedef enum yysymbol_kind_t yysymbol_kind_t;
 
@@ -501,19 +504,19 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  4
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   256
+#define YYLAST   287
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  44
+#define YYNTOKENS  46
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  17
+#define YYNNTS  18
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  48
+#define YYNRULES  50
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  116
+#define YYNSTATES  123
 
 /* YYMAXUTOK -- Last valid token kind.  */
-#define YYMAXUTOK   294
+#define YYMAXUTOK   296
 
 
 /* YYTRANSLATE(TOKEN-NUM) -- Symbol number corresponding to TOKEN-NUM
@@ -531,7 +534,7 @@ static const yytype_int8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,    42,    40,     2,    41,     2,    43,     2,     2,
+       2,     2,    44,    42,     2,    43,     2,    45,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
@@ -556,18 +559,19 @@ static const yytype_int8 yytranslate[] =
        5,     6,     7,     8,     9,    10,    11,    12,    13,    14,
       15,    16,    17,    18,    19,    20,    21,    22,    23,    24,
       25,    26,    27,    28,    29,    30,    31,    32,    33,    34,
-      35,    36,    37,    38,    39
+      35,    36,    37,    38,    39,    40,    41
 };
 
 #if YYDEBUG
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int16 yyrline[] =
 {
-       0,   138,   138,   148,   154,   161,   162,   163,   164,   165,
-     166,   167,   170,   171,   172,   177,   189,   203,   219,   235,
-     248,   266,   279,   288,   293,   299,   300,   303,   308,   313,
-     320,   325,   330,   335,   340,   345,   350,   355,   360,   365,
-     372,   373,   378,   385,   390,   395,   402,   407,   412
+       0,   139,   139,   149,   155,   162,   163,   164,   165,   166,
+     167,   168,   169,   172,   173,   174,   179,   191,   205,   216,
+     232,   248,   261,   279,   292,   301,   306,   312,   313,   316,
+     321,   326,   333,   338,   343,   348,   353,   358,   363,   368,
+     373,   378,   385,   386,   391,   398,   403,   408,   415,   420,
+     425
 };
 #endif
 
@@ -585,13 +589,14 @@ static const char *const yytname[] =
 {
   "\"end of file\"", "error", "\"invalid token\"", "FUNCTION", "MAIN",
   "ID", "TINT", "TFLOAT", "TBOOL", "INTEGER", "FLOATING", "LET", "MUT",
-  "COLON", "LEFT", "RIGHT", "LBRACE", "RBRACE", "NOT", "AND", "OR", "TRUE",
-  "FALSE", "ATRIB", "EQ", "NE", "LT", "LE", "GT", "GE", "IF", "ELSE",
-  "FOR", "IN", "TO", "WHILE", "READ", "WRITE", "WRITELN", "EOL", "'+'",
-  "'-'", "'*'", "'/'", "$accept", "program", "commands", "command", "TYPE",
-  "declaration", "assign", "if_else_command", "for_command",
-  "while_command", "read_command", "write_command", "expression",
-  "arithmetic_expression", "logical_expression", "term", "factor", YY_NULLPTR
+  "COLON", "LEFT", "RIGHT", "LBRACE", "RBRACE", "LBRACKET", "RBRACKET",
+  "NOT", "AND", "OR", "TRUE", "FALSE", "ATRIB", "EQ", "NE", "LT", "LE",
+  "GT", "GE", "IF", "ELSE", "FOR", "IN", "TO", "WHILE", "READ", "WRITE",
+  "WRITELN", "EOL", "'+'", "'-'", "'*'", "'/'", "$accept", "program",
+  "commands", "command", "TYPE", "declaration", "array_declaration",
+  "assign", "if_else_command", "for_command", "while_command",
+  "read_command", "write_command", "expression", "arithmetic_expression",
+  "logical_expression", "term", "factor", YY_NULLPTR
 };
 
 static const char *
@@ -615,18 +620,19 @@ yysymbol_name (yysymbol_kind_t yysymbol)
    STATE-NUM.  */
 static const yytype_int16 yypact[] =
 {
-       0,     8,    39,    47,   -59,    50,    55,    97,    43,    62,
-     159,    68,   159,    53,    71,    77,     6,   -59,   -59,   -59,
-     -59,   -59,   -59,   -59,   -59,   159,    87,   -59,   -59,   -59,
-     159,   159,   -59,   -59,   210,    19,    66,    21,   -59,    89,
-      81,    95,   159,   159,   -59,   -59,   117,   -59,    90,   169,
-      86,   -59,   159,   159,   159,   159,   159,   159,   159,   159,
-     161,   161,    97,   161,   161,    73,    97,    92,   184,   199,
-     -59,    41,   -59,   -59,   227,   221,   -13,   -13,   -59,   -59,
-     -59,   -59,   159,   -59,   -59,    40,   -59,   -59,   161,    51,
-      65,    74,    80,   -59,   -59,   -59,   -18,    91,    12,   -59,
-     -59,   -59,   -59,   159,   -59,    94,   161,   133,    97,   -14,
-     -59,    79,    97,   -59,    88,   -59
+       0,     7,    17,    22,   -59,     6,    25,   111,    13,    36,
+     175,    37,   175,    39,    42,    57,     5,   -59,   -59,   -59,
+     -59,   -59,   -59,   -59,   -59,   -59,   175,    67,   -59,   -59,
+     -59,   175,   175,   -59,   -59,   239,   -28,    63,    24,   -59,
+      68,    77,    78,   175,   175,   -59,   -59,   131,   -59,    81,
+     181,    80,   -59,   175,   175,   175,   175,   175,   175,   175,
+     175,   177,   177,   111,   177,   177,    61,   111,    83,   198,
+     215,   -59,    44,   -59,   -59,   256,   250,    47,    47,   -59,
+     -59,   -59,   -59,   175,   -59,   -59,    50,   -59,   -59,   177,
+      75,    58,    60,    65,   -59,   -59,   -59,    19,   -17,    69,
+      21,   -59,   -59,   -59,   -59,    87,   175,   -59,    92,   177,
+     175,   147,   111,     4,   228,   -59,    86,   111,    88,   -59,
+     100,   -59,   -59
 };
 
 /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -636,30 +642,31 @@ static const yytype_int8 yydefact[] =
 {
        0,     0,     0,     0,     1,     0,     0,     0,     0,     0,
        0,     0,     0,     0,     0,     0,     0,     3,     5,     6,
-       7,     8,     9,    10,    11,     0,     0,    45,    43,    44,
-       0,     0,    47,    48,     0,    25,    26,    29,    40,     0,
-      26,     0,     0,     0,     2,     4,     0,    26,     0,     0,
-      26,    32,     0,     0,     0,     0,     0,     0,     0,     0,
+       7,     8,     9,    10,    11,    12,     0,     0,    47,    45,
+      46,     0,     0,    49,    50,     0,    27,    28,    31,    42,
+       0,    28,     0,     0,     0,     2,     4,     0,    28,     0,
+       0,    28,    34,     0,     0,     0,     0,     0,     0,     0,
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-      17,     0,    46,    39,    30,    31,    33,    34,    35,    36,
-      37,    38,     0,    27,    28,     0,    41,    42,     0,     0,
-       0,     0,     0,    12,    13,    14,     0,    19,     0,    21,
-      22,    23,    24,     0,    15,     0,     0,     0,     0,     0,
-      16,     0,     0,    18,     0,    20
+       0,    19,     0,    48,    41,    32,    33,    35,    36,    37,
+      38,    39,    40,     0,    29,    30,     0,    43,    44,     0,
+       0,     0,     0,     0,    13,    14,    15,     0,     0,    21,
+       0,    23,    24,    25,    26,     0,     0,    16,     0,     0,
+       0,     0,     0,     0,     0,    17,     0,     0,     0,    20,
+       0,    18,    22
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -59,   -59,   -58,   -16,   -59,   -59,   -59,   -59,   -59,   -59,
-     -59,   -59,   -24,   -51,    10,   -59,   -39
+     -59,   -59,   -58,   -16,    30,   -59,   -59,   -59,   -59,   -59,
+     -59,   -59,   -59,   -25,   -49,    -8,   -59,     1
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-       0,     2,    16,    17,    96,    18,    19,    20,    21,    22,
-      23,    24,    34,    35,    47,    37,    38
+       0,     2,    16,    17,    98,    18,    19,    20,    21,    22,
+      23,    24,    25,    35,    36,    48,    38,    39
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -667,100 +674,109 @@ static const yytype_int8 yydefgoto[] =
    number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-      45,    46,   112,     1,    85,   103,    49,    51,    89,    83,
-      84,     8,     3,    56,    57,    58,    59,     9,    68,    69,
-      36,   104,    40,    44,    86,    87,    60,    61,    74,    75,
-      76,    77,    78,    79,    80,    81,    10,    98,    11,     4,
-      50,    12,    13,    14,    15,     8,   106,    93,    94,    95,
-     111,     9,    60,    61,   114,   109,     8,    97,    49,    60,
-      61,     5,     9,    63,    64,     6,    25,    41,    99,    45,
-      10,     7,    11,    45,    26,    12,    13,    14,    15,   107,
-      39,    10,    62,    11,     8,    42,    12,    13,    14,    15,
-       9,    43,    48,     8,    65,    45,   113,    66,    45,     9,
-      67,    73,     8,    71,   100,   115,    88,    90,     9,    10,
-     108,    11,     0,   101,    12,    13,    14,    15,    10,   102,
-      11,     0,   105,    12,    13,    14,    15,    10,     0,    11,
-       0,     0,    12,    13,    14,    15,    52,    53,     0,     0,
-       0,    54,    55,    56,    57,    58,    59,     0,     0,     0,
-       0,     0,    52,    53,     0,     0,    70,    54,    55,    56,
-      57,    58,    59,     0,    27,     0,    27,     0,    28,    29,
-      28,    29,   110,    30,     0,    82,     0,    31,     0,     0,
-      32,    33,    32,    33,    72,     0,     0,     0,    52,    53,
-       0,     0,     0,    54,    55,    56,    57,    58,    59,    91,
-       0,     0,     0,    52,    53,     0,     0,     0,    54,    55,
-      56,    57,    58,    59,    92,     0,     0,     0,    52,    53,
-       0,     0,     0,    54,    55,    56,    57,    58,    59,    52,
-      53,     0,     0,     0,    54,    55,    56,    57,    58,    59,
-      52,     0,     0,     0,     0,    54,    55,    56,    57,    58,
-      59,    54,    55,    56,    57,    58,    59
+      46,    47,    37,     1,    41,    86,    50,    52,   106,    90,
+       8,     3,    84,    85,    61,    62,     9,     4,    69,    70,
+     117,     6,    45,    51,   107,    94,    95,    96,    75,    76,
+      77,    78,    79,    80,    81,    82,     5,    10,    26,    11,
+     100,     7,    12,    13,    14,    15,    61,    62,    27,    40,
+      94,    95,    96,    42,   116,     8,    43,   109,    50,   120,
+     113,     9,    97,    61,    62,    87,    88,    99,    64,    65,
+      46,    44,    49,    66,    46,    57,    58,    59,    60,    63,
+       8,   111,    10,    68,    11,   114,     9,    12,    13,    14,
+      15,     8,   101,    67,    72,    74,    89,     9,    91,   102,
+      46,   103,   108,   119,    46,     8,   104,    10,   112,    11,
+       0,     9,    12,    13,    14,    15,     8,   122,    10,     0,
+      11,     0,     9,    12,    13,    14,    15,   105,   110,   121,
+       0,     0,    10,     0,    11,     0,     0,    12,    13,    14,
+      15,     0,     0,    10,     0,    11,     0,     0,    12,    13,
+      14,    15,    53,    54,     0,     0,     0,    55,    56,    57,
+      58,    59,    60,     0,     0,     0,     0,     0,    53,    54,
+       0,     0,    71,    55,    56,    57,    58,    59,    60,     0,
+      28,     0,    28,     0,    29,    30,    29,    30,   115,    31,
+       0,    83,     0,     0,     0,    32,    73,     0,    33,    34,
+      33,    34,    53,    54,     0,     0,     0,    55,    56,    57,
+      58,    59,    60,    92,     0,     0,     0,     0,     0,    53,
+      54,     0,     0,     0,    55,    56,    57,    58,    59,    60,
+      93,     0,     0,     0,     0,     0,    53,    54,     0,     0,
+       0,    55,    56,    57,    58,    59,    60,   118,     0,    53,
+      54,     0,     0,     0,    55,    56,    57,    58,    59,    60,
+      53,    54,     0,     0,     0,    55,    56,    57,    58,    59,
+      60,    53,     0,     0,     0,     0,    55,    56,    57,    58,
+      59,    60,    55,    56,    57,    58,    59,    60
 };
 
 static const yytype_int8 yycheck[] =
 {
-      16,    25,    16,     3,    62,    23,    30,    31,    66,    60,
-      61,     5,     4,    26,    27,    28,    29,    11,    42,    43,
-      10,    39,    12,    17,    63,    64,    40,    41,    52,    53,
-      54,    55,    56,    57,    58,    59,    30,    88,    32,     0,
-      30,    35,    36,    37,    38,     5,    34,     6,     7,     8,
-     108,    11,    40,    41,   112,   106,     5,    17,    82,    40,
-      41,    14,    11,    42,    43,    15,    23,    14,    17,    85,
-      30,    16,    32,    89,    12,    35,    36,    37,    38,   103,
-      12,    30,    16,    32,     5,    14,    35,    36,    37,    38,
-      11,    14,     5,     5,     5,   111,    17,    16,   114,    11,
-       5,    15,     5,    13,    39,    17,    33,    15,    11,    30,
-      16,    32,    -1,    39,    35,    36,    37,    38,    30,    39,
-      32,    -1,    31,    35,    36,    37,    38,    30,    -1,    32,
-      -1,    -1,    35,    36,    37,    38,    19,    20,    -1,    -1,
-      -1,    24,    25,    26,    27,    28,    29,    -1,    -1,    -1,
-      -1,    -1,    19,    20,    -1,    -1,    39,    24,    25,    26,
-      27,    28,    29,    -1,     5,    -1,     5,    -1,     9,    10,
-       9,    10,    39,    14,    -1,    14,    -1,    18,    -1,    -1,
-      21,    22,    21,    22,    15,    -1,    -1,    -1,    19,    20,
-      -1,    -1,    -1,    24,    25,    26,    27,    28,    29,    15,
-      -1,    -1,    -1,    19,    20,    -1,    -1,    -1,    24,    25,
-      26,    27,    28,    29,    15,    -1,    -1,    -1,    19,    20,
-      -1,    -1,    -1,    24,    25,    26,    27,    28,    29,    19,
-      20,    -1,    -1,    -1,    24,    25,    26,    27,    28,    29,
-      19,    -1,    -1,    -1,    -1,    24,    25,    26,    27,    28,
-      29,    24,    25,    26,    27,    28,    29
+      16,    26,    10,     3,    12,    63,    31,    32,    25,    67,
+       5,     4,    61,    62,    42,    43,    11,     0,    43,    44,
+      16,    15,    17,    31,    41,     6,     7,     8,    53,    54,
+      55,    56,    57,    58,    59,    60,    14,    32,    25,    34,
+      89,    16,    37,    38,    39,    40,    42,    43,    12,    12,
+       6,     7,     8,    14,   112,     5,    14,    36,    83,   117,
+     109,    11,    18,    42,    43,    64,    65,    17,    44,    45,
+      86,    14,     5,     5,    90,    28,    29,    30,    31,    16,
+       5,   106,    32,     5,    34,   110,    11,    37,    38,    39,
+      40,     5,    17,    16,    13,    15,    35,    11,    15,    41,
+     116,    41,    33,    17,   120,     5,    41,    32,    16,    34,
+      -1,    11,    37,    38,    39,    40,     5,    17,    32,    -1,
+      34,    -1,    11,    37,    38,    39,    40,    97,    41,    41,
+      -1,    -1,    32,    -1,    34,    -1,    -1,    37,    38,    39,
+      40,    -1,    -1,    32,    -1,    34,    -1,    -1,    37,    38,
+      39,    40,    21,    22,    -1,    -1,    -1,    26,    27,    28,
+      29,    30,    31,    -1,    -1,    -1,    -1,    -1,    21,    22,
+      -1,    -1,    41,    26,    27,    28,    29,    30,    31,    -1,
+       5,    -1,     5,    -1,     9,    10,     9,    10,    41,    14,
+      -1,    14,    -1,    -1,    -1,    20,    15,    -1,    23,    24,
+      23,    24,    21,    22,    -1,    -1,    -1,    26,    27,    28,
+      29,    30,    31,    15,    -1,    -1,    -1,    -1,    -1,    21,
+      22,    -1,    -1,    -1,    26,    27,    28,    29,    30,    31,
+      15,    -1,    -1,    -1,    -1,    -1,    21,    22,    -1,    -1,
+      -1,    26,    27,    28,    29,    30,    31,    19,    -1,    21,
+      22,    -1,    -1,    -1,    26,    27,    28,    29,    30,    31,
+      21,    22,    -1,    -1,    -1,    26,    27,    28,    29,    30,
+      31,    21,    -1,    -1,    -1,    -1,    26,    27,    28,    29,
+      30,    31,    26,    27,    28,    29,    30,    31
 };
 
 /* YYSTOS[STATE-NUM] -- The symbol kind of the accessing symbol of
    state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,     3,    45,     4,     0,    14,    15,    16,     5,    11,
-      30,    32,    35,    36,    37,    38,    46,    47,    49,    50,
-      51,    52,    53,    54,    55,    23,    12,     5,     9,    10,
-      14,    18,    21,    22,    56,    57,    58,    59,    60,    12,
-      58,    14,    14,    14,    17,    47,    56,    58,     5,    56,
-      58,    56,    19,    20,    24,    25,    26,    27,    28,    29,
-      40,    41,    16,    42,    43,     5,    16,     5,    56,    56,
-      39,    13,    15,    15,    56,    56,    56,    56,    56,    56,
-      56,    56,    14,    57,    57,    46,    60,    60,    33,    46,
-      15,    15,    15,     6,     7,     8,    48,    17,    57,    17,
-      39,    39,    39,    23,    39,    31,    34,    56,    16,    57,
-      39,    46,    16,    17,    46,    17
+       0,     3,    47,     4,     0,    14,    15,    16,     5,    11,
+      32,    34,    37,    38,    39,    40,    48,    49,    51,    52,
+      53,    54,    55,    56,    57,    58,    25,    12,     5,     9,
+      10,    14,    20,    23,    24,    59,    60,    61,    62,    63,
+      12,    61,    14,    14,    14,    17,    49,    59,    61,     5,
+      59,    61,    59,    21,    22,    26,    27,    28,    29,    30,
+      31,    42,    43,    16,    44,    45,     5,    16,     5,    59,
+      59,    41,    13,    15,    15,    59,    59,    59,    59,    59,
+      59,    59,    59,    14,    60,    60,    48,    63,    63,    35,
+      48,    15,    15,    15,     6,     7,     8,    18,    50,    17,
+      60,    17,    41,    41,    41,    50,    25,    41,    33,    36,
+      41,    59,    16,    60,    59,    41,    48,    16,    19,    17,
+      48,    41,    17
 };
 
 /* YYR1[RULE-NUM] -- Symbol kind of the left-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr1[] =
 {
-       0,    44,    45,    46,    46,    47,    47,    47,    47,    47,
-      47,    47,    48,    48,    48,    49,    49,    50,    51,    51,
-      52,    53,    54,    55,    55,    56,    56,    57,    57,    57,
-      58,    58,    58,    58,    58,    58,    58,    58,    58,    58,
-      59,    59,    59,    60,    60,    60,    60,    60,    60
+       0,    46,    47,    48,    48,    49,    49,    49,    49,    49,
+      49,    49,    49,    50,    50,    50,    51,    51,    52,    53,
+      54,    54,    55,    56,    57,    58,    58,    59,    59,    60,
+      60,    60,    61,    61,    61,    61,    61,    61,    61,    61,
+      61,    61,    62,    62,    62,    63,    63,    63,    63,    63,
+      63
 };
 
 /* YYR2[RULE-NUM] -- Number of symbols on the right-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr2[] =
 {
        0,     2,     7,     1,     2,     1,     1,     1,     1,     1,
-       1,     1,     1,     1,     1,     6,     8,     4,     9,     5,
-      10,     5,     5,     5,     5,     1,     1,     3,     3,     1,
-       3,     3,     2,     3,     3,     3,     3,     3,     3,     3,
-       1,     3,     3,     1,     1,     1,     3,     1,     1
+       1,     1,     1,     1,     1,     1,     6,     8,    10,     4,
+       9,     5,    10,     5,     5,     5,     5,     1,     1,     3,
+       3,     1,     3,     3,     2,     3,     3,     3,     3,     3,
+       3,     3,     1,     3,     3,     1,     1,     1,     3,     1,
+       1
 };
 
 
@@ -1224,7 +1240,7 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* program: FUNCTION MAIN LEFT RIGHT LBRACE commands RBRACE  */
-#line 138 "compiler.y"
+#line 139 "compiler.y"
                                                          { 
         ast_root = new MainFunctionNode();
         cout<< "Program Started." << endl;
@@ -1234,91 +1250,97 @@ yyreduce:
         }
         delete cmds_list;
     }
-#line 1238 "compiler.tab.c"
+#line 1254 "compiler.tab.c"
     break;
 
   case 3: /* commands: command  */
-#line 149 "compiler.y"
+#line 150 "compiler.y"
     {
         (yyval.command_list_ptr) = new std::vector<CommandNode*>();
         (yyval.command_list_ptr)->push_back((yyvsp[0].command_node_ptr));
         //cout << "[INFO] " << "\t Command added to command list." << endl;
     }
-#line 1248 "compiler.tab.c"
+#line 1264 "compiler.tab.c"
     break;
 
   case 4: /* commands: commands command  */
-#line 155 "compiler.y"
+#line 156 "compiler.y"
     {
         (yyval.command_list_ptr) = (yyvsp[-1].command_list_ptr);
         (yyval.command_list_ptr)->push_back((yyvsp[0].command_node_ptr));
         //cout << "[INFO] " << "\t Command added to command list." << endl;
     }
-#line 1258 "compiler.tab.c"
+#line 1274 "compiler.tab.c"
     break;
 
   case 5: /* command: declaration  */
-#line 161 "compiler.y"
-                     { (yyval.command_node_ptr) = (yyvsp[0].var_decl_node_ptr); }
-#line 1264 "compiler.tab.c"
-    break;
-
-  case 6: /* command: assign  */
 #line 162 "compiler.y"
-             { (yyval.command_node_ptr) = (yyvsp[0].Variable_assign_node_ptr); }
-#line 1270 "compiler.tab.c"
+                     { (yyval.command_node_ptr) = (yyvsp[0].var_decl_node_ptr); }
+#line 1280 "compiler.tab.c"
     break;
 
-  case 7: /* command: if_else_command  */
+  case 6: /* command: array_declaration  */
 #line 163 "compiler.y"
-                      { (yyval.command_node_ptr) = (yyvsp[0].if_else_node_ptr); }
-#line 1276 "compiler.tab.c"
+                        { (yyval.command_node_ptr) = (yyvsp[0].array_decl_node_ptr); }
+#line 1286 "compiler.tab.c"
     break;
 
-  case 8: /* command: for_command  */
+  case 7: /* command: assign  */
 #line 164 "compiler.y"
-                  { (yyval.command_node_ptr) = (yyvsp[0].for_node_ptr); }
-#line 1282 "compiler.tab.c"
+             { (yyval.command_node_ptr) = (yyvsp[0].Variable_assign_node_ptr); }
+#line 1292 "compiler.tab.c"
     break;
 
-  case 9: /* command: while_command  */
+  case 8: /* command: if_else_command  */
 #line 165 "compiler.y"
-                    { (yyval.command_node_ptr) = (yyvsp[0].while_node_ptr); }
-#line 1288 "compiler.tab.c"
+                      { (yyval.command_node_ptr) = (yyvsp[0].if_else_node_ptr); }
+#line 1298 "compiler.tab.c"
     break;
 
-  case 10: /* command: read_command  */
+  case 9: /* command: for_command  */
 #line 166 "compiler.y"
-                   { (yyval.command_node_ptr) = (yyvsp[0].input_node_ptr); }
-#line 1294 "compiler.tab.c"
+                  { (yyval.command_node_ptr) = (yyvsp[0].for_node_ptr); }
+#line 1304 "compiler.tab.c"
     break;
 
-  case 11: /* command: write_command  */
+  case 10: /* command: while_command  */
 #line 167 "compiler.y"
+                    { (yyval.command_node_ptr) = (yyvsp[0].while_node_ptr); }
+#line 1310 "compiler.tab.c"
+    break;
+
+  case 11: /* command: read_command  */
+#line 168 "compiler.y"
+                   { (yyval.command_node_ptr) = (yyvsp[0].input_node_ptr); }
+#line 1316 "compiler.tab.c"
+    break;
+
+  case 12: /* command: write_command  */
+#line 169 "compiler.y"
                     { (yyval.command_node_ptr) = (yyvsp[0].output_node_ptr); }
-#line 1300 "compiler.tab.c"
+#line 1322 "compiler.tab.c"
     break;
 
-  case 12: /* TYPE: TINT  */
-#line 170 "compiler.y"
-           { (yyval.type_node_ptr) = new IntegerTypeNode(); }
-#line 1306 "compiler.tab.c"
-    break;
-
-  case 13: /* TYPE: TFLOAT  */
-#line 171 "compiler.y"
-             { (yyval.type_node_ptr) = new FloatTypeNode(); }
-#line 1312 "compiler.tab.c"
-    break;
-
-  case 14: /* TYPE: TBOOL  */
+  case 13: /* TYPE: TINT  */
 #line 172 "compiler.y"
-            { (yyval.type_node_ptr) = new BooleanTypeNode; }
-#line 1318 "compiler.tab.c"
+           { (yyval.type_node_ptr) = new IntegerTypeNode(); }
+#line 1328 "compiler.tab.c"
     break;
 
-  case 15: /* declaration: LET MUT ID COLON TYPE EOL  */
-#line 178 "compiler.y"
+  case 14: /* TYPE: TFLOAT  */
+#line 173 "compiler.y"
+             { (yyval.type_node_ptr) = new FloatTypeNode(); }
+#line 1334 "compiler.tab.c"
+    break;
+
+  case 15: /* TYPE: TBOOL  */
+#line 174 "compiler.y"
+            { (yyval.type_node_ptr) = new BooleanTypeNode; }
+#line 1340 "compiler.tab.c"
+    break;
+
+  case 16: /* declaration: LET MUT ID COLON TYPE EOL  */
+#line 180 "compiler.y"
     {   
         IdentifierNode* id_node_ptr = new IdentifierNode(*(yyvsp[-3].str));
 
@@ -1330,11 +1352,11 @@ yyreduce:
         //cout << "[INFO] " << "\t Variable/Constant " << *$3 << " added to AST." << endl;
         delete (yyvsp[-3].str);
     }
-#line 1334 "compiler.tab.c"
+#line 1356 "compiler.tab.c"
     break;
 
-  case 16: /* declaration: LET MUT ID COLON TYPE ATRIB expression EOL  */
-#line 190 "compiler.y"
+  case 17: /* declaration: LET MUT ID COLON TYPE ATRIB expression EOL  */
+#line 192 "compiler.y"
     {   
         IdentifierNode* id_node_ptr = new IdentifierNode(*(yyvsp[-5].str));
 
@@ -1346,11 +1368,25 @@ yyreduce:
         //cout << "[INFO] " << "\t Variable " << *$3 << " added to AST." << endl;
         delete (yyvsp[-5].str);
     }
-#line 1350 "compiler.tab.c"
+#line 1372 "compiler.tab.c"
     break;
 
-  case 17: /* assign: ID ATRIB expression EOL  */
-#line 204 "compiler.y"
+  case 18: /* array_declaration: LET MUT ID COLON LBRACKET TYPE EOL expression RBRACKET EOL  */
+#line 206 "compiler.y"
+{
+    IdentifierNode* id_node_ptr = new IdentifierNode(*(yyvsp[-7].str));
+    TypeNode* type_node_ptr = (yyvsp[-4].type_node_ptr);
+
+    (yyval.array_decl_node_ptr) = new ArrayDeclarationNode(type_node_ptr, id_node_ptr, (yyvsp[-2].expr_node_ptr));
+    st.vectors.insert({id_node_ptr->getIdentifier(), type_node_ptr});
+
+    delete (yyvsp[-7].str);
+}
+#line 1386 "compiler.tab.c"
+    break;
+
+  case 19: /* assign: ID ATRIB expression EOL  */
+#line 217 "compiler.y"
 {
     IdentifierNode* id_node_ptr = new IdentifierNode(*(yyvsp[-3].str));
     if(st.variables.find(id_node_ptr->getIdentifier()) != st.variables.end()) {
@@ -1364,11 +1400,11 @@ yyreduce:
     }
     delete (yyvsp[-3].str);
 }
-#line 1368 "compiler.tab.c"
+#line 1404 "compiler.tab.c"
     break;
 
-  case 18: /* if_else_command: IF logical_expression LBRACE commands RBRACE ELSE LBRACE commands RBRACE  */
-#line 219 "compiler.y"
+  case 20: /* if_else_command: IF logical_expression LBRACE commands RBRACE ELSE LBRACE commands RBRACE  */
+#line 232 "compiler.y"
                                                                                           {
         IfElseNode* if_else = new IfElseNode((yyvsp[-7].logical_expr_node_ptr), true);
         
@@ -1379,17 +1415,17 @@ yyreduce:
         delete cmds_list;
         cmds_list = (yyvsp[-1].command_list_ptr);
         for (CommandNode* cmd : *cmds_list) {
-            if_else->addIfCommand(cmd);
+            if_else->addElseCommand(cmd);
         }
         delete cmds_list;
         (yyval.if_else_node_ptr) = if_else;
         //cout << "[INFO] " << "\t If-Else command AST node created." << endl;
     }
-#line 1389 "compiler.tab.c"
+#line 1425 "compiler.tab.c"
     break;
 
-  case 19: /* if_else_command: IF logical_expression LBRACE commands RBRACE  */
-#line 235 "compiler.y"
+  case 21: /* if_else_command: IF logical_expression LBRACE commands RBRACE  */
+#line 248 "compiler.y"
                                                   {
         IfElseNode* if_else = new IfElseNode((yyvsp[-3].logical_expr_node_ptr), false);
         
@@ -1401,11 +1437,11 @@ yyreduce:
         (yyval.if_else_node_ptr) = if_else;
         //cout << "[INFO] " << "\t If command AST node created." << endl;
     }
-#line 1405 "compiler.tab.c"
+#line 1441 "compiler.tab.c"
     break;
 
-  case 20: /* for_command: FOR MUT ID IN arithmetic_expression TO arithmetic_expression LBRACE commands RBRACE  */
-#line 248 "compiler.y"
+  case 22: /* for_command: FOR MUT ID IN arithmetic_expression TO arithmetic_expression LBRACE commands RBRACE  */
+#line 261 "compiler.y"
                                                                                                  {
         IdentifierNode* iterator_id_node = new IdentifierNode(*((yyvsp[-7].str)));
 
@@ -1423,11 +1459,11 @@ yyreduce:
 
         delete (yyvsp[-7].str);
     }
-#line 1427 "compiler.tab.c"
+#line 1463 "compiler.tab.c"
     break;
 
-  case 21: /* while_command: WHILE logical_expression LBRACE commands RBRACE  */
-#line 267 "compiler.y"
+  case 23: /* while_command: WHILE logical_expression LBRACE commands RBRACE  */
+#line 280 "compiler.y"
 {
     WhileNode* while_node = new WhileNode((yyvsp[-3].logical_expr_node_ptr));
     std::vector<CommandNode*>* cmds_list = (yyvsp[-1].command_list_ptr);
@@ -1439,243 +1475,243 @@ yyreduce:
     (yyval.while_node_ptr) = while_node;
     //cout << "[INFO] " << "\t While loop command AST node created." << endl;
 }
-#line 1443 "compiler.tab.c"
+#line 1479 "compiler.tab.c"
     break;
 
-  case 22: /* read_command: READ LEFT ID RIGHT EOL  */
-#line 280 "compiler.y"
+  case 24: /* read_command: READ LEFT ID RIGHT EOL  */
+#line 293 "compiler.y"
     {
         IdentifierNode* id_node_ptr = new IdentifierNode(*((yyvsp[-2].str)));
         (yyval.input_node_ptr) = new InputNode(id_node_ptr);
         //cout << "[INFO] " << "\t Input command AST node created." << endl;
         delete (yyvsp[-2].str);
     }
-#line 1454 "compiler.tab.c"
+#line 1490 "compiler.tab.c"
     break;
 
-  case 23: /* write_command: WRITE LEFT expression RIGHT EOL  */
-#line 289 "compiler.y"
+  case 25: /* write_command: WRITE LEFT expression RIGHT EOL  */
+#line 302 "compiler.y"
     {
         (yyval.output_node_ptr) = new OutputNode((yyvsp[-2].expr_node_ptr),false);
         //cout << "[INFO] " << "\t Output command AST node created." << endl;
     }
-#line 1463 "compiler.tab.c"
+#line 1499 "compiler.tab.c"
     break;
 
-  case 24: /* write_command: WRITELN LEFT expression RIGHT EOL  */
-#line 294 "compiler.y"
+  case 26: /* write_command: WRITELN LEFT expression RIGHT EOL  */
+#line 307 "compiler.y"
     {
         (yyval.output_node_ptr) = new OutputNode((yyvsp[-2].expr_node_ptr), true);
         //cout << "[INFO] " << "\t Output command AST node created." << endl;
     }
-#line 1472 "compiler.tab.c"
+#line 1508 "compiler.tab.c"
     break;
 
-  case 25: /* expression: arithmetic_expression  */
-#line 299 "compiler.y"
+  case 27: /* expression: arithmetic_expression  */
+#line 312 "compiler.y"
                                   { (yyval.expr_node_ptr) = (yyvsp[0].arith_expr_node_ptr); }
-#line 1478 "compiler.tab.c"
+#line 1514 "compiler.tab.c"
     break;
 
-  case 26: /* expression: logical_expression  */
-#line 300 "compiler.y"
+  case 28: /* expression: logical_expression  */
+#line 313 "compiler.y"
                          { (yyval.expr_node_ptr) = (yyvsp[0].logical_expr_node_ptr); }
-#line 1484 "compiler.tab.c"
+#line 1520 "compiler.tab.c"
     break;
 
-  case 27: /* arithmetic_expression: arithmetic_expression '+' arithmetic_expression  */
-#line 304 "compiler.y"
+  case 29: /* arithmetic_expression: arithmetic_expression '+' arithmetic_expression  */
+#line 317 "compiler.y"
     { 
         (yyval.arith_expr_node_ptr) = new AdditionOperatorNode((yyvsp[-2].arith_expr_node_ptr), (yyvsp[0].arith_expr_node_ptr)); 
         //cout << "[INFO] " << "\t Addition operation added to AST." << endl;
     }
-#line 1493 "compiler.tab.c"
+#line 1529 "compiler.tab.c"
     break;
 
-  case 28: /* arithmetic_expression: arithmetic_expression '-' arithmetic_expression  */
-#line 309 "compiler.y"
+  case 30: /* arithmetic_expression: arithmetic_expression '-' arithmetic_expression  */
+#line 322 "compiler.y"
     { 
         (yyval.arith_expr_node_ptr) = new SubtractionOperatorNode((yyvsp[-2].arith_expr_node_ptr), (yyvsp[0].arith_expr_node_ptr)); 
         //cout << "[INFO] " << "\t Subtraction operation added to AST." << endl;
     }
-#line 1502 "compiler.tab.c"
+#line 1538 "compiler.tab.c"
     break;
 
-  case 29: /* arithmetic_expression: term  */
-#line 314 "compiler.y"
+  case 31: /* arithmetic_expression: term  */
+#line 327 "compiler.y"
     { 
         (yyval.arith_expr_node_ptr) = static_cast<ArithmeticExpressionNode*>((yyvsp[0].expr_node_ptr)); 
         //cout << "[INFO] " << "\t Term added to arithmetic expression." << endl;
     }
-#line 1511 "compiler.tab.c"
+#line 1547 "compiler.tab.c"
     break;
 
-  case 30: /* logical_expression: expression AND expression  */
-#line 321 "compiler.y"
+  case 32: /* logical_expression: expression AND expression  */
+#line 334 "compiler.y"
     { 
         (yyval.logical_expr_node_ptr) = new LogicalAndOperatorNode((yyvsp[-2].expr_node_ptr), (yyvsp[0].expr_node_ptr));
         //cout << "[INFO] " << "\t Logical AND operation added to AST." << endl;
     }
-#line 1520 "compiler.tab.c"
+#line 1556 "compiler.tab.c"
     break;
 
-  case 31: /* logical_expression: expression OR expression  */
-#line 326 "compiler.y"
+  case 33: /* logical_expression: expression OR expression  */
+#line 339 "compiler.y"
     { 
         (yyval.logical_expr_node_ptr) = new LogicalOrOperatorNode((yyvsp[-2].expr_node_ptr), (yyvsp[0].expr_node_ptr));
         //cout << "[INFO] " << "\t Logical OR operation added to AST." << endl;
     }
-#line 1529 "compiler.tab.c"
+#line 1565 "compiler.tab.c"
     break;
 
-  case 32: /* logical_expression: NOT expression  */
-#line 331 "compiler.y"
+  case 34: /* logical_expression: NOT expression  */
+#line 344 "compiler.y"
     { 
         (yyval.logical_expr_node_ptr) = new NotOperatorNode((yyvsp[0].expr_node_ptr)); 
         //cout << "[INFO] " << "\t Logical NOT operation added to AST." << endl;
     }
-#line 1538 "compiler.tab.c"
+#line 1574 "compiler.tab.c"
     break;
 
-  case 33: /* logical_expression: expression EQ expression  */
-#line 336 "compiler.y"
+  case 35: /* logical_expression: expression EQ expression  */
+#line 349 "compiler.y"
     { 
         (yyval.logical_expr_node_ptr) = new EqualityOperatorNode((yyvsp[-2].expr_node_ptr), (yyvsp[0].expr_node_ptr)); 
         //cout << "[INFO] " << "\t Equality operation added to AST." << endl;
     }
-#line 1547 "compiler.tab.c"
+#line 1583 "compiler.tab.c"
     break;
 
-  case 34: /* logical_expression: expression NE expression  */
-#line 341 "compiler.y"
+  case 36: /* logical_expression: expression NE expression  */
+#line 354 "compiler.y"
     { 
         (yyval.logical_expr_node_ptr) = new InequalityOperatorNode((yyvsp[-2].expr_node_ptr), (yyvsp[0].expr_node_ptr)); 
         //cout << "[INFO] " << "\t Inequality operation added to AST." << endl;
     }
-#line 1556 "compiler.tab.c"
+#line 1592 "compiler.tab.c"
     break;
 
-  case 35: /* logical_expression: expression LT expression  */
-#line 346 "compiler.y"
+  case 37: /* logical_expression: expression LT expression  */
+#line 359 "compiler.y"
     { 
         (yyval.logical_expr_node_ptr) = new LessThanOperatorNode((yyvsp[-2].expr_node_ptr), (yyvsp[0].expr_node_ptr)); 
         //cout << "[INFO] " << "\t Less than operation added to AST." << endl;
     }
-#line 1565 "compiler.tab.c"
+#line 1601 "compiler.tab.c"
     break;
 
-  case 36: /* logical_expression: expression LE expression  */
-#line 351 "compiler.y"
+  case 38: /* logical_expression: expression LE expression  */
+#line 364 "compiler.y"
     { 
         (yyval.logical_expr_node_ptr) = new LessThanOrEqualOperatorNode((yyvsp[-2].expr_node_ptr), (yyvsp[0].expr_node_ptr)); 
         //cout << "[INFO] " << "\t Less than or equal operation added to AST." << endl;
     }
-#line 1574 "compiler.tab.c"
+#line 1610 "compiler.tab.c"
     break;
 
-  case 37: /* logical_expression: expression GT expression  */
-#line 356 "compiler.y"
+  case 39: /* logical_expression: expression GT expression  */
+#line 369 "compiler.y"
     { 
         (yyval.logical_expr_node_ptr) = new GreaterThanOperatorNode((yyvsp[-2].expr_node_ptr), (yyvsp[0].expr_node_ptr)); 
         //cout << "[INFO] " << "\t Greater than operation added to AST." << endl;
     }
-#line 1583 "compiler.tab.c"
+#line 1619 "compiler.tab.c"
     break;
 
-  case 38: /* logical_expression: expression GE expression  */
-#line 361 "compiler.y"
+  case 40: /* logical_expression: expression GE expression  */
+#line 374 "compiler.y"
     { 
         (yyval.logical_expr_node_ptr) = new GreaterThanOrEqualOperatorNode((yyvsp[-2].expr_node_ptr), (yyvsp[0].expr_node_ptr)); 
         //cout << "[INFO] " << "\t Greater than or equal operation added to AST." << endl;
     }
-#line 1592 "compiler.tab.c"
+#line 1628 "compiler.tab.c"
     break;
 
-  case 39: /* logical_expression: LEFT logical_expression RIGHT  */
-#line 366 "compiler.y"
+  case 41: /* logical_expression: LEFT logical_expression RIGHT  */
+#line 379 "compiler.y"
     { 
         (yyval.logical_expr_node_ptr) = (yyvsp[-1].logical_expr_node_ptr); 
         //cout << "[INFO] " << "\t Parentheses added to logical expression." << endl;
     }
-#line 1601 "compiler.tab.c"
+#line 1637 "compiler.tab.c"
     break;
 
-  case 41: /* term: term '*' factor  */
-#line 374 "compiler.y"
+  case 43: /* term: term '*' factor  */
+#line 387 "compiler.y"
     { 
         (yyval.expr_node_ptr) = new MultiplicationOperatorNode((yyvsp[-2].expr_node_ptr), (yyvsp[0].expr_node_ptr)); 
         //cout << "[INFO] " << "\t Multiplication operation added to AST." << endl;
     }
-#line 1610 "compiler.tab.c"
+#line 1646 "compiler.tab.c"
     break;
 
-  case 42: /* term: term '/' factor  */
-#line 379 "compiler.y"
+  case 44: /* term: term '/' factor  */
+#line 392 "compiler.y"
     { 
         (yyval.expr_node_ptr) = new DivisionOperatorNode((yyvsp[-2].expr_node_ptr), (yyvsp[0].expr_node_ptr)); 
         //cout << "[INFO] " << "\t Division operation added to AST." << endl;
     }
-#line 1619 "compiler.tab.c"
+#line 1655 "compiler.tab.c"
     break;
 
-  case 43: /* factor: INTEGER  */
-#line 386 "compiler.y"
+  case 45: /* factor: INTEGER  */
+#line 399 "compiler.y"
     { 
         (yyval.expr_node_ptr) = new IntegerLiteralNode((yyvsp[0].ival)); 
         //cout << "[INFO] " << "\t Integer literal " << $1 << " added to AST." << endl;
     }
-#line 1628 "compiler.tab.c"
+#line 1664 "compiler.tab.c"
     break;
 
-  case 44: /* factor: FLOATING  */
-#line 391 "compiler.y"
+  case 46: /* factor: FLOATING  */
+#line 404 "compiler.y"
     { 
         (yyval.expr_node_ptr) = new FloatLiteralNode((yyvsp[0].fval)); 
         //cout << "[INFO] " << "\t Float literal " << $1 << " added to AST." << endl;
     }
-#line 1637 "compiler.tab.c"
+#line 1673 "compiler.tab.c"
     break;
 
-  case 45: /* factor: ID  */
-#line 396 "compiler.y"
+  case 47: /* factor: ID  */
+#line 409 "compiler.y"
     { 
         IdentifierNode* id_node_ptr = new IdentifierNode(*(yyvsp[0].str));
         (yyval.expr_node_ptr) = id_node_ptr; 
         //cout << "[INFO] " << "\t Identifier " << *$1 << " added to AST." << endl;
         delete (yyvsp[0].str);
     }
-#line 1648 "compiler.tab.c"
+#line 1684 "compiler.tab.c"
     break;
 
-  case 46: /* factor: LEFT expression RIGHT  */
-#line 403 "compiler.y"
+  case 48: /* factor: LEFT expression RIGHT  */
+#line 416 "compiler.y"
     { 
         (yyval.expr_node_ptr) = (yyvsp[-1].expr_node_ptr); 
         //cout << "[INFO] " << "\t Parentheses added to arithmetic expression." << endl;
     }
-#line 1657 "compiler.tab.c"
+#line 1693 "compiler.tab.c"
     break;
 
-  case 47: /* factor: TRUE  */
-#line 408 "compiler.y"
+  case 49: /* factor: TRUE  */
+#line 421 "compiler.y"
     { 
         (yyval.expr_node_ptr) = new BooleanLiteralNode(true); 
         //cout << "[INFO] " << "\t Boolean literal TRUE added to AST." << endl;
     }
-#line 1666 "compiler.tab.c"
+#line 1702 "compiler.tab.c"
     break;
 
-  case 48: /* factor: FALSE  */
-#line 413 "compiler.y"
+  case 50: /* factor: FALSE  */
+#line 426 "compiler.y"
     { 
         (yyval.expr_node_ptr) = new BooleanLiteralNode(false); 
         //cout << "[INFO] " << "\t Boolean literal FALSE added to AST." << endl;
     }
-#line 1675 "compiler.tab.c"
+#line 1711 "compiler.tab.c"
     break;
 
 
-#line 1679 "compiler.tab.c"
+#line 1715 "compiler.tab.c"
 
       default: break;
     }
@@ -1868,7 +1904,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 419 "compiler.y"
+#line 432 "compiler.y"
 
 
 
@@ -1876,13 +1912,19 @@ yyreturnlab:
 int main() { 
 
     int parse_result = yyparse();
+    int semantic_result = false;
     if (parse_result == 0) 
     {
         cout << "Parsing successful!" << endl;
         if(ast_root){
             SemanticVisitor semantic(st);
             ast_root->accept(semantic);
-            //ast_root->print();
+            if(semantic.hasError) {
+                cout << "Semantic errors found." << endl;
+            } else {
+                cout << "Semantic analysis completed successfully." << endl;
+            }
+            semantic_result = semantic.hasError;
         }
     } 
     else 
@@ -1890,7 +1932,7 @@ int main() {
         cout << "Parsing failed." << endl;
     }
 
-    if(parse_result == 0 && ast_root)
+    if(parse_result == 0 && ast_root && semantic_result == 0)
     {
         CodeVisitor code(st);
         ast_root->accept(code);

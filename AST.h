@@ -194,12 +194,12 @@ class ArrayDeclarationNode: public CommandNode
 {
 public:
 //Constants are not supported in this grammar anymore
+//In this version vectors can't be initialized
 TypeNode* type;
 IdentifierNode* identifier;
 ExpressionNode* size;
-ListElementsNode* initialElements;
 
-ArrayDeclarationNode(TypeNode* type, IdentifierNode* id, ExpressionNode* size, ListElementsNode* list);
+ArrayDeclarationNode(TypeNode* type, IdentifierNode* id, ExpressionNode* size);
 ~ArrayDeclarationNode() override;
 
     void accept(class Visitor& visitor) override;

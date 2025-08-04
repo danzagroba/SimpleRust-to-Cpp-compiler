@@ -18,6 +18,7 @@ public:
     virtual void visit(VariableDeclarationNode& variableDeclarationNode) = 0;
     virtual void visit(VariableAssignmentNode& VariableAssignmentNode) = 0;
     virtual void visit(ListElementsNode& listElementsNode) = 0;
+    virtual void visit(ArrayDeclarationNode& arrayDeclarationNode) = 0;
     virtual void visit(ArrayAssignmentNode& arrayAssignmentNode) = 0;
     virtual void visit(IfElseNode& ifElseNode) = 0;
     virtual void visit(WhileNode& whileNode) = 0;

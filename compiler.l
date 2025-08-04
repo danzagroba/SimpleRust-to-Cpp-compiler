@@ -36,6 +36,9 @@ OP [+*/-]
 "{" {return LBRACE;}
 "}" {return RBRACE;}
 
+"[" {return LBRACKET;}
+"]" {return RBRACKET;}
+
 "&&" {return AND;}
 "||" {return OR;}
 

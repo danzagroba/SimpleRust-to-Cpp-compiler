@@ -85,6 +85,14 @@ void CodeVisitor::visit(VariableAssignmentNode& VariableAssignmentNode) {
     appendCode(";\n");
 }
 void CodeVisitor::visit(ListElementsNode& listElementsNode) {}
+
+void CodeVisitor::visit(ArrayDeclarationNode& arrayDeclarationNode) {
+    symbolTable.vectors.find(arrayDeclarationNode.getIdentifier())->second->accept(*this);
+    appendCode(arrayDeclarationNode.getIdentifier());
+    appendCode("[");
+    arrayDeclarationNode.getSize()->accept(*this);
+    appendCode("];\n");
+}
 void CodeVisitor::visit(ArrayAssignmentNode& arrayAssignmentNode) {}
 void CodeVisitor::visit(IfElseNode& ifElseNode) {
     appendCode("if (");
@@ -100,6 +108,7 @@ void CodeVisitor::visit(IfElseNode& ifElseNode) {
     indent();
     appendCode("}\n");
     if(ifElseNode.has_else) {
+        indent();
         appendCode("else {\n");
         indentLevel++;
         for (CommandNode* command : ifElseNode.getElseCommands()) {

@@ -8,6 +8,8 @@ public:
     SymbolTable& symbolTable; 
     unique_ptr<TypeNode> lastType;
 
+    bool hasError;
+
     SemanticVisitor(SymbolTable& symbolTable);
     ~SemanticVisitor() override;
 
@@ -28,6 +30,7 @@ public:
     void visit(VariableDeclarationNode& variableDeclarationNode);
     void visit(VariableAssignmentNode& VariableAssignmentNode);
     void visit(ListElementsNode& listElementsNode);
+    void visit(ArrayDeclarationNode& arrayDeclarationNode);
     void visit(ArrayAssignmentNode& arrayAssignmentNode);
     void visit(IfElseNode& ifElseNode);
     void visit(WhileNode& whileNode);

@@ -139,21 +139,15 @@ void ArrayDeclarationNode::accept(class Visitor& visitor) {
     visitor.visit(*this);
 }
 
-ArrayDeclarationNode::ArrayDeclarationNode(TypeNode* type, IdentifierNode* id, ExpressionNode* size, ListElementsNode* list = nullptr)
-    : type(type), identifier(id), size(size), initialElements(list)
+ArrayDeclarationNode::ArrayDeclarationNode(TypeNode* type, IdentifierNode* id, ExpressionNode* size)
+    : type(type), identifier(id), size(size)
 {
-    if (initialElements == nullptr) {
-        initialElements = new ListElementsNode(type);
-    }
 }
 
 ArrayDeclarationNode::~ArrayDeclarationNode() {
     delete type;
     delete identifier;
     delete size;
-    if(initialElements != nullptr) {
-        delete initialElements;
-    }
 }
 
 TypeNode* ArrayDeclarationNode::getType() const {
