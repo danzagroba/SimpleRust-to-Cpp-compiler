@@ -62,8 +62,21 @@ void SemanticVisitor::visit(class IdentifierNode& identifierNode) {
             lastType = std::make_unique<BooleanTypeNode>();
         }
     } else {
-        hasError = true;
-        cerr << "[ERROR] Identifier not found: " << identifierNode.getIdentifier() << endl;
+        it = symbolTable.vectors.find(identifierNode.getIdentifier());
+        if (it != symbolTable.vectors.end()) {
+            TypeNode* FoundType = it->second;
+            if (dynamic_cast<IntegerTypeNode*>(FoundType)) {
+                lastType = std::make_unique<IntegerTypeNode>();
+            } else if (dynamic_cast<FloatTypeNode*>(FoundType)) {
+                lastType = std::make_unique<FloatTypeNode>();
+            } else if (dynamic_cast<BooleanTypeNode*>(FoundType)) {
+                lastType = std::make_unique<BooleanTypeNode>();
+            }
+        
+        } else {
+            hasError = true;
+            cerr << "[ERROR] Identifier not found: " << identifierNode.getIdentifier() << endl;
+        }
     }
     
 }
@@ -185,8 +198,8 @@ void SemanticVisitor::visit(ArrayDeclarationNode& arrayDeclarationNode) {
 
 void SemanticVisitor::visit(ArrayAssignmentNode& arrayAssignmentNode) {
     TypeNode* varType = nullptr;
-    auto it = symbolTable.variables.find(arrayAssignmentNode.getIdentifier());
-    if (it != symbolTable.variables.end()) {
+    auto it = symbolTable.vectors.find(arrayAssignmentNode.getIdentifier());
+    if (it != symbolTable.vectors.end()) {
         varType = it->second;
     } else {
         hasError = true;

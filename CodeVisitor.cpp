@@ -65,7 +65,10 @@ void CodeVisitor::visit(IdentifierNode& identifierNode)
 
 void CodeVisitor::visit(ArrayAcessNode& arrayAccessNode) 
 {
-    //IMPLEMENT AFTER
+    appendCode(arrayAccessNode.getIdentifier());
+    appendCode("[");
+    arrayAccessNode.getIndex()->accept(*this);
+    appendCode("]");
 }
 
 void CodeVisitor::visit(VariableDeclarationNode& variableDeclarationNode) 
@@ -93,7 +96,14 @@ void CodeVisitor::visit(ArrayDeclarationNode& arrayDeclarationNode) {
     arrayDeclarationNode.getSize()->accept(*this);
     appendCode("];\n");
 }
-void CodeVisitor::visit(ArrayAssignmentNode& arrayAssignmentNode) {}
+void CodeVisitor::visit(ArrayAssignmentNode& arrayAssignmentNode) {
+    appendCode(arrayAssignmentNode.getIdentifier());
+    appendCode("[");
+    arrayAssignmentNode.getIndex()->accept(*this);
+    appendCode("] = ");
+    arrayAssignmentNode.getValue()->accept(*this);
+    appendCode(";\n");
+}
 void CodeVisitor::visit(IfElseNode& ifElseNode) {
     appendCode("if (");
     ifElseNode.condition->accept(*this);
