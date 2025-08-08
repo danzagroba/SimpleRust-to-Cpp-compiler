@@ -1,3 +1,8 @@
+fn area() -> i32
+{
+    let mut asds: f32;
+}
+
 fn main() {
     let mut array: [i32; 3];
     let mut dsad: [f32; 4];

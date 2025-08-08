@@ -33,6 +33,83 @@ const vector<CommandNode*>& MainFunctionNode::getCommands() const {
     return commands;
 }
 
+FunctionNode::FunctionNode(IdentifierNode* id, TypeNode* returnType): identifier(id), returnType(returnType) {}
+
+FunctionNode::~FunctionNode() {
+    returnType = nullptr;
+    for (CommandNode* command : commands) {
+        delete command;
+    }
+    for (ParameterNode* param : parameters) {
+        delete param;
+    }
+}
+
+void FunctionNode::accept(class Visitor& visitor) {
+    visitor.visit(*this);
+}
+
+void FunctionNode::print(int indent) {
+    Node::print(indent); 
+    for (CommandNode* command : commands) {
+        if (command) {
+            command->print(indent + 1); 
+        }
+    }
+}
+
+void FunctionNode::addParameter(ParameterNode* parameter) {
+    parameters.push_back(parameter);
+}
+
+const vector<ParameterNode*>& FunctionNode::getParameters() const {
+    return parameters;
+}
+
+void FunctionNode::addCommand(CommandNode* command) {
+    commands.push_back(command);
+}
+
+const vector<CommandNode*>& FunctionNode::getCommands() const {
+    return commands;
+}
+
+ReturnNode::ReturnNode(ExpressionNode* rv) : returnValue(rv) {}
+
+ReturnNode::~ReturnNode() {
+    delete returnValue;
+}
+
+void ReturnNode::accept(class Visitor& visitor) {
+    visitor.visit(*this);
+}
+
+ExpressionNode* ReturnNode::getReturnValue() const {
+    return returnValue;
+}
+
+ParameterNode::ParameterNode(IdentifierNode* id, TypeNode* t): type(t), identifier(id) 
+{
+    
+}
+
+ParameterNode::~ParameterNode() {
+    delete type;
+    delete identifier;
+}
+
+void ParameterNode::accept(class Visitor& visitor) {
+    visitor.visit(*this);
+}
+
+TypeNode* ParameterNode::getType() const {
+    return type;
+}
+const string& ParameterNode::getIdentifier() const {
+    return identifier->getIdentifier();
+}
+
+
 IntegerLiteralNode::IntegerLiteralNode(int value): value(value) {}
 
 void IntegerLiteralNode::accept(class Visitor& visitor) {

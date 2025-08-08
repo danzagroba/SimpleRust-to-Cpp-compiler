@@ -43,6 +43,32 @@ void CodeVisitor::visit(MainFunctionNode& mainFunctionNode) {
     std::cout << "Generated C++ Code:\n" << finalCode << std::endl;
 }
 
+void CodeVisitor::visit(FunctionNode& functionNode) {
+    functionNode.returnType->accept(*this);
+    appendCode(functionNode.identifier->getIdentifier());
+    appendCode("(");
+    const auto& params = functionNode.getParameters();
+    for (size_t i = 0; i < params.size(); ++i) {
+        params[i]->accept(*this);
+        if (i < params.size() - 1) {
+            appendCode(", ");
+        }
+    }
+    appendCode(") {\n");
+    indentLevel++;
+    for (CommandNode* command : functionNode.getCommands()) {
+        indent();
+        command->accept(*this);
+    }
+    indentLevel--;
+    appendCode("}\n");
+}
+
+void CodeVisitor::visit(ParameterNode& parameterNode) {
+    parameterNode.type->accept(*this);
+    appendCode(parameterNode.getIdentifier());
+}
+
 void CodeVisitor::visit(IntegerLiteralNode& integerLiteralNode)
 {
     appendCode(std::to_string(integerLiteralNode.getValue()));

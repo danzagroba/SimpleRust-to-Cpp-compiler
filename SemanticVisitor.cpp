@@ -35,10 +35,40 @@ void SemanticVisitor::visit(class LogicalExpressionNode& logicalExpressionNode) 
     lastType = std::make_unique<BooleanTypeNode>();
 }
 void SemanticVisitor::visit(class ArithmeticExpressionNode& arithmeticExpressionNode) {}
+
 void SemanticVisitor::visit(class MainFunctionNode& mainFunctionNode) {
     for (CommandNode* command : mainFunctionNode.getCommands()) {
         command->accept(*this);
     }
+}
+void SemanticVisitor::visit(class FunctionNode& functionNode) {
+    bool hasReturn = false;
+    for (ParameterNode* param : functionNode.getParameters()) {
+        param->accept(*this);
+    }
+    for (CommandNode* command : functionNode.getCommands()) {
+        command->accept(*this);
+        if(dynamic_cast<ReturnNode*>(command)) {
+            std::unique_ptr<TypeNode> returnNodeType = move(lastType);
+            if(!compareTypes(functionNode.returnType, returnNodeType.get()))
+            {
+                hasError = true;
+                cerr << "[ERROR] Return type mismatch in function: " << functionNode.identifier->getIdentifier() << endl;
+            }
+            else {
+                hasReturn = true;
+            }
+        }
+    }
+    if(!hasReturn) {
+        hasError = true;
+        cerr << "[ERROR] Missing return statement in function: " << functionNode.identifier->getIdentifier() << endl;
+    }
+}
+void SemanticVisitor::visit(class ParameterNode& parameterNode) {}
+
+void SemanticVisitor::visit(class ReturnNode& returnNode) {
+    returnNode.returnValue->accept(*this);
 }
 void SemanticVisitor::visit(class IntegerLiteralNode& integerLiteralNode) {
     lastType = std::make_unique<IntegerTypeNode>();

@@ -60,6 +60,19 @@ public:
     void accept(class Visitor& visitor) override = 0;
 };
 
+class IdentifierNode: public ExpressionNode
+{
+public:
+    string identifier;
+
+    IdentifierNode(const string& identifier);
+    ~IdentifierNode() override = default;
+
+    void accept(class Visitor& visitor) override;
+
+    const string& getIdentifier() const;
+};
+
 class MainFunctionNode: public Node
 {
     private:
@@ -75,6 +88,51 @@ class MainFunctionNode: public Node
 
     void addCommand(class CommandNode* command);
     const vector<class CommandNode*>& getCommands() const;
+};
+
+class ParameterNode: public Node
+{
+public:
+    TypeNode* type;
+    IdentifierNode* identifier;
+    ParameterNode(IdentifierNode* id, TypeNode* t);
+    ~ParameterNode() override;
+
+    void accept(class Visitor& visitor) override;
+    TypeNode* getType() const;
+    const string& getIdentifier() const;
+};
+
+class FunctionNode: public Node
+{
+public:
+    IdentifierNode* identifier;
+    vector<ParameterNode*> parameters;
+    TypeNode* returnType;
+    vector<CommandNode*> commands;
+
+    FunctionNode(IdentifierNode* id, TypeNode* returnType);
+    ~FunctionNode() override;
+    void accept(class Visitor& visitor) override;
+    
+    void print(int indent = 0) override;
+    
+    void addParameter(ParameterNode* parameter);
+    const vector<ParameterNode*>& getParameters() const;
+
+    void addCommand(class CommandNode* command);
+    const vector<class CommandNode*>& getCommands() const;
+
+};
+
+class ReturnNode: public CommandNode
+{
+public:
+    ExpressionNode* returnValue;
+    ReturnNode(ExpressionNode* rv);
+    ~ReturnNode() override;
+    void accept(class Visitor& visitor) override;
+    ExpressionNode* getReturnValue() const;
 };
 
 class IntegerLiteralNode: public ArithmeticExpressionNode
@@ -114,20 +172,6 @@ public:
     void accept(class Visitor& visitor) override;
 
     bool getValue() const;
-};
-
-
-class IdentifierNode: public ExpressionNode
-{
-public:
-    string identifier;
-
-    IdentifierNode(const string& identifier);
-    ~IdentifierNode() override = default;
-
-    void accept(class Visitor& visitor) override;
-
-    const string& getIdentifier() const;
 };
     
 class IntegerTypeNode: public TypeNode

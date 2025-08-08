@@ -31,6 +31,10 @@ MainFunctionNode* ast_root = nullptr;
     LogicalExpressionNode* logical_expr_node_ptr;
     ArithmeticExpressionNode* arith_expr_node_ptr;
     MainFunctionNode* main_func_node_ptr;
+    FunctionNode* function_node_ptr;
+    std::vector<FunctionNode*>* function_list_ptr;
+    ParameterNode* parameter_node_ptr; 
+    vector<ParameterNode*>* parameter_list_ptr;
     IdentifierNode* id_node_ptr;
     IntegerLiteralNode* int_literal_node_ptr;
     FloatLiteralNode* float_literal_node_ptr;
@@ -81,7 +85,7 @@ MainFunctionNode* ast_root = nullptr;
 %token <ival> INTEGER
 %token <fval> FLOATING
 
-%token LET MUT COLON
+%token LET MUT COLON COMMA ARROW
 
 %token LEFT RIGHT LBRACE RBRACE LBRACKET RBRACKET
 
@@ -105,6 +109,10 @@ MainFunctionNode* ast_root = nullptr;
 %type <main_func_node_ptr> program
 %type <command_list_ptr> commands
 %type <command_node_ptr> command
+%type <function_list_ptr> fns
+%type <function_node_ptr> fn
+%type <parameter_list_ptr> parameters
+%type <parameter_node_ptr> parameter
 %type <type_node_ptr> TYPE
 %type <var_decl_node_ptr> declaration
 %type <array_decl_node_ptr> array_declaration
@@ -137,15 +145,88 @@ MainFunctionNode* ast_root = nullptr;
                             GRAMMAR RULES
 =========================================================================*/
 %%
-program: FUNCTION MAIN LEFT RIGHT LBRACE commands RBRACE { 
+program: fns FUNCTION MAIN LEFT RIGHT LBRACE commands RBRACE { 
         ast_root = new MainFunctionNode();
         cout<< "Program Started." << endl;
-        std::vector<CommandNode*>* cmds_list = $6;
+        std::vector<CommandNode*>* cmds_list = $7;
         for (CommandNode* cmd : *cmds_list) {
             ast_root->addCommand(cmd);
         }
         delete cmds_list;
-    };
+    }
+    ;
+fns: fns fn
+    {
+        $$ = $1;
+        $$->push_back($2);
+        //cout << "[INFO] " << "\t Function added to function list." << endl;
+    }
+    | fn
+    {
+        $$ = new std::vector<FunctionNode*>();
+        $$->push_back($1);
+        //cout << "[INFO] " << "\t Function added to function list." << endl;
+    }
+    | /* empty */
+    {
+        $$ = nullptr;
+    }
+    ;
+
+fn: FUNCTION ID LEFT parameters RIGHT ARROW TYPE LBRACE commands RBRACE { 
+        IdentifierNode* id_node_ptr = new IdentifierNode(*$2);
+        TypeNode* return_type_node_ptr = $7;
+
+        FunctionNode* function_node_ptr = new FunctionNode(id_node_ptr, return_type_node_ptr);
+
+        std::vector<ParameterNode*>* prmt_list = $4;
+        for (ParameterNode* prmt : *prmt_list) {
+            function_node_ptr->addParameter(prmt);
+            st.variables.insert({prmt->getIdentifier()->getIdentifier(), prmt->getType()});
+        }
+        delete prmt_list;
+        
+        std::vector<CommandNode*>* cmds_list = $9;
+        for (CommandNode* cmd : *cmds_list) {
+            function_node_ptr->addCommand(cmd);
+        }
+        delete cmds_list;
+
+        $$ = function_node_ptr;
+        st.functions.insert({id_node_ptr->getIdentifier(), return_type_node_ptr});
+        //cout << "[INFO] " << "\t Function " << *$2 << " added to AST." << endl;
+        delete $2;
+    }
+    ;
+
+parameters: parameter
+    {
+        $$ = new std::vector<ParameterNode*>();
+        $$->push_back($1);
+        //cout << "[INFO] " << "\t Parameter added to parameter list." << endl;    
+    }
+    | parameters COMMA parameter
+    {
+        $$ = $1;
+        $$->push_back($3);
+        //cout << "[INFO] " << "\t Parameter added to parameter list." << endl;    
+    }
+    | /* empty parameter list */
+    {
+        $$ = nullptr;
+    }
+    ;
+
+parameter:MUT ID COLON TYPE
+    {
+        IdentifierNode* id_node_ptr = new IdentifierNode(*$2);
+        TypeNode* type_node_ptr = $4;
+
+        $$ = new ParameterNode(id_node_ptr, type_node_ptr);
+        //cout << "[INFO] " << "\t Parameter " << *$2 << " added to AST." << endl;
+        delete $2;
+    }
+    ;
 
 commands: command 
     {

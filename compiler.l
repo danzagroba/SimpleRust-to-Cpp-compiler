@@ -56,6 +56,8 @@ OP [+*/-]
 "let" { return LET; }
 "mut" { return MUT; }
 ":" { return COLON; }
+"," { return COMMA; }
+"->" { return ARROW; }
 
 "if"    { return IF;    }
 "else"  { return ELSE;  }

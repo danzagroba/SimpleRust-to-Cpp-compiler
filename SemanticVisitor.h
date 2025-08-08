@@ -22,6 +22,9 @@ public:
     void visit(LogicalExpressionNode& logicalExpressionNode);
     void visit(ArithmeticExpressionNode& arithmeticExpressionNode);
     void visit(MainFunctionNode& mainFunctionNode);
+    void visit(FunctionNode& functionNode);
+    void visit(ParameterNode& parameterNode);
+    void visit(ReturnNode& returnNode);
     void visit(IntegerLiteralNode& integerLiteralNode);
     void visit(FloatLiteralNode& floatLiteralNode);
     void visit(BooleanLiteralNode& booleanLiteralNode);

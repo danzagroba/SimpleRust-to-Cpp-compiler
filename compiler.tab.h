@@ -65,34 +65,36 @@ extern int yydebug;
     LET = 266,                     /* LET  */
     MUT = 267,                     /* MUT  */
     COLON = 268,                   /* COLON  */
-    LEFT = 269,                    /* LEFT  */
-    RIGHT = 270,                   /* RIGHT  */
-    LBRACE = 271,                  /* LBRACE  */
-    RBRACE = 272,                  /* RBRACE  */
-    LBRACKET = 273,                /* LBRACKET  */
-    RBRACKET = 274,                /* RBRACKET  */
-    NOT = 275,                     /* NOT  */
-    AND = 276,                     /* AND  */
-    OR = 277,                      /* OR  */
-    TRUE = 278,                    /* TRUE  */
-    FALSE = 279,                   /* FALSE  */
-    ATRIB = 280,                   /* ATRIB  */
-    EQ = 281,                      /* EQ  */
-    NE = 282,                      /* NE  */
-    LT = 283,                      /* LT  */
-    LE = 284,                      /* LE  */
-    GT = 285,                      /* GT  */
-    GE = 286,                      /* GE  */
-    IF = 287,                      /* IF  */
-    ELSE = 288,                    /* ELSE  */
-    FOR = 289,                     /* FOR  */
-    IN = 290,                      /* IN  */
-    TO = 291,                      /* TO  */
-    WHILE = 292,                   /* WHILE  */
-    READ = 293,                    /* READ  */
-    WRITE = 294,                   /* WRITE  */
-    WRITELN = 295,                 /* WRITELN  */
-    EOL = 296                      /* EOL  */
+    COMMA = 269,                   /* COMMA  */
+    ARROW = 270,                   /* ARROW  */
+    LEFT = 271,                    /* LEFT  */
+    RIGHT = 272,                   /* RIGHT  */
+    LBRACE = 273,                  /* LBRACE  */
+    RBRACE = 274,                  /* RBRACE  */
+    LBRACKET = 275,                /* LBRACKET  */
+    RBRACKET = 276,                /* RBRACKET  */
+    NOT = 277,                     /* NOT  */
+    AND = 278,                     /* AND  */
+    OR = 279,                      /* OR  */
+    TRUE = 280,                    /* TRUE  */
+    FALSE = 281,                   /* FALSE  */
+    ATRIB = 282,                   /* ATRIB  */
+    EQ = 283,                      /* EQ  */
+    NE = 284,                      /* NE  */
+    LT = 285,                      /* LT  */
+    LE = 286,                      /* LE  */
+    GT = 287,                      /* GT  */
+    GE = 288,                      /* GE  */
+    IF = 289,                      /* IF  */
+    ELSE = 290,                    /* ELSE  */
+    FOR = 291,                     /* FOR  */
+    IN = 292,                      /* IN  */
+    TO = 293,                      /* TO  */
+    WHILE = 294,                   /* WHILE  */
+    READ = 295,                    /* READ  */
+    WRITE = 296,                   /* WRITE  */
+    WRITELN = 297,                 /* WRITELN  */
+    EOL = 298                      /* EOL  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -117,6 +119,10 @@ union YYSTYPE
     LogicalExpressionNode* logical_expr_node_ptr;
     ArithmeticExpressionNode* arith_expr_node_ptr;
     MainFunctionNode* main_func_node_ptr;
+    FunctionNode* function_node_ptr;
+    std::vector<FunctionNode*>* function_list_ptr;
+    ParameterNode* parameter_node_ptr; 
+    vector<ParameterNode*>* parameter_list_ptr;
     IdentifierNode* id_node_ptr;
     IntegerLiteralNode* int_literal_node_ptr;
     FloatLiteralNode* float_literal_node_ptr;
@@ -147,7 +153,7 @@ union YYSTYPE
     ArrayAcessNode* array_access_node_ptr; 
 
 
-#line 151 "compiler.tab.h"
+#line 157 "compiler.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
