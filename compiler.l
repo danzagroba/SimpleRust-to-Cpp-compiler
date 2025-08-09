@@ -24,6 +24,7 @@ OP [+*/-]
 
 "fn" { return FUNCTION; }
 "main" { return MAIN; }
+"return" { return RETURN; }
 
 "i32"   { return TINT;   }
 "f32" { return TFLOAT; }

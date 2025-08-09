@@ -1,6 +1,8 @@
 fn area() -> i32
 {
     let mut asds: f32;
+    let mut xfs: i32 = 4;
+    return xfs;
 }
 
 fn main() {

@@ -56,45 +56,46 @@ extern int yydebug;
     YYUNDEF = 257,                 /* "invalid token"  */
     FUNCTION = 258,                /* FUNCTION  */
     MAIN = 259,                    /* MAIN  */
-    ID = 260,                      /* ID  */
-    TINT = 261,                    /* TINT  */
-    TFLOAT = 262,                  /* TFLOAT  */
-    TBOOL = 263,                   /* TBOOL  */
-    INTEGER = 264,                 /* INTEGER  */
-    FLOATING = 265,                /* FLOATING  */
-    LET = 266,                     /* LET  */
-    MUT = 267,                     /* MUT  */
-    COLON = 268,                   /* COLON  */
-    COMMA = 269,                   /* COMMA  */
-    ARROW = 270,                   /* ARROW  */
-    LEFT = 271,                    /* LEFT  */
-    RIGHT = 272,                   /* RIGHT  */
-    LBRACE = 273,                  /* LBRACE  */
-    RBRACE = 274,                  /* RBRACE  */
-    LBRACKET = 275,                /* LBRACKET  */
-    RBRACKET = 276,                /* RBRACKET  */
-    NOT = 277,                     /* NOT  */
-    AND = 278,                     /* AND  */
-    OR = 279,                      /* OR  */
-    TRUE = 280,                    /* TRUE  */
-    FALSE = 281,                   /* FALSE  */
-    ATRIB = 282,                   /* ATRIB  */
-    EQ = 283,                      /* EQ  */
-    NE = 284,                      /* NE  */
-    LT = 285,                      /* LT  */
-    LE = 286,                      /* LE  */
-    GT = 287,                      /* GT  */
-    GE = 288,                      /* GE  */
-    IF = 289,                      /* IF  */
-    ELSE = 290,                    /* ELSE  */
-    FOR = 291,                     /* FOR  */
-    IN = 292,                      /* IN  */
-    TO = 293,                      /* TO  */
-    WHILE = 294,                   /* WHILE  */
-    READ = 295,                    /* READ  */
-    WRITE = 296,                   /* WRITE  */
-    WRITELN = 297,                 /* WRITELN  */
-    EOL = 298                      /* EOL  */
+    RETURN = 260,                  /* RETURN  */
+    ID = 261,                      /* ID  */
+    TINT = 262,                    /* TINT  */
+    TFLOAT = 263,                  /* TFLOAT  */
+    TBOOL = 264,                   /* TBOOL  */
+    INTEGER = 265,                 /* INTEGER  */
+    FLOATING = 266,                /* FLOATING  */
+    LET = 267,                     /* LET  */
+    MUT = 268,                     /* MUT  */
+    COLON = 269,                   /* COLON  */
+    COMMA = 270,                   /* COMMA  */
+    ARROW = 271,                   /* ARROW  */
+    LEFT = 272,                    /* LEFT  */
+    RIGHT = 273,                   /* RIGHT  */
+    LBRACE = 274,                  /* LBRACE  */
+    RBRACE = 275,                  /* RBRACE  */
+    LBRACKET = 276,                /* LBRACKET  */
+    RBRACKET = 277,                /* RBRACKET  */
+    NOT = 278,                     /* NOT  */
+    AND = 279,                     /* AND  */
+    OR = 280,                      /* OR  */
+    TRUE = 281,                    /* TRUE  */
+    FALSE = 282,                   /* FALSE  */
+    ATRIB = 283,                   /* ATRIB  */
+    EQ = 284,                      /* EQ  */
+    NE = 285,                      /* NE  */
+    LT = 286,                      /* LT  */
+    LE = 287,                      /* LE  */
+    GT = 288,                      /* GT  */
+    GE = 289,                      /* GE  */
+    IF = 290,                      /* IF  */
+    ELSE = 291,                    /* ELSE  */
+    FOR = 292,                     /* FOR  */
+    IN = 293,                      /* IN  */
+    TO = 294,                      /* TO  */
+    WHILE = 295,                   /* WHILE  */
+    READ = 296,                    /* READ  */
+    WRITE = 297,                   /* WRITE  */
+    WRITELN = 298,                 /* WRITELN  */
+    EOL = 299                      /* EOL  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -122,6 +123,7 @@ union YYSTYPE
     FunctionNode* function_node_ptr;
     std::vector<FunctionNode*>* function_list_ptr;
     ParameterNode* parameter_node_ptr; 
+    ReturnNode* return_node_ptr;
     vector<ParameterNode*>* parameter_list_ptr;
     IdentifierNode* id_node_ptr;
     IntegerLiteralNode* int_literal_node_ptr;
@@ -153,7 +155,7 @@ union YYSTYPE
     ArrayAcessNode* array_access_node_ptr; 
 
 
-#line 157 "compiler.tab.h"
+#line 159 "compiler.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

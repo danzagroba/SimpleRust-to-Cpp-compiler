@@ -34,6 +34,7 @@ ProgramNode* ast_root = nullptr;
     FunctionNode* function_node_ptr;
     std::vector<FunctionNode*>* function_list_ptr;
     ParameterNode* parameter_node_ptr; 
+    ReturnNode* return_node_ptr;
     vector<ParameterNode*>* parameter_list_ptr;
     IdentifierNode* id_node_ptr;
     IntegerLiteralNode* int_literal_node_ptr;
@@ -76,7 +77,7 @@ ProgramNode* ast_root = nullptr;
 =========================================================================*/
 
 
-%token FUNCTION MAIN
+%token FUNCTION MAIN RETURN
 
 %token <str> ID
 
@@ -131,6 +132,8 @@ ProgramNode* ast_root = nullptr;
 
 %type <input_node_ptr> read_command
 %type <output_node_ptr> write_command
+
+%type <return_node_ptr> return_command
 
 %left OR
 %left AND
@@ -253,6 +256,7 @@ command: declaration { $$ = $1; }
     | while_command { $$ = $1; }
     | read_command { $$ = $1; }
     | write_command { $$ = $1; }
+    | return_command { $$ = $1; }
     ;
 
 TYPE: TINT { $$ = new IntegerTypeNode(); }
@@ -410,6 +414,13 @@ write_command: WRITE LEFT expression RIGHT EOL
         //cout << "[INFO] " << "\t Output command AST node created." << endl;
     }
     ;
+
+return_command: RETURN expression EOL
+    {
+        $$ = new ReturnNode($2);
+        //cout << "[INFO] " << "\t Return command AST node created." << endl;
+    }
+
 expression: arithmetic_expression { $$ = $1; }
     | logical_expression { $$ = $1; }
     ;
