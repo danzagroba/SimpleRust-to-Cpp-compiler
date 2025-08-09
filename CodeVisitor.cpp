@@ -10,6 +10,18 @@ void CodeVisitor::indent() {
     }
 }
 
+void CodeVisitor::createFinalCode() {
+    std::ofstream finalfile("output.cpp");
+    if(finalfile.is_open()) {
+        finalfile << finalCode;
+        finalfile.close();
+        cout << "C++ code generated and saved to output.cpp" << endl;
+    }
+    else {        
+        cerr << "Error opening output.cpp for writing." << endl;
+    }
+}
+
 void CodeVisitor::appendCode(const std::string& code) {
     finalCode += code;
 }
@@ -64,9 +76,27 @@ void CodeVisitor::visit(FunctionNode& functionNode) {
     appendCode("}\n");
 }
 
+void CodeVisitor::visit(ProgramNode& programNode) {
+    appendCode("#include <iostream>\n");
+
+    for (FunctionNode* function : (*programNode.functions)) {
+        function->accept(*this);
+    }
+    if (programNode.mainFunction) {
+        programNode.mainFunction->accept(*this);
+    }
+
+}
+
 void CodeVisitor::visit(ParameterNode& parameterNode) {
     parameterNode.type->accept(*this);
     appendCode(parameterNode.getIdentifier());
+}
+
+void CodeVisitor::visit(ReturnNode& returnNode) {
+    appendCode("return ");
+    returnNode.getReturnValue()->accept(*this);
+    appendCode(";\n");
 }
 
 void CodeVisitor::visit(IntegerLiteralNode& integerLiteralNode)

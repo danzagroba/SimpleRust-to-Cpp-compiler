@@ -82,7 +82,7 @@ int yywrap(void);
 void yyerror(const char* s);
     
 SymbolTable st;
-MainFunctionNode* ast_root = nullptr;
+ProgramNode* ast_root = nullptr;
 
 
 #line 89 "compiler.tab.c"
@@ -573,13 +573,13 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int16 yyrline[] =
 {
-       0,   148,   148,   158,   164,   171,   176,   201,   207,   214,
-     219,   230,   236,   243,   244,   245,   246,   247,   248,   249,
-     250,   251,   254,   255,   256,   261,   273,   287,   299,   314,
-     329,   345,   358,   376,   389,   398,   403,   409,   410,   413,
-     418,   423,   430,   435,   440,   445,   450,   455,   460,   465,
-     470,   475,   482,   483,   488,   495,   500,   505,   512,   519,
-     524,   529
+       0,   148,   148,   161,   167,   174,   179,   205,   211,   218,
+     223,   234,   240,   247,   248,   249,   250,   251,   252,   253,
+     254,   255,   258,   259,   260,   265,   277,   291,   303,   318,
+     333,   349,   362,   380,   393,   402,   407,   413,   414,   417,
+     422,   427,   434,   439,   444,   449,   454,   459,   464,   469,
+     474,   479,   486,   487,   492,   499,   504,   509,   516,   523,
+     528,   533
 };
 #endif
 
@@ -1282,47 +1282,50 @@ yyreduce:
   case 2: /* program: fns FUNCTION MAIN LEFT RIGHT LBRACE commands RBRACE  */
 #line 148 "compiler.y"
                                                              { 
-        ast_root = new MainFunctionNode();
         cout<< "Program Started." << endl;
+        ast_root = new ProgramNode();
+        MainFunctionNode* main_func_node_ptr = new MainFunctionNode();
         std::vector<CommandNode*>* cmds_list = (yyvsp[-1].command_list_ptr);
         for (CommandNode* cmd : *cmds_list) {
-            ast_root->addCommand(cmd);
+            main_func_node_ptr->addCommand(cmd);
         }
+        ast_root->mainFunction = main_func_node_ptr;
+        ast_root->functions = (yyvsp[-7].function_list_ptr);
         delete cmds_list;
     }
-#line 1294 "compiler.tab.c"
+#line 1297 "compiler.tab.c"
     break;
 
   case 3: /* fns: fns fn  */
-#line 159 "compiler.y"
+#line 162 "compiler.y"
     {
         (yyval.function_list_ptr) = (yyvsp[-1].function_list_ptr);
         (yyval.function_list_ptr)->push_back((yyvsp[0].function_node_ptr));
         //cout << "[INFO] " << "\t Function added to function list." << endl;
     }
-#line 1304 "compiler.tab.c"
+#line 1307 "compiler.tab.c"
     break;
 
   case 4: /* fns: fn  */
-#line 165 "compiler.y"
+#line 168 "compiler.y"
     {
         (yyval.function_list_ptr) = new std::vector<FunctionNode*>();
         (yyval.function_list_ptr)->push_back((yyvsp[0].function_node_ptr));
         //cout << "[INFO] " << "\t Function added to function list." << endl;
     }
-#line 1314 "compiler.tab.c"
+#line 1317 "compiler.tab.c"
     break;
 
   case 5: /* fns: %empty  */
-#line 171 "compiler.y"
+#line 174 "compiler.y"
     {
         (yyval.function_list_ptr) = nullptr;
     }
-#line 1322 "compiler.tab.c"
+#line 1325 "compiler.tab.c"
     break;
 
   case 6: /* fn: FUNCTION ID LEFT parameters RIGHT ARROW TYPE LBRACE commands RBRACE  */
-#line 176 "compiler.y"
+#line 179 "compiler.y"
                                                                         { 
         IdentifierNode* id_node_ptr = new IdentifierNode(*(yyvsp[-8].str));
         TypeNode* return_type_node_ptr = (yyvsp[-3].type_node_ptr);
@@ -1332,6 +1335,7 @@ yyreduce:
         std::vector<ParameterNode*>* prmt_list = (yyvsp[-6].parameter_list_ptr);
         for (ParameterNode* prmt : *prmt_list) {
             function_node_ptr->addParameter(prmt);
+            st.variables.insert({prmt->identifier->getIdentifier(), prmt->getType()});
         }
         delete prmt_list;
         
@@ -1346,39 +1350,39 @@ yyreduce:
         //cout << "[INFO] " << "\t Function " << *$2 << " added to AST." << endl;
         delete (yyvsp[-8].str);
     }
-#line 1350 "compiler.tab.c"
+#line 1354 "compiler.tab.c"
     break;
 
   case 7: /* parameters: parameter  */
-#line 202 "compiler.y"
+#line 206 "compiler.y"
     {
         (yyval.parameter_list_ptr) = new std::vector<ParameterNode*>();
         (yyval.parameter_list_ptr)->push_back((yyvsp[0].parameter_node_ptr));
         //cout << "[INFO] " << "\t Parameter added to parameter list." << endl;    
     }
-#line 1360 "compiler.tab.c"
+#line 1364 "compiler.tab.c"
     break;
 
   case 8: /* parameters: parameters COMMA parameter  */
-#line 208 "compiler.y"
+#line 212 "compiler.y"
     {
         (yyval.parameter_list_ptr) = (yyvsp[-2].parameter_list_ptr);
         (yyval.parameter_list_ptr)->push_back((yyvsp[0].parameter_node_ptr));
         //cout << "[INFO] " << "\t Parameter added to parameter list." << endl;    
     }
-#line 1370 "compiler.tab.c"
+#line 1374 "compiler.tab.c"
     break;
 
   case 9: /* parameters: %empty  */
-#line 214 "compiler.y"
+#line 218 "compiler.y"
     {
         (yyval.parameter_list_ptr) = nullptr;
     }
-#line 1378 "compiler.tab.c"
+#line 1382 "compiler.tab.c"
     break;
 
   case 10: /* parameter: MUT ID COLON TYPE  */
-#line 220 "compiler.y"
+#line 224 "compiler.y"
     {
         IdentifierNode* id_node_ptr = new IdentifierNode(*(yyvsp[-2].str));
         TypeNode* type_node_ptr = (yyvsp[0].type_node_ptr);
@@ -1387,103 +1391,103 @@ yyreduce:
         //cout << "[INFO] " << "\t Parameter " << *$2 << " added to AST." << endl;
         delete (yyvsp[-2].str);
     }
-#line 1391 "compiler.tab.c"
+#line 1395 "compiler.tab.c"
     break;
 
   case 11: /* commands: command  */
-#line 231 "compiler.y"
+#line 235 "compiler.y"
     {
         (yyval.command_list_ptr) = new std::vector<CommandNode*>();
         (yyval.command_list_ptr)->push_back((yyvsp[0].command_node_ptr));
         //cout << "[INFO] " << "\t Command added to command list." << endl;
     }
-#line 1401 "compiler.tab.c"
+#line 1405 "compiler.tab.c"
     break;
 
   case 12: /* commands: commands command  */
-#line 237 "compiler.y"
+#line 241 "compiler.y"
     {
         (yyval.command_list_ptr) = (yyvsp[-1].command_list_ptr);
         (yyval.command_list_ptr)->push_back((yyvsp[0].command_node_ptr));
         //cout << "[INFO] " << "\t Command added to command list." << endl;
     }
-#line 1411 "compiler.tab.c"
+#line 1415 "compiler.tab.c"
     break;
 
   case 13: /* command: declaration  */
-#line 243 "compiler.y"
+#line 247 "compiler.y"
                      { (yyval.command_node_ptr) = (yyvsp[0].var_decl_node_ptr); }
-#line 1417 "compiler.tab.c"
+#line 1421 "compiler.tab.c"
     break;
 
   case 14: /* command: array_declaration  */
-#line 244 "compiler.y"
+#line 248 "compiler.y"
                         { (yyval.command_node_ptr) = (yyvsp[0].array_decl_node_ptr); }
-#line 1423 "compiler.tab.c"
+#line 1427 "compiler.tab.c"
     break;
 
   case 15: /* command: assign  */
-#line 245 "compiler.y"
+#line 249 "compiler.y"
              { (yyval.command_node_ptr) = (yyvsp[0].Variable_assign_node_ptr); }
-#line 1429 "compiler.tab.c"
+#line 1433 "compiler.tab.c"
     break;
 
   case 16: /* command: array_assign  */
-#line 246 "compiler.y"
+#line 250 "compiler.y"
                    { (yyval.command_node_ptr) = (yyvsp[0].array_assign_node_ptr); }
-#line 1435 "compiler.tab.c"
+#line 1439 "compiler.tab.c"
     break;
 
   case 17: /* command: if_else_command  */
-#line 247 "compiler.y"
+#line 251 "compiler.y"
                       { (yyval.command_node_ptr) = (yyvsp[0].if_else_node_ptr); }
-#line 1441 "compiler.tab.c"
+#line 1445 "compiler.tab.c"
     break;
 
   case 18: /* command: for_command  */
-#line 248 "compiler.y"
+#line 252 "compiler.y"
                   { (yyval.command_node_ptr) = (yyvsp[0].for_node_ptr); }
-#line 1447 "compiler.tab.c"
+#line 1451 "compiler.tab.c"
     break;
 
   case 19: /* command: while_command  */
-#line 249 "compiler.y"
+#line 253 "compiler.y"
                     { (yyval.command_node_ptr) = (yyvsp[0].while_node_ptr); }
-#line 1453 "compiler.tab.c"
+#line 1457 "compiler.tab.c"
     break;
 
   case 20: /* command: read_command  */
-#line 250 "compiler.y"
+#line 254 "compiler.y"
                    { (yyval.command_node_ptr) = (yyvsp[0].input_node_ptr); }
-#line 1459 "compiler.tab.c"
+#line 1463 "compiler.tab.c"
     break;
 
   case 21: /* command: write_command  */
-#line 251 "compiler.y"
+#line 255 "compiler.y"
                     { (yyval.command_node_ptr) = (yyvsp[0].output_node_ptr); }
-#line 1465 "compiler.tab.c"
+#line 1469 "compiler.tab.c"
     break;
 
   case 22: /* TYPE: TINT  */
-#line 254 "compiler.y"
+#line 258 "compiler.y"
            { (yyval.type_node_ptr) = new IntegerTypeNode(); }
-#line 1471 "compiler.tab.c"
+#line 1475 "compiler.tab.c"
     break;
 
   case 23: /* TYPE: TFLOAT  */
-#line 255 "compiler.y"
+#line 259 "compiler.y"
              { (yyval.type_node_ptr) = new FloatTypeNode(); }
-#line 1477 "compiler.tab.c"
+#line 1481 "compiler.tab.c"
     break;
 
   case 24: /* TYPE: TBOOL  */
-#line 256 "compiler.y"
+#line 260 "compiler.y"
             { (yyval.type_node_ptr) = new BooleanTypeNode; }
-#line 1483 "compiler.tab.c"
+#line 1487 "compiler.tab.c"
     break;
 
   case 25: /* declaration: LET MUT ID COLON TYPE EOL  */
-#line 262 "compiler.y"
+#line 266 "compiler.y"
     {   
         IdentifierNode* id_node_ptr = new IdentifierNode(*(yyvsp[-3].str));
 
@@ -1495,11 +1499,11 @@ yyreduce:
         //cout << "[INFO] " << "\t Variable/Constant " << *$3 << " added to AST." << endl;
         delete (yyvsp[-3].str);
     }
-#line 1499 "compiler.tab.c"
+#line 1503 "compiler.tab.c"
     break;
 
   case 26: /* declaration: LET MUT ID COLON TYPE ATRIB expression EOL  */
-#line 274 "compiler.y"
+#line 278 "compiler.y"
     {   
         IdentifierNode* id_node_ptr = new IdentifierNode(*(yyvsp[-5].str));
 
@@ -1511,11 +1515,11 @@ yyreduce:
         //cout << "[INFO] " << "\t Variable " << *$3 << " added to AST." << endl;
         delete (yyvsp[-5].str);
     }
-#line 1515 "compiler.tab.c"
+#line 1519 "compiler.tab.c"
     break;
 
   case 27: /* array_declaration: LET MUT ID COLON LBRACKET TYPE EOL expression RBRACKET EOL  */
-#line 288 "compiler.y"
+#line 292 "compiler.y"
 {
     IdentifierNode* id_node_ptr = new IdentifierNode(*(yyvsp[-7].str));
     TypeNode* type_node_ptr = (yyvsp[-4].type_node_ptr);
@@ -1526,11 +1530,11 @@ yyreduce:
     //cout << "[INFO] " << "\t Array " << *$3 << " added to AST." << endl;
     delete (yyvsp[-7].str);
 }
-#line 1530 "compiler.tab.c"
+#line 1534 "compiler.tab.c"
     break;
 
   case 28: /* assign: ID ATRIB expression EOL  */
-#line 300 "compiler.y"
+#line 304 "compiler.y"
 {
     IdentifierNode* id_node_ptr = new IdentifierNode(*(yyvsp[-3].str));
     if(st.variables.find(id_node_ptr->getIdentifier()) != st.variables.end()) {
@@ -1544,11 +1548,11 @@ yyreduce:
     }
     delete (yyvsp[-3].str);
 }
-#line 1548 "compiler.tab.c"
+#line 1552 "compiler.tab.c"
     break;
 
   case 29: /* array_assign: ID LBRACKET expression RBRACKET ATRIB expression EOL  */
-#line 315 "compiler.y"
+#line 319 "compiler.y"
 {
     IdentifierNode* id_node_ptr = new IdentifierNode(*(yyvsp[-6].str));
     if(st.vectors.find(id_node_ptr->getIdentifier()) != st.vectors.end()) {
@@ -1562,11 +1566,11 @@ yyreduce:
     }
     delete (yyvsp[-6].str);
 }
-#line 1566 "compiler.tab.c"
+#line 1570 "compiler.tab.c"
     break;
 
   case 30: /* if_else_command: IF logical_expression LBRACE commands RBRACE ELSE LBRACE commands RBRACE  */
-#line 329 "compiler.y"
+#line 333 "compiler.y"
                                                                                           {
         IfElseNode* if_else = new IfElseNode((yyvsp[-7].logical_expr_node_ptr), true);
         
@@ -1583,11 +1587,11 @@ yyreduce:
         (yyval.if_else_node_ptr) = if_else;
         //cout << "[INFO] " << "\t If-Else command AST node created." << endl;
     }
-#line 1587 "compiler.tab.c"
+#line 1591 "compiler.tab.c"
     break;
 
   case 31: /* if_else_command: IF logical_expression LBRACE commands RBRACE  */
-#line 345 "compiler.y"
+#line 349 "compiler.y"
                                                   {
         IfElseNode* if_else = new IfElseNode((yyvsp[-3].logical_expr_node_ptr), false);
         
@@ -1599,11 +1603,11 @@ yyreduce:
         (yyval.if_else_node_ptr) = if_else;
         //cout << "[INFO] " << "\t If command AST node created." << endl;
     }
-#line 1603 "compiler.tab.c"
+#line 1607 "compiler.tab.c"
     break;
 
   case 32: /* for_command: FOR MUT ID IN arithmetic_expression TO arithmetic_expression LBRACE commands RBRACE  */
-#line 358 "compiler.y"
+#line 362 "compiler.y"
                                                                                                  {
         IdentifierNode* iterator_id_node = new IdentifierNode(*((yyvsp[-7].str)));
 
@@ -1621,11 +1625,11 @@ yyreduce:
 
         delete (yyvsp[-7].str);
     }
-#line 1625 "compiler.tab.c"
+#line 1629 "compiler.tab.c"
     break;
 
   case 33: /* while_command: WHILE logical_expression LBRACE commands RBRACE  */
-#line 377 "compiler.y"
+#line 381 "compiler.y"
 {
     WhileNode* while_node = new WhileNode((yyvsp[-3].logical_expr_node_ptr));
     std::vector<CommandNode*>* cmds_list = (yyvsp[-1].command_list_ptr);
@@ -1637,254 +1641,254 @@ yyreduce:
     (yyval.while_node_ptr) = while_node;
     //cout << "[INFO] " << "\t While loop command AST node created." << endl;
 }
-#line 1641 "compiler.tab.c"
+#line 1645 "compiler.tab.c"
     break;
 
   case 34: /* read_command: READ LEFT ID RIGHT EOL  */
-#line 390 "compiler.y"
+#line 394 "compiler.y"
     {
         IdentifierNode* id_node_ptr = new IdentifierNode(*((yyvsp[-2].str)));
         (yyval.input_node_ptr) = new InputNode(id_node_ptr);
         //cout << "[INFO] " << "\t Input command AST node created." << endl;
         delete (yyvsp[-2].str);
     }
-#line 1652 "compiler.tab.c"
+#line 1656 "compiler.tab.c"
     break;
 
   case 35: /* write_command: WRITE LEFT expression RIGHT EOL  */
-#line 399 "compiler.y"
+#line 403 "compiler.y"
     {
         (yyval.output_node_ptr) = new OutputNode((yyvsp[-2].expr_node_ptr),false);
         //cout << "[INFO] " << "\t Output command AST node created." << endl;
     }
-#line 1661 "compiler.tab.c"
+#line 1665 "compiler.tab.c"
     break;
 
   case 36: /* write_command: WRITELN LEFT expression RIGHT EOL  */
-#line 404 "compiler.y"
+#line 408 "compiler.y"
     {
         (yyval.output_node_ptr) = new OutputNode((yyvsp[-2].expr_node_ptr), true);
         //cout << "[INFO] " << "\t Output command AST node created." << endl;
     }
-#line 1670 "compiler.tab.c"
+#line 1674 "compiler.tab.c"
     break;
 
   case 37: /* expression: arithmetic_expression  */
-#line 409 "compiler.y"
+#line 413 "compiler.y"
                                   { (yyval.expr_node_ptr) = (yyvsp[0].arith_expr_node_ptr); }
-#line 1676 "compiler.tab.c"
+#line 1680 "compiler.tab.c"
     break;
 
   case 38: /* expression: logical_expression  */
-#line 410 "compiler.y"
+#line 414 "compiler.y"
                          { (yyval.expr_node_ptr) = (yyvsp[0].logical_expr_node_ptr); }
-#line 1682 "compiler.tab.c"
+#line 1686 "compiler.tab.c"
     break;
 
   case 39: /* arithmetic_expression: arithmetic_expression '+' arithmetic_expression  */
-#line 414 "compiler.y"
+#line 418 "compiler.y"
     { 
         (yyval.arith_expr_node_ptr) = new AdditionOperatorNode((yyvsp[-2].arith_expr_node_ptr), (yyvsp[0].arith_expr_node_ptr)); 
         //cout << "[INFO] " << "\t Addition operation added to AST." << endl;
     }
-#line 1691 "compiler.tab.c"
+#line 1695 "compiler.tab.c"
     break;
 
   case 40: /* arithmetic_expression: arithmetic_expression '-' arithmetic_expression  */
-#line 419 "compiler.y"
+#line 423 "compiler.y"
     { 
         (yyval.arith_expr_node_ptr) = new SubtractionOperatorNode((yyvsp[-2].arith_expr_node_ptr), (yyvsp[0].arith_expr_node_ptr)); 
         //cout << "[INFO] " << "\t Subtraction operation added to AST." << endl;
     }
-#line 1700 "compiler.tab.c"
+#line 1704 "compiler.tab.c"
     break;
 
   case 41: /* arithmetic_expression: term  */
-#line 424 "compiler.y"
+#line 428 "compiler.y"
     { 
         (yyval.arith_expr_node_ptr) = static_cast<ArithmeticExpressionNode*>((yyvsp[0].expr_node_ptr)); 
         //cout << "[INFO] " << "\t Term added to arithmetic expression." << endl;
     }
-#line 1709 "compiler.tab.c"
+#line 1713 "compiler.tab.c"
     break;
 
   case 42: /* logical_expression: expression AND expression  */
-#line 431 "compiler.y"
+#line 435 "compiler.y"
     { 
         (yyval.logical_expr_node_ptr) = new LogicalAndOperatorNode((yyvsp[-2].expr_node_ptr), (yyvsp[0].expr_node_ptr));
         //cout << "[INFO] " << "\t Logical AND operation added to AST." << endl;
     }
-#line 1718 "compiler.tab.c"
+#line 1722 "compiler.tab.c"
     break;
 
   case 43: /* logical_expression: expression OR expression  */
-#line 436 "compiler.y"
+#line 440 "compiler.y"
     { 
         (yyval.logical_expr_node_ptr) = new LogicalOrOperatorNode((yyvsp[-2].expr_node_ptr), (yyvsp[0].expr_node_ptr));
         //cout << "[INFO] " << "\t Logical OR operation added to AST." << endl;
     }
-#line 1727 "compiler.tab.c"
+#line 1731 "compiler.tab.c"
     break;
 
   case 44: /* logical_expression: NOT expression  */
-#line 441 "compiler.y"
+#line 445 "compiler.y"
     { 
         (yyval.logical_expr_node_ptr) = new NotOperatorNode((yyvsp[0].expr_node_ptr)); 
         //cout << "[INFO] " << "\t Logical NOT operation added to AST." << endl;
     }
-#line 1736 "compiler.tab.c"
+#line 1740 "compiler.tab.c"
     break;
 
   case 45: /* logical_expression: expression EQ expression  */
-#line 446 "compiler.y"
+#line 450 "compiler.y"
     { 
         (yyval.logical_expr_node_ptr) = new EqualityOperatorNode((yyvsp[-2].expr_node_ptr), (yyvsp[0].expr_node_ptr)); 
         //cout << "[INFO] " << "\t Equality operation added to AST." << endl;
     }
-#line 1745 "compiler.tab.c"
+#line 1749 "compiler.tab.c"
     break;
 
   case 46: /* logical_expression: expression NE expression  */
-#line 451 "compiler.y"
+#line 455 "compiler.y"
     { 
         (yyval.logical_expr_node_ptr) = new InequalityOperatorNode((yyvsp[-2].expr_node_ptr), (yyvsp[0].expr_node_ptr)); 
         //cout << "[INFO] " << "\t Inequality operation added to AST." << endl;
     }
-#line 1754 "compiler.tab.c"
+#line 1758 "compiler.tab.c"
     break;
 
   case 47: /* logical_expression: expression LT expression  */
-#line 456 "compiler.y"
+#line 460 "compiler.y"
     { 
         (yyval.logical_expr_node_ptr) = new LessThanOperatorNode((yyvsp[-2].expr_node_ptr), (yyvsp[0].expr_node_ptr)); 
         //cout << "[INFO] " << "\t Less than operation added to AST." << endl;
     }
-#line 1763 "compiler.tab.c"
+#line 1767 "compiler.tab.c"
     break;
 
   case 48: /* logical_expression: expression LE expression  */
-#line 461 "compiler.y"
+#line 465 "compiler.y"
     { 
         (yyval.logical_expr_node_ptr) = new LessThanOrEqualOperatorNode((yyvsp[-2].expr_node_ptr), (yyvsp[0].expr_node_ptr)); 
         //cout << "[INFO] " << "\t Less than or equal operation added to AST." << endl;
     }
-#line 1772 "compiler.tab.c"
+#line 1776 "compiler.tab.c"
     break;
 
   case 49: /* logical_expression: expression GT expression  */
-#line 466 "compiler.y"
+#line 470 "compiler.y"
     { 
         (yyval.logical_expr_node_ptr) = new GreaterThanOperatorNode((yyvsp[-2].expr_node_ptr), (yyvsp[0].expr_node_ptr)); 
         //cout << "[INFO] " << "\t Greater than operation added to AST." << endl;
     }
-#line 1781 "compiler.tab.c"
+#line 1785 "compiler.tab.c"
     break;
 
   case 50: /* logical_expression: expression GE expression  */
-#line 471 "compiler.y"
+#line 475 "compiler.y"
     { 
         (yyval.logical_expr_node_ptr) = new GreaterThanOrEqualOperatorNode((yyvsp[-2].expr_node_ptr), (yyvsp[0].expr_node_ptr)); 
         //cout << "[INFO] " << "\t Greater than or equal operation added to AST." << endl;
     }
-#line 1790 "compiler.tab.c"
+#line 1794 "compiler.tab.c"
     break;
 
   case 51: /* logical_expression: LEFT logical_expression RIGHT  */
-#line 476 "compiler.y"
+#line 480 "compiler.y"
     { 
         (yyval.logical_expr_node_ptr) = (yyvsp[-1].logical_expr_node_ptr); 
         //cout << "[INFO] " << "\t Parentheses added to logical expression." << endl;
     }
-#line 1799 "compiler.tab.c"
+#line 1803 "compiler.tab.c"
     break;
 
   case 53: /* term: term '*' factor  */
-#line 484 "compiler.y"
+#line 488 "compiler.y"
     { 
         (yyval.expr_node_ptr) = new MultiplicationOperatorNode((yyvsp[-2].expr_node_ptr), (yyvsp[0].expr_node_ptr)); 
         //cout << "[INFO] " << "\t Multiplication operation added to AST." << endl;
     }
-#line 1808 "compiler.tab.c"
+#line 1812 "compiler.tab.c"
     break;
 
   case 54: /* term: term '/' factor  */
-#line 489 "compiler.y"
+#line 493 "compiler.y"
     { 
         (yyval.expr_node_ptr) = new DivisionOperatorNode((yyvsp[-2].expr_node_ptr), (yyvsp[0].expr_node_ptr)); 
         //cout << "[INFO] " << "\t Division operation added to AST." << endl;
     }
-#line 1817 "compiler.tab.c"
+#line 1821 "compiler.tab.c"
     break;
 
   case 55: /* factor: INTEGER  */
-#line 496 "compiler.y"
+#line 500 "compiler.y"
     { 
         (yyval.expr_node_ptr) = new IntegerLiteralNode((yyvsp[0].ival)); 
         //cout << "[INFO] " << "\t Integer literal " << $1 << " added to AST." << endl;
     }
-#line 1826 "compiler.tab.c"
+#line 1830 "compiler.tab.c"
     break;
 
   case 56: /* factor: FLOATING  */
-#line 501 "compiler.y"
+#line 505 "compiler.y"
     { 
         (yyval.expr_node_ptr) = new FloatLiteralNode((yyvsp[0].fval)); 
         //cout << "[INFO] " << "\t Float literal " << $1 << " added to AST." << endl;
     }
-#line 1835 "compiler.tab.c"
+#line 1839 "compiler.tab.c"
     break;
 
   case 57: /* factor: ID  */
-#line 506 "compiler.y"
+#line 510 "compiler.y"
     { 
         IdentifierNode* id_node_ptr = new IdentifierNode(*(yyvsp[0].str));
         (yyval.expr_node_ptr) = id_node_ptr; 
         //cout << "[INFO] " << "\t Identifier " << *$1 << " added to AST." << endl;
         delete (yyvsp[0].str);
     }
-#line 1846 "compiler.tab.c"
+#line 1850 "compiler.tab.c"
     break;
 
   case 58: /* factor: ID LBRACKET expression RBRACKET  */
-#line 513 "compiler.y"
+#line 517 "compiler.y"
     { 
         IdentifierNode* id_node_ptr = new IdentifierNode(*(yyvsp[-3].str));
         (yyval.expr_node_ptr) = new ArrayAcessNode(id_node_ptr, (yyvsp[-1].expr_node_ptr));
         //cout << "[INFO] " << "\t Array access for " << *$1 << " added to AST." << endl;
         delete (yyvsp[-3].str);
     }
-#line 1857 "compiler.tab.c"
+#line 1861 "compiler.tab.c"
     break;
 
   case 59: /* factor: LEFT expression RIGHT  */
-#line 520 "compiler.y"
+#line 524 "compiler.y"
     { 
         (yyval.expr_node_ptr) = (yyvsp[-1].expr_node_ptr); 
         //cout << "[INFO] " << "\t Parentheses added to arithmetic expression." << endl;
     }
-#line 1866 "compiler.tab.c"
+#line 1870 "compiler.tab.c"
     break;
 
   case 60: /* factor: TRUE  */
-#line 525 "compiler.y"
+#line 529 "compiler.y"
     { 
         (yyval.expr_node_ptr) = new BooleanLiteralNode(true); 
         //cout << "[INFO] " << "\t Boolean literal TRUE added to AST." << endl;
     }
-#line 1875 "compiler.tab.c"
+#line 1879 "compiler.tab.c"
     break;
 
   case 61: /* factor: FALSE  */
-#line 530 "compiler.y"
+#line 534 "compiler.y"
     { 
         (yyval.expr_node_ptr) = new BooleanLiteralNode(false); 
         //cout << "[INFO] " << "\t Boolean literal FALSE added to AST." << endl;
     }
-#line 1884 "compiler.tab.c"
+#line 1888 "compiler.tab.c"
     break;
 
 
-#line 1888 "compiler.tab.c"
+#line 1892 "compiler.tab.c"
 
       default: break;
     }
@@ -2077,7 +2081,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 536 "compiler.y"
+#line 540 "compiler.y"
 
 
 
@@ -2109,6 +2113,7 @@ int main() {
     {
         CodeVisitor code(st);
         ast_root->accept(code);
+        code.createFinalCode();
     }
     delete ast_root;
     ast_root = nullptr;

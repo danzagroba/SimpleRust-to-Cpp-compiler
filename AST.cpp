@@ -74,6 +74,25 @@ const vector<CommandNode*>& FunctionNode::getCommands() const {
     return commands;
 }
 
+void ProgramNode::accept(class Visitor& visitor) {
+    visitor.visit(*this);
+}
+ProgramNode::ProgramNode() : mainFunction(nullptr) {}
+
+ProgramNode::~ProgramNode() {
+    for (FunctionNode* function : *functions) {
+        delete function;
+    }
+    delete mainFunction;
+}
+void ProgramNode::addFunction(FunctionNode* function) {
+    functions->push_back(function);
+}
+const vector<FunctionNode*>* ProgramNode::getFunctions() const {
+    return functions;
+}
+
+
 ReturnNode::ReturnNode(ExpressionNode* rv) : returnValue(rv) {}
 
 ReturnNode::~ReturnNode() {

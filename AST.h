@@ -125,6 +125,20 @@ public:
 
 };
 
+class ProgramNode: public Node
+{
+public:
+    vector<FunctionNode*>* functions;
+    MainFunctionNode* mainFunction;
+
+    ProgramNode();
+    ~ProgramNode() override;
+    void accept(class Visitor& visitor) override;
+
+    void addFunction(FunctionNode* function);
+    const vector<FunctionNode*>* getFunctions() const;
+};
+
 class ReturnNode: public CommandNode
 {
 public:

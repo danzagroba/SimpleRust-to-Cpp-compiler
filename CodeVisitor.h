@@ -2,6 +2,7 @@
 #include "Visitor.h"
 #include "SymbolTable.h"
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <vector>
 
@@ -19,6 +20,8 @@ public:
     CodeVisitor(SymbolTable& symbolTable);
     ~CodeVisitor() override;
 
+    void createFinalCode();
+
     void visit(Node& node);
     void visit(CommandNode& commandNode);
     void visit(TypeNode& typeNode);
@@ -27,6 +30,7 @@ public:
     void visit(ArithmeticExpressionNode& arithmeticExpressionNode);
     void visit(MainFunctionNode& mainFunctionNode);
     void visit(FunctionNode& functionNode);
+    void visit(ProgramNode& programNode);
     void visit(ParameterNode& parameterNode);
     void visit(ReturnNode& returnNode);
     void visit(IntegerLiteralNode& integerLiteralNode);
@@ -57,5 +61,4 @@ public:
     void visit(NotOperatorNode& notOperatorNode);
     void visit(InputNode& inputNode);
     void visit(OutputNode& outputNode);
-
 };

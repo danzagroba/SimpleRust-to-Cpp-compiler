@@ -12,7 +12,7 @@ int yywrap(void);
 void yyerror(const char* s);
     
 SymbolTable st;
-MainFunctionNode* ast_root = nullptr;
+ProgramNode* ast_root = nullptr;
 
 %}
 
@@ -146,12 +146,15 @@ MainFunctionNode* ast_root = nullptr;
 =========================================================================*/
 %%
 program: fns FUNCTION MAIN LEFT RIGHT LBRACE commands RBRACE { 
-        ast_root = new MainFunctionNode();
         cout<< "Program Started." << endl;
+        ast_root = new ProgramNode();
+        MainFunctionNode* main_func_node_ptr = new MainFunctionNode();
         std::vector<CommandNode*>* cmds_list = $7;
         for (CommandNode* cmd : *cmds_list) {
-            ast_root->addCommand(cmd);
+            main_func_node_ptr->addCommand(cmd);
         }
+        ast_root->mainFunction = main_func_node_ptr;
+        ast_root->functions = $1;
         delete cmds_list;
     }
     ;
@@ -182,7 +185,7 @@ fn: FUNCTION ID LEFT parameters RIGHT ARROW TYPE LBRACE commands RBRACE {
         std::vector<ParameterNode*>* prmt_list = $4;
         for (ParameterNode* prmt : *prmt_list) {
             function_node_ptr->addParameter(prmt);
-            st.variables.insert({prmt->getIdentifier()->getIdentifier(), prmt->getType()});
+            st.variables.insert({prmt->identifier->getIdentifier(), prmt->getType()});
         }
         delete prmt_list;
         
@@ -565,6 +568,7 @@ int main() {
     {
         CodeVisitor code(st);
         ast_root->accept(code);
+        code.createFinalCode();
     }
     delete ast_root;
     ast_root = nullptr;

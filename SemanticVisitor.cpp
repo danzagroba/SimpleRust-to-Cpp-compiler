@@ -65,6 +65,24 @@ void SemanticVisitor::visit(class FunctionNode& functionNode) {
         cerr << "[ERROR] Missing return statement in function: " << functionNode.identifier->getIdentifier() << endl;
     }
 }
+
+void SemanticVisitor::visit(class ProgramNode& programNode) {
+    for (FunctionNode* function : (*programNode.functions)) {
+        function->accept(*this);
+    }
+    if ((*programNode.functions).empty()) {
+        hasError = true;
+        cerr << "[ERROR] Program must contain at least one function." << endl;
+    }
+    if (programNode.mainFunction) {
+        programNode.mainFunction->accept(*this);
+    }
+    else {
+        hasError = true;
+        cerr << "[ERROR] Program must contain a main function." << endl;
+    }
+}
+
 void SemanticVisitor::visit(class ParameterNode& parameterNode) {}
 
 void SemanticVisitor::visit(class ReturnNode& returnNode) {
