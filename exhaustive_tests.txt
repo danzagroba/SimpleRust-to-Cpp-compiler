@@ -1,0 +1,3 @@
+fn noparameter() -> f32 { let mut x: i32;}
+
+fn main() {}

@@ -173,10 +173,6 @@ fns: fns fn
         $$->push_back($1);
         //cout << "[INFO] " << "\t Function added to function list." << endl;
     }
-    | /* empty */
-    {
-        $$ = nullptr;
-    }
     ;
 
 fn: FUNCTION ID LEFT parameters RIGHT ARROW TYPE LBRACE commands RBRACE { 
@@ -203,6 +199,23 @@ fn: FUNCTION ID LEFT parameters RIGHT ARROW TYPE LBRACE commands RBRACE {
         //cout << "[INFO] " << "\t Function " << *$2 << " added to AST." << endl;
         delete $2;
     }
+    | FUNCTION ID LEFT RIGHT ARROW TYPE LBRACE commands RBRACE { 
+        IdentifierNode* id_node_ptr = new IdentifierNode(*$2);
+        TypeNode* return_type_node_ptr = $6;
+
+        FunctionNode* function_node_ptr = new FunctionNode(id_node_ptr, return_type_node_ptr);
+
+        std::vector<CommandNode*>* cmds_list = $8;
+        for (CommandNode* cmd : *cmds_list) {
+            function_node_ptr->addCommand(cmd);
+        }
+        delete cmds_list;
+
+        $$ = function_node_ptr;
+        st.functions.insert({id_node_ptr->getIdentifier(), return_type_node_ptr});
+        //cout << "[INFO] " << "\t Function " << *$2 << " added to AST." << endl;
+        delete $2;
+    }
     ;
 
 parameters: parameter
@@ -216,10 +229,6 @@ parameters: parameter
         $$ = $1;
         $$->push_back($3);
         //cout << "[INFO] " << "\t Parameter added to parameter list." << endl;    
-    }
-    | /* empty parameter list */
-    {
-        $$ = nullptr;
     }
     ;
 
@@ -553,7 +562,6 @@ factor: INTEGER
 
 
 int main() { 
-
     int parse_result = yyparse();
     int semantic_result = false;
     if (parse_result == 0) 

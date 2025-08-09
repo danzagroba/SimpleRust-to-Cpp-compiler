@@ -1,8 +1,15 @@
-fn area() -> i32
+fn area (mut dsds: i32) -> i32
 {
     let mut asds: f32;
     let mut xfs: i32 = 4;
     return xfs;
+}
+
+fn blabla() -> bool
+{
+    let mut xiquinitos: bool = false;
+    print!(xiquinitos);
+    return xiquinitos;
 }
 
 fn main() {
