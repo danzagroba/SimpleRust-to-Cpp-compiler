@@ -181,48 +181,62 @@ fns: fns fn
     }
     ;
 
-fn: FUNCTION ID LEFT parameters RIGHT ARROW TYPE LBRACE commands RBRACE { 
-        IdentifierNode* id_node_ptr = new IdentifierNode(*$2);
-        TypeNode* return_type_node_ptr = $7;
+fn: FUNCTION ID LEFT parameters RIGHT ARROW TYPE LBRACE commands RBRACE 
+    { 
+        if(st.variables.find(*$2) != st.variables.end() || st.vectors.find(*$2) != st.vectors.end() || st.functions.find(*$2) != st.functions.end()) {
+                yyerror("Identifier already declared.");
+                delete $2;
+                $$ = nullptr;
+        } else {
+            IdentifierNode* id_node_ptr = new IdentifierNode(*$2);
+            TypeNode* return_type_node_ptr = $7;
 
-        FunctionNode* function_node_ptr = new FunctionNode(id_node_ptr, return_type_node_ptr);
+            FunctionNode* function_node_ptr = new FunctionNode(id_node_ptr, return_type_node_ptr);
 
-        std::vector<ParameterNode*>* prmt_list = $4;
-        for (ParameterNode* prmt : *prmt_list) {
-            function_node_ptr->addParameter(prmt);
-            st.variables.insert({prmt->identifier->getIdentifier(), prmt->getType()});
+            std::vector<ParameterNode*>* prmt_list = $4;
+            for (ParameterNode* prmt : *prmt_list) {
+                function_node_ptr->addParameter(prmt);
+                st.variables.insert({prmt->identifier->getIdentifier(), prmt->getType()});
+            }
+            delete prmt_list;
+            
+            std::vector<CommandNode*>* cmds_list = $9;
+            for (CommandNode* cmd : *cmds_list) {
+                function_node_ptr->addCommand(cmd);
+            }
+            delete cmds_list;
+
+            $$ = function_node_ptr;
+            st.functions.insert({id_node_ptr->getIdentifier(), return_type_node_ptr});
+            st.functionNodes.insert({id_node_ptr->getIdentifier(), function_node_ptr});
+            //cout << "[INFO] " << "\t Function " << *$2 << " added to AST." << endl;
+            delete $2;
         }
-        delete prmt_list;
-        
-        std::vector<CommandNode*>* cmds_list = $9;
-        for (CommandNode* cmd : *cmds_list) {
-            function_node_ptr->addCommand(cmd);
-        }
-        delete cmds_list;
-
-        $$ = function_node_ptr;
-        st.functions.insert({id_node_ptr->getIdentifier(), return_type_node_ptr});
-        st.functionNodes.insert({id_node_ptr->getIdentifier(), function_node_ptr});
-        //cout << "[INFO] " << "\t Function " << *$2 << " added to AST." << endl;
-        delete $2;
     }
-    | FUNCTION ID LEFT RIGHT ARROW TYPE LBRACE commands RBRACE { 
-        IdentifierNode* id_node_ptr = new IdentifierNode(*$2);
-        TypeNode* return_type_node_ptr = $6;
+    | FUNCTION ID LEFT RIGHT ARROW TYPE LBRACE commands RBRACE 
+    {
+        if(st.variables.find(*$2) != st.variables.end() || st.vectors.find(*$2) != st.vectors.end() || st.functions.find(*$2) != st.functions.end()) {
+                yyerror("Identifier already declared.");
+                delete $2;
+                $$ = nullptr;
+        } else { 
+            IdentifierNode* id_node_ptr = new IdentifierNode(*$2);
+            TypeNode* return_type_node_ptr = $6;
 
-        FunctionNode* function_node_ptr = new FunctionNode(id_node_ptr, return_type_node_ptr);
+            FunctionNode* function_node_ptr = new FunctionNode(id_node_ptr, return_type_node_ptr);
 
-        std::vector<CommandNode*>* cmds_list = $8;
-        for (CommandNode* cmd : *cmds_list) {
-            function_node_ptr->addCommand(cmd);
+            std::vector<CommandNode*>* cmds_list = $8;
+            for (CommandNode* cmd : *cmds_list) {
+                function_node_ptr->addCommand(cmd);
+            }
+            delete cmds_list;
+
+            $$ = function_node_ptr;
+            st.functions.insert({id_node_ptr->getIdentifier(), return_type_node_ptr});
+            st.functionNodes.insert({id_node_ptr->getIdentifier(), function_node_ptr});
+            //cout << "[INFO] " << "\t Function " << *$2 << " added to AST." << endl;
+            delete $2;
         }
-        delete cmds_list;
-
-        $$ = function_node_ptr;
-        st.functions.insert({id_node_ptr->getIdentifier(), return_type_node_ptr});
-        st.functionNodes.insert({id_node_ptr->getIdentifier(), function_node_ptr});
-        //cout << "[INFO] " << "\t Function " << *$2 << " added to AST." << endl;
-        delete $2;
     }
     ;
 
@@ -300,40 +314,57 @@ declaration:
 
     LET MUT ID COLON TYPE EOL
     {   
-        IdentifierNode* id_node_ptr = new IdentifierNode(*$3);
+        if(st.variables.find(*$3) != st.variables.end() || st.vectors.find(*$3) != st.vectors.end() || st.functions.find(*$3) != st.functions.end()) {
+            yyerror("Identifier already declared.");
+            delete $3;
+            $$ = nullptr;
+        } else {
+            IdentifierNode* id_node_ptr = new IdentifierNode(*$3);
+            TypeNode* type_node_ptr = $5;
+            $$ = new VariableDeclarationNode(type_node_ptr, id_node_ptr, nullptr);
+            st.variables.insert({id_node_ptr->getIdentifier(), type_node_ptr});
 
-        TypeNode* type_node_ptr = $5;
-
-        $$ = new VariableDeclarationNode(type_node_ptr, id_node_ptr, nullptr);
-        st.variables.insert({id_node_ptr->getIdentifier(), type_node_ptr});
-
-        //cout << "[INFO] " << "\t Variable/Constant " << *$3 << " added to AST." << endl;
-        delete $3;
+            //cout << "[INFO] " << "\t Variable/Constant " << *$3 << " added to AST." << endl;
+            delete $3;
+        }
     }
     | LET MUT ID COLON TYPE ATRIB expression EOL
     {   
-        IdentifierNode* id_node_ptr = new IdentifierNode(*$3);
-
-        TypeNode* type_node_ptr = $5;
+        if(st.variables.find(*$3) != st.variables.end() || st.vectors.find(*$3) != st.vectors.end() || st.functions.find(*$3) != st.functions.end()) {
+            yyerror("Identifier already declared.");
+            delete $3;
+            $$ = nullptr;
+        } else {
+            IdentifierNode* id_node_ptr = new IdentifierNode(*$3);
     
-        $$ = new VariableDeclarationNode(type_node_ptr, id_node_ptr, $7);
-        st.variables.insert({id_node_ptr->getIdentifier(), type_node_ptr});
-
-        //cout << "[INFO] " << "\t Variable " << *$3 << " added to AST." << endl;
-        delete $3;
+            TypeNode* type_node_ptr = $5;
+        
+            $$ = new VariableDeclarationNode(type_node_ptr, id_node_ptr, $7);
+            st.variables.insert({id_node_ptr->getIdentifier(), type_node_ptr});
+    
+            //cout << "[INFO] " << "\t Variable " << *$3 << " added to AST." << endl;
+            delete $3;
+        }
     }
 ;
 
 array_declaration: LET MUT ID COLON LBRACKET TYPE EOL expression RBRACKET EOL
 {
-    IdentifierNode* id_node_ptr = new IdentifierNode(*$3);
-    TypeNode* type_node_ptr = $6;
+    if(st.variables.find(*$3) != st.variables.end() || st.vectors.find(*$3) != st.vectors.end() || st.functions.find(*$3) != st.functions.end()) {
+            yyerror("Identifier already declared.");
+            delete $3;
+            $$ = nullptr;
+    } else {
+        IdentifierNode* id_node_ptr = new IdentifierNode(*$3);
+        TypeNode* type_node_ptr = $6;
+    
+        $$ = new ArrayDeclarationNode(type_node_ptr, id_node_ptr, $8);
+        st.vectors.insert({id_node_ptr->getIdentifier(), type_node_ptr});
+    
+        //cout << "[INFO] " << "\t Array " << *$3 << " added to AST." << endl;
+        delete $3;
+    }
 
-    $$ = new ArrayDeclarationNode(type_node_ptr, id_node_ptr, $8);
-    st.vectors.insert({id_node_ptr->getIdentifier(), type_node_ptr});
-
-    //cout << "[INFO] " << "\t Array " << *$3 << " added to AST." << endl;
-    delete $3;
 }
 ;
 assign: ID ATRIB expression EOL
