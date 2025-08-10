@@ -94,6 +94,7 @@ void SemanticVisitor::visit(class FunctionCallExpressionNode& functionCallNode) 
     auto it = symbolTable.functions.find(functionCallNode.identifier->getIdentifier());
     auto itNode = symbolTable.functionNodes.find(functionCallNode.identifier->getIdentifier());
     if (it != symbolTable.functions.end() && itNode != symbolTable.functionNodes.end()) {
+        
         FunctionNode* function = itNode->second;
         if (functionCallNode.arguments->size() != function->getParameters().size()) {
             hasError = true;
@@ -107,6 +108,7 @@ void SemanticVisitor::visit(class FunctionCallExpressionNode& functionCallNode) 
                     cerr << "[ERROR] Type mismatch for argument " << i + 1 << " in function call: " << functionCallNode.identifier->getIdentifier() << endl;
                 }
             }
+            functionCallNode.identifier->accept(*this);
         }
     } else {
         hasError = true;
@@ -170,8 +172,20 @@ void SemanticVisitor::visit(class IdentifierNode& identifierNode) {
             }
         
         } else {
-            hasError = true;
-            cerr << "[ERROR] Identifier not found: " << identifierNode.getIdentifier() << endl;
+            it = symbolTable.functions.find(identifierNode.getIdentifier());
+            if (it != symbolTable.functions.end()) {
+                TypeNode* FoundType = it->second;
+                if (dynamic_cast<IntegerTypeNode*>(FoundType)) {
+                    lastType = std::make_unique<IntegerTypeNode>();
+                } else if (dynamic_cast<FloatTypeNode*>(FoundType)) {
+                    lastType = std::make_unique<FloatTypeNode>();
+                } else if (dynamic_cast<BooleanTypeNode*>(FoundType)) {
+                    lastType = std::make_unique<BooleanTypeNode>();
+                }
+            } else {
+                hasError = true;
+                cerr << "[ERROR] Identifier not found: " << identifierNode.getIdentifier() << endl;
+            }
         }
     }
     

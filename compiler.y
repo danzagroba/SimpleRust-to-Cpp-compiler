@@ -342,7 +342,7 @@ assign: ID ATRIB expression EOL
     if(st.variables.find(id_node_ptr->getIdentifier()) != st.variables.end()) {
         $$ = new VariableAssignmentNode(id_node_ptr, $3);
         //cout << "[INFO] " << "\t Variable assignment for " << *$1 << " added to AST." << endl;
-    } 
+    }
     else {
         yyerror("Identifier not declared.");
         delete id_node_ptr;
@@ -472,7 +472,7 @@ function_command: ID LEFT expr_list RIGHT EOL
     {
         IdentifierNode* id_node_ptr = new IdentifierNode(*$1);
         if(st.functions.find(id_node_ptr->getIdentifier()) != st.functions.end()) {
-            FunctionCallCommandNode* function_call_node_ptr = new FunctionCallCommandNode(id_node_ptr, nullptr);
+            FunctionCallCommandNode* function_call_node_ptr = new FunctionCallCommandNode(id_node_ptr, new std::vector<ExpressionNode*>());
             $$ = function_call_node_ptr;
             //cout << "[INFO] " << "\t Function call for " << *$1 << " added to AST." << endl;
         } 
@@ -598,31 +598,15 @@ factor: INTEGER
     | ID LEFT expr_list RIGHT
     { 
         IdentifierNode* id_node_ptr = new IdentifierNode(*$1);
-        if(st.functions.find(id_node_ptr->getIdentifier()) != st.functions.end()) {
-            FunctionCallExpressionNode* function_call_node_ptr = new FunctionCallExpressionNode(id_node_ptr, $3);
-            $$ = function_call_node_ptr;
-            //cout << "[INFO] " << "\t Function call for " << *$1 << " added to AST." << endl;
-        } 
-        else {
-            yyerror("Function not declared.");
-            delete id_node_ptr;
-            $$ = nullptr;
-        }
+        $$ = new FunctionCallExpressionNode(id_node_ptr, $3);
+        //cout << "[INFO] " << "\t Function call for " << *$1 << " added to AST." << endl;
         delete $1;
     }
     | ID LEFT RIGHT
     { 
         IdentifierNode* id_node_ptr = new IdentifierNode(*$1);
-        if(st.functions.find(id_node_ptr->getIdentifier()) != st.functions.end()) {
-            FunctionCallExpressionNode* function_call_node_ptr = new FunctionCallExpressionNode(id_node_ptr, nullptr);
-            $$ = function_call_node_ptr;
-            //cout << "[INFO] " << "\t Function call for " << *$1 << " added to AST." << endl;
-        } 
-        else {
-            yyerror("Function not declared.");
-            delete id_node_ptr;
-            $$ = nullptr;
-        }
+        $$ = new FunctionCallExpressionNode(id_node_ptr, new std::vector<ExpressionNode*>());
+        //cout << "[INFO] " << "\t Function call for " << *$1 << " added to AST." << endl;
         delete $1;
     }
     | LEFT expression RIGHT 

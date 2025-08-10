@@ -583,7 +583,7 @@ static const yytype_int16 yyrline[] =
      327,   339,   354,   369,   385,   398,   416,   429,   438,   443,
      450,   456,   471,   488,   489,   492,   497,   502,   509,   514,
      519,   524,   529,   534,   539,   544,   549,   554,   561,   562,
-     567,   574,   579,   584,   591,   598,   613,   628,   633,   638
+     567,   574,   579,   584,   591,   598,   605,   612,   617,   622
 };
 #endif
 
@@ -1605,7 +1605,7 @@ yyreduce:
     if(st.variables.find(id_node_ptr->getIdentifier()) != st.variables.end()) {
         (yyval.Variable_assign_node_ptr) = new VariableAssignmentNode(id_node_ptr, (yyvsp[-1].expr_node_ptr));
         //cout << "[INFO] " << "\t Variable assignment for " << *$1 << " added to AST." << endl;
-    } 
+    }
     else {
         yyerror("Identifier not declared.");
         delete id_node_ptr;
@@ -1771,7 +1771,7 @@ yyreduce:
     {
         IdentifierNode* id_node_ptr = new IdentifierNode(*(yyvsp[-3].str));
         if(st.functions.find(id_node_ptr->getIdentifier()) != st.functions.end()) {
-            FunctionCallCommandNode* function_call_node_ptr = new FunctionCallCommandNode(id_node_ptr, nullptr);
+            FunctionCallCommandNode* function_call_node_ptr = new FunctionCallCommandNode(id_node_ptr, new std::vector<ExpressionNode*>());
             (yyval.function_command_node_ptr) = function_call_node_ptr;
             //cout << "[INFO] " << "\t Function call for " << *$1 << " added to AST." << endl;
         } 
@@ -1976,69 +1976,53 @@ yyreduce:
 #line 599 "compiler.y"
     { 
         IdentifierNode* id_node_ptr = new IdentifierNode(*(yyvsp[-3].str));
-        if(st.functions.find(id_node_ptr->getIdentifier()) != st.functions.end()) {
-            FunctionCallExpressionNode* function_call_node_ptr = new FunctionCallExpressionNode(id_node_ptr, (yyvsp[-1].expr_list_ptr));
-            (yyval.expr_node_ptr) = function_call_node_ptr;
-            //cout << "[INFO] " << "\t Function call for " << *$1 << " added to AST." << endl;
-        } 
-        else {
-            yyerror("Function not declared.");
-            delete id_node_ptr;
-            (yyval.expr_node_ptr) = nullptr;
-        }
+        (yyval.expr_node_ptr) = new FunctionCallExpressionNode(id_node_ptr, (yyvsp[-1].expr_list_ptr));
+        //cout << "[INFO] " << "\t Function call for " << *$1 << " added to AST." << endl;
         delete (yyvsp[-3].str);
     }
-#line 1992 "compiler.tab.c"
+#line 1984 "compiler.tab.c"
     break;
 
   case 66: /* factor: ID LEFT RIGHT  */
-#line 614 "compiler.y"
+#line 606 "compiler.y"
     { 
         IdentifierNode* id_node_ptr = new IdentifierNode(*(yyvsp[-2].str));
-        if(st.functions.find(id_node_ptr->getIdentifier()) != st.functions.end()) {
-            FunctionCallExpressionNode* function_call_node_ptr = new FunctionCallExpressionNode(id_node_ptr, nullptr);
-            (yyval.expr_node_ptr) = function_call_node_ptr;
-            //cout << "[INFO] " << "\t Function call for " << *$1 << " added to AST." << endl;
-        } 
-        else {
-            yyerror("Function not declared.");
-            delete id_node_ptr;
-            (yyval.expr_node_ptr) = nullptr;
-        }
+        (yyval.expr_node_ptr) = new FunctionCallExpressionNode(id_node_ptr, new std::vector<ExpressionNode*>());
+        //cout << "[INFO] " << "\t Function call for " << *$1 << " added to AST." << endl;
         delete (yyvsp[-2].str);
     }
-#line 2011 "compiler.tab.c"
+#line 1995 "compiler.tab.c"
     break;
 
   case 67: /* factor: LEFT expression RIGHT  */
-#line 629 "compiler.y"
+#line 613 "compiler.y"
     { 
         (yyval.expr_node_ptr) = (yyvsp[-1].expr_node_ptr); 
         //cout << "[INFO] " << "\t Parentheses added to arithmetic expression." << endl;
     }
-#line 2020 "compiler.tab.c"
+#line 2004 "compiler.tab.c"
     break;
 
   case 68: /* factor: TRUE  */
-#line 634 "compiler.y"
+#line 618 "compiler.y"
     { 
         (yyval.expr_node_ptr) = new BooleanLiteralNode(true); 
         //cout << "[INFO] " << "\t Boolean literal TRUE added to AST." << endl;
     }
-#line 2029 "compiler.tab.c"
+#line 2013 "compiler.tab.c"
     break;
 
   case 69: /* factor: FALSE  */
-#line 639 "compiler.y"
+#line 623 "compiler.y"
     { 
         (yyval.expr_node_ptr) = new BooleanLiteralNode(false); 
         //cout << "[INFO] " << "\t Boolean literal FALSE added to AST." << endl;
     }
-#line 2038 "compiler.tab.c"
+#line 2022 "compiler.tab.c"
     break;
 
 
-#line 2042 "compiler.tab.c"
+#line 2026 "compiler.tab.c"
 
       default: break;
     }
@@ -2231,7 +2215,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 645 "compiler.y"
+#line 629 "compiler.y"
 
 
 

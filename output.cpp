@@ -6,7 +6,7 @@ float function_with_params(float a, float b, bool c) {
     }
     return a + b;
 }
-bool function_no_params_with_return() {
+bool function_no_params() {
     int x = 5;
     int y = 5;
     return x == y;
@@ -25,6 +25,9 @@ int main() {
     bool bb = 1;
     int uninitialized_var;
     uninitialized_var = 100;
+    function_with_params(f, 3.400000, bb);
+    bb = function_no_params();
+    usingparameters(i, bb);
     int arr_i[5];
     float arr_f[2];
     bool arr_b[3];
@@ -32,6 +35,7 @@ int main() {
     arr_i[4] = 2;
     arr_f[1] = 3.140000;
     arr_b[2] = 0;
+    arr_b[3] = usingparameters(i, arr_b[2]);
     int add_res = 1 + 2;
     int sub_res = 10 - 5;
     int mul_res = 3 * 4;
