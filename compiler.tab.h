@@ -117,10 +117,13 @@ union YYSTYPE
     vector<CommandNode*>* command_list_ptr; 
     TypeNode* type_node_ptr;
     ExpressionNode* expr_node_ptr;
+    std::vector<ExpressionNode*>* expr_list_ptr;
     LogicalExpressionNode* logical_expr_node_ptr;
     ArithmeticExpressionNode* arith_expr_node_ptr;
     MainFunctionNode* main_func_node_ptr;
     FunctionNode* function_node_ptr;
+    FunctionCallCommandNode* function_command_node_ptr;
+    FunctionCallExpressionNode* function_expr_node_ptr;
     std::vector<FunctionNode*>* function_list_ptr;
     ParameterNode* parameter_node_ptr; 
     ReturnNode* return_node_ptr;
@@ -155,7 +158,7 @@ union YYSTYPE
     ArrayAcessNode* array_access_node_ptr; 
 
 
-#line 159 "compiler.tab.h"
+#line 162 "compiler.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

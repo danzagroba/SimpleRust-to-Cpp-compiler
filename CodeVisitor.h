@@ -30,6 +30,8 @@ public:
     void visit(ArithmeticExpressionNode& arithmeticExpressionNode);
     void visit(MainFunctionNode& mainFunctionNode);
     void visit(FunctionNode& functionNode);
+    void visit(FunctionCallCommandNode& functionCallNode);
+    void visit(FunctionCallExpressionNode& functionCallNode);
     void visit(ProgramNode& programNode);
     void visit(ParameterNode& parameterNode);
     void visit(ReturnNode& returnNode);

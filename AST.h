@@ -139,6 +139,31 @@ public:
     const vector<FunctionNode*>* getFunctions() const;
 };
 
+class FunctionCallExpressionNode: public ExpressionNode
+{
+public:
+    IdentifierNode* identifier;
+    vector<ExpressionNode*>* arguments;
+    
+    FunctionCallExpressionNode(IdentifierNode* id, std::vector<ExpressionNode*>* args);
+    ~FunctionCallExpressionNode() override;
+
+    void accept(class Visitor& visitor) override;
+
+};
+
+class FunctionCallCommandNode: public CommandNode
+{
+public:
+    IdentifierNode* identifier;
+    vector<ExpressionNode*>* arguments;
+
+    FunctionCallCommandNode(IdentifierNode* id, std::vector<ExpressionNode*>* args);
+    ~FunctionCallCommandNode() override;
+
+    void accept(class Visitor& visitor) override;
+};
+
 class ReturnNode: public CommandNode
 {
 public:

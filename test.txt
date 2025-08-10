@@ -75,4 +75,6 @@ fn main() {
     }
     zagroba = false;
     input!(xx);
+
+    blabla();
 }

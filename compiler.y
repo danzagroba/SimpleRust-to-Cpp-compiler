@@ -28,10 +28,13 @@ ProgramNode* ast_root = nullptr;
     vector<CommandNode*>* command_list_ptr; 
     TypeNode* type_node_ptr;
     ExpressionNode* expr_node_ptr;
+    std::vector<ExpressionNode*>* expr_list_ptr;
     LogicalExpressionNode* logical_expr_node_ptr;
     ArithmeticExpressionNode* arith_expr_node_ptr;
     MainFunctionNode* main_func_node_ptr;
     FunctionNode* function_node_ptr;
+    FunctionCallCommandNode* function_command_node_ptr;
+    FunctionCallExpressionNode* function_expr_node_ptr;
     std::vector<FunctionNode*>* function_list_ptr;
     ParameterNode* parameter_node_ptr; 
     ReturnNode* return_node_ptr;
@@ -122,8 +125,11 @@ ProgramNode* ast_root = nullptr;
 %type <if_else_node_ptr> if_else_command
 %type <for_node_ptr> for_command
 %type <while_node_ptr> while_command
+%type <function_command_node_ptr> function_command
+
 
 %type <expr_node_ptr> expression
+%type <expr_list_ptr> expr_list
 %type <arith_expr_node_ptr> arithmetic_expression
 %type <logical_expr_node_ptr> logical_expression
 
@@ -196,6 +202,7 @@ fn: FUNCTION ID LEFT parameters RIGHT ARROW TYPE LBRACE commands RBRACE {
 
         $$ = function_node_ptr;
         st.functions.insert({id_node_ptr->getIdentifier(), return_type_node_ptr});
+        st.functionNodes.insert({id_node_ptr->getIdentifier(), function_node_ptr});
         //cout << "[INFO] " << "\t Function " << *$2 << " added to AST." << endl;
         delete $2;
     }
@@ -213,8 +220,23 @@ fn: FUNCTION ID LEFT parameters RIGHT ARROW TYPE LBRACE commands RBRACE {
 
         $$ = function_node_ptr;
         st.functions.insert({id_node_ptr->getIdentifier(), return_type_node_ptr});
+        st.functionNodes.insert({id_node_ptr->getIdentifier(), function_node_ptr});
         //cout << "[INFO] " << "\t Function " << *$2 << " added to AST." << endl;
         delete $2;
+    }
+    ;
+
+expr_list: expression
+    {
+        $$ = new std::vector<ExpressionNode*>();
+        $$->push_back($1);
+        //cout << "[INFO] " << "\t Expression added to expression list." << endl;    
+    }
+    | expr_list COMMA expression
+    {
+        $$ = $1;
+        $$->push_back($3);
+        //cout << "[INFO] " << "\t Expression added to expression list." << endl;    
     }
     ;
 
@@ -266,6 +288,7 @@ command: declaration { $$ = $1; }
     | read_command { $$ = $1; }
     | write_command { $$ = $1; }
     | return_command { $$ = $1; }
+    | function_command {$$ = $1; }
     ;
 
 TYPE: TINT { $$ = new IntegerTypeNode(); }
@@ -430,6 +453,38 @@ return_command: RETURN expression EOL
         //cout << "[INFO] " << "\t Return command AST node created." << endl;
     }
 
+function_command: ID LEFT expr_list RIGHT EOL
+    {
+        IdentifierNode* id_node_ptr = new IdentifierNode(*$1);
+        if(st.functions.find(id_node_ptr->getIdentifier()) != st.functions.end()) {
+            FunctionCallCommandNode* function_call_node_ptr = new FunctionCallCommandNode(id_node_ptr, $3);
+            $$ = function_call_node_ptr;
+            //cout << "[INFO] " << "\t Function call for " << *$1 << " added to AST." << endl;
+        } 
+        else {
+            yyerror("Function not declared.");
+            delete id_node_ptr;
+            $$ = nullptr;
+        }
+        delete $1;
+    }
+    | ID LEFT RIGHT EOL
+    {
+        IdentifierNode* id_node_ptr = new IdentifierNode(*$1);
+        if(st.functions.find(id_node_ptr->getIdentifier()) != st.functions.end()) {
+            FunctionCallCommandNode* function_call_node_ptr = new FunctionCallCommandNode(id_node_ptr, nullptr);
+            $$ = function_call_node_ptr;
+            //cout << "[INFO] " << "\t Function call for " << *$1 << " added to AST." << endl;
+        } 
+        else {
+            yyerror("Function not declared.");
+            delete id_node_ptr;
+            $$ = nullptr;
+        }
+        delete $1;
+    }
+    ;
+
 expression: arithmetic_expression { $$ = $1; }
     | logical_expression { $$ = $1; }
     ;
@@ -538,6 +593,36 @@ factor: INTEGER
         IdentifierNode* id_node_ptr = new IdentifierNode(*$1);
         $$ = new ArrayAcessNode(id_node_ptr, $3);
         //cout << "[INFO] " << "\t Array access for " << *$1 << " added to AST." << endl;
+        delete $1;
+    }
+    | ID LEFT expr_list RIGHT
+    { 
+        IdentifierNode* id_node_ptr = new IdentifierNode(*$1);
+        if(st.functions.find(id_node_ptr->getIdentifier()) != st.functions.end()) {
+            FunctionCallExpressionNode* function_call_node_ptr = new FunctionCallExpressionNode(id_node_ptr, $3);
+            $$ = function_call_node_ptr;
+            //cout << "[INFO] " << "\t Function call for " << *$1 << " added to AST." << endl;
+        } 
+        else {
+            yyerror("Function not declared.");
+            delete id_node_ptr;
+            $$ = nullptr;
+        }
+        delete $1;
+    }
+    | ID LEFT RIGHT
+    { 
+        IdentifierNode* id_node_ptr = new IdentifierNode(*$1);
+        if(st.functions.find(id_node_ptr->getIdentifier()) != st.functions.end()) {
+            FunctionCallExpressionNode* function_call_node_ptr = new FunctionCallExpressionNode(id_node_ptr, nullptr);
+            $$ = function_call_node_ptr;
+            //cout << "[INFO] " << "\t Function call for " << *$1 << " added to AST." << endl;
+        } 
+        else {
+            yyerror("Function not declared.");
+            delete id_node_ptr;
+            $$ = nullptr;
+        }
         delete $1;
     }
     | LEFT expression RIGHT 

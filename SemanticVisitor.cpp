@@ -66,6 +66,54 @@ void SemanticVisitor::visit(class FunctionNode& functionNode) {
     }
 }
 
+void SemanticVisitor::visit(class FunctionCallCommandNode& functionCallNode) {
+    auto it = symbolTable.functions.find(functionCallNode.identifier->getIdentifier());
+    auto itNode = symbolTable.functionNodes.find(functionCallNode.identifier->getIdentifier());
+    if (it != symbolTable.functions.end() || itNode != symbolTable.functionNodes.end()) {
+        FunctionNode* function = itNode->second;
+        if (functionCallNode.arguments->size() != function->getParameters().size()) {
+            hasError = true;
+            cerr << "[ERROR] Function call argument count mismatch for function: " << functionCallNode.identifier->getIdentifier() << endl;
+        } else {
+            for (size_t i = 0; i < functionCallNode.arguments->size(); ++i) {
+                (*functionCallNode.arguments)[i]->accept(*this);
+                std::unique_ptr<TypeNode> argumentType = move(lastType);
+                if (!compareTypes(function->getParameters()[i]->getType(), argumentType.get())) {
+                    hasError = true;
+                    cerr << "[ERROR] Type mismatch for argument " << i + 1 << " in function call: " << functionCallNode.identifier->getIdentifier() << endl;
+                }
+            }
+        }
+    } else {
+        hasError = true;
+        cerr << "[ERROR] Function not found: " << functionCallNode.identifier->getIdentifier() << endl;
+    }
+}
+
+void SemanticVisitor::visit(class FunctionCallExpressionNode& functionCallNode) {
+    auto it = symbolTable.functions.find(functionCallNode.identifier->getIdentifier());
+    auto itNode = symbolTable.functionNodes.find(functionCallNode.identifier->getIdentifier());
+    if (it != symbolTable.functions.end() && itNode != symbolTable.functionNodes.end()) {
+        FunctionNode* function = itNode->second;
+        if (functionCallNode.arguments->size() != function->getParameters().size()) {
+            hasError = true;
+            cerr << "[ERROR] Function call argument count mismatch for function: " << functionCallNode.identifier->getIdentifier() << endl;
+        } else {
+            for (size_t i = 0; i < functionCallNode.arguments->size(); ++i) {
+                (*functionCallNode.arguments)[i]->accept(*this);
+                std::unique_ptr<TypeNode> argumentType = move(lastType);
+                if (!compareTypes(function->getParameters()[i]->getType(), argumentType.get())) {
+                    hasError = true;
+                    cerr << "[ERROR] Type mismatch for argument " << i + 1 << " in function call: " << functionCallNode.identifier->getIdentifier() << endl;
+                }
+            }
+        }
+    } else {
+        hasError = true;
+        cerr << "[ERROR] Function not found: " << functionCallNode.identifier->getIdentifier() << endl;
+    }
+}
+
 void SemanticVisitor::visit(class ProgramNode& programNode) {
     for (FunctionNode* function : (*programNode.functions)) {
         function->accept(*this);

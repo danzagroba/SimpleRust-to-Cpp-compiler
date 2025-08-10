@@ -92,6 +92,34 @@ const vector<FunctionNode*>* ProgramNode::getFunctions() const {
     return functions;
 }
 
+FunctionCallCommandNode::FunctionCallCommandNode(IdentifierNode* id, std::vector<ExpressionNode*>* args): identifier(id), arguments(args) {}
+FunctionCallCommandNode::~FunctionCallCommandNode() {
+    delete identifier;
+    for (ExpressionNode* arg : *arguments) {
+        delete arg;
+        arg = nullptr;
+    }
+    delete arguments;
+}
+
+void FunctionCallCommandNode::accept(class Visitor& visitor) {
+    visitor.visit(*this);
+}
+
+FunctionCallExpressionNode::FunctionCallExpressionNode(IdentifierNode* id, std::vector<ExpressionNode*>* args): identifier(id), arguments(args) {}
+FunctionCallExpressionNode::~FunctionCallExpressionNode() {
+    delete identifier;
+    for (ExpressionNode* arg : *arguments) {
+        delete arg;
+        arg = nullptr;
+    }
+    delete arguments;
+}
+
+void FunctionCallExpressionNode::accept(class Visitor& visitor) {
+    visitor.visit(*this);
+}
+
 
 ReturnNode::ReturnNode(ExpressionNode* rv) : returnValue(rv) {}
 

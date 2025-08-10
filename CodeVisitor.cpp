@@ -76,6 +76,32 @@ void CodeVisitor::visit(FunctionNode& functionNode) {
     appendCode("}\n");
 }
 
+void CodeVisitor::visit(FunctionCallCommandNode& functionCallNode) {
+    appendCode(functionCallNode.identifier->getIdentifier());
+    appendCode("(");
+    const auto& args = *functionCallNode.arguments;
+    for (size_t i = 0; i < args.size(); ++i) {
+        args[i]->accept(*this); 
+        if (i < args.size() - 1) {
+            appendCode(", ");
+        }
+    }
+    appendCode(");\n");
+}
+
+void CodeVisitor::visit(FunctionCallExpressionNode& functionCallNode) {
+    appendCode(functionCallNode.identifier->getIdentifier());
+    appendCode("(");
+    const auto& args = *functionCallNode.arguments;
+    for (size_t i = 0; i < args.size(); ++i) {
+        args[i]->accept(*this); 
+        if (i < args.size() - 1) {
+            appendCode(", ");
+        }
+    }
+    appendCode(")");
+}
+
 void CodeVisitor::visit(ProgramNode& programNode) {
     appendCode("#include <iostream>\n");
 

@@ -43,6 +43,7 @@
         "cstdarg": "cpp",
         "iostream": "cpp",
         "istream": "cpp",
-        "cinttypes": "cpp"
+        "cinttypes": "cpp",
+        "fstream": "cpp"
     }
 }

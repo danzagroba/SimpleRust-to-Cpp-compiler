@@ -11,6 +11,8 @@ public:
     virtual void visit(ArithmeticExpressionNode& arithmeticExpressionNode) = 0;
     virtual void visit(MainFunctionNode& mainFunctionNode) = 0;
     virtual void visit(FunctionNode& functionNode) = 0;
+    virtual void visit(FunctionCallCommandNode& functionCallNode) = 0;
+    virtual void visit(FunctionCallExpressionNode& functionCallNode) = 0;
     virtual void visit(ProgramNode& programNode) = 0;
     virtual void visit(ParameterNode& parameterNode) = 0;
     virtual void visit(ReturnNode& returnNode) = 0;
